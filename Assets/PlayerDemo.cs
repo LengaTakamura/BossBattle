@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerDemo : MonoBehaviour
 {
@@ -11,8 +13,17 @@ public class PlayerDemo : MonoBehaviour
     MotionIndex motionIndex;
     Animator anim;
     public float waitTime = 0;
+    private Vector3 _lastPosition;
+    private Transform _transform;
+    private float _currentVelocity = 0;
+    public float _smoothTime = 0; 
+    public float _maxSpeed = 360f;
+    bool canMove = true;
     void Awake()
     {
+        _transform = transform;
+        
+        
         anim = GetComponent<Animator>();
         rb= GetComponent<Rigidbody>();
         anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
@@ -21,22 +32,61 @@ public class PlayerDemo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Moving();
         AnimationManagement();
+
+        if (canMove)
+        {
+            Moving();
+            Rotating();
+        }
+        
+        
     }
 
     void Moving()
     {
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, 0, Input.GetAxis("Vertical") * speed);
+        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed * -1, 0, Input.GetAxis("Vertical") * speed * -1  );
 
         
+    }
+
+    void Rotating()
+    {
+        var position = _transform.position;
+        var movement = position - _lastPosition;
+        _lastPosition = position;
+
+        if (movement.magnitude > 0.01f)
+        {
+            Debug.Log("kaiten");
+            var rota = Quaternion.LookRotation(movement, Vector3.up);
+            var diffAngle = Vector3.Angle(_transform.forward, movement);
+            var targetAngle = Mathf.SmoothDampAngle(0, diffAngle, ref _currentVelocity, _smoothTime, _maxSpeed);
+            var nextRot = Quaternion.RotateTowards(_transform.rotation, rota, targetAngle);
+            Debug.Log(movement);
+            _transform.rotation = rota;
+        }
+            
+        
+
     }
 
 
 
     void AnimationManagement()
     {
-        if(rb.velocity.x >= 0.1f || rb.velocity.x >= 0.1f)
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
+        {
+            canMove = false;
+        }
+        else
+        {
+            canMove = true;
+        }
+
+        if (rb.velocity.x >= 0.1f || rb.velocity.z >= 0.1f)
         {
             anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
