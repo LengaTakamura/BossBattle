@@ -1,21 +1,129 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerDemo : MonoBehaviour
 {
     Rigidbody rb;
     [SerializeField]
-    int speed = 0 ;    // Start is called before the first frame update
-    void Start()
+    int speed = 0 ;
+    MotionIndex motionIndex;
+    Animator anim;
+    public float waitTime = 0;
+    private Vector3 _lastPosition;
+    private Transform _transform;
+    private float _currentVelocity = 0;
+    public float _smoothTime = 0; 
+    public float _maxSpeed = 360f;
+    bool canMove = true;
+    void Awake()
     {
+        _transform = transform;
+        
+        
+        anim = GetComponent<Animator>();
         rb= GetComponent<Rigidbody>();
+        anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
     }
 
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, 0, Input.GetAxis("Vertical") * speed);
+        AnimationManagement();
+
+        if (canMove)
+        {
+            Moving();
+            Rotating();
+        }
         
+        
+    }
+
+    void Moving()
+    {
+        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed * -1, 0, Input.GetAxis("Vertical") * speed * -1  );
+
+        
+    }
+
+    void Rotating()
+    {
+        var position = _transform.position;
+        var movement = position - _lastPosition;
+        _lastPosition = position;
+
+        if (movement.magnitude > 0.01f)
+        {
+            Debug.Log("kaiten");
+            var rota = Quaternion.LookRotation(movement, Vector3.up);
+            var diffAngle = Vector3.Angle(_transform.forward, movement);
+            var targetAngle = Mathf.SmoothDampAngle(0, diffAngle, ref _currentVelocity, _smoothTime, _maxSpeed);
+            var nextRot = Quaternion.RotateTowards(_transform.rotation, rota, targetAngle);
+            Debug.Log(movement);
+            _transform.rotation = rota;
+        }
+            
+        
+
+    }
+
+
+
+    void AnimationManagement()
+    {
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
+        {
+            canMove = false;
+        }
+        else
+        {
+            canMove = true;
+        }
+
+        if (rb.velocity.x >= 0.1f || rb.velocity.z >= 0.1f)
+        {
+            anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            waitTime += Time.deltaTime;
+        }
+        else if (Input.GetKeyUp(KeyCode.W))
+        {
+            waitTime = 0f;
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            anim.SetTrigger("Skil");
+        }
+        else if (Input.GetKeyUp(KeyCode.Q))
+        {
+            anim.SetTrigger("Ult");
+        }
+
+        if(Input.GetKey(KeyCode.W) && waitTime >= 3f)
+        {
+            anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
+        }
+
+        if(rb.velocity == Vector3.zero)
+        {
+            anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
+        }
+
+        
+
+    }
+
+    enum MotionIndex 
+    {
+        Idol = 0,Walk = 10,Run = 20, Avoid = 30
     }
 }
