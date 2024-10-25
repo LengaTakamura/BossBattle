@@ -13,12 +13,13 @@ public class PlayerDemo : MonoBehaviour
     MotionIndex motionIndex;
     Animator anim;
     public float waitTime = 0;
-    private Vector3 _lastPosition;
+    private Vector3 pos;
     private Transform _transform;
     private float _currentVelocity = 0;
     public float _smoothTime = 0; 
     public float _maxSpeed = 360f;
     bool canMove = true;
+    
     void Awake()
     {
         _transform = transform;
@@ -39,35 +40,35 @@ public class PlayerDemo : MonoBehaviour
             Moving();
             Rotating();
         }
-        
+      
         
     }
 
     void Moving()
     {
         rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed , 0, Input.GetAxis("Vertical") * speed);
-
+        
         
     }
 
     void Rotating()
     {
-        var position = _transform.position;
-        var movement = position - _lastPosition;
-        _lastPosition = position;
+        //var position = _transform.position;
+        //var movement = position - _lastPosition;
+        //_lastPosition = position;
+        var movement = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
-        if (movement.magnitude > 0.01f)
+        if (movement.magnitude != 0f)
         {
             Debug.Log("kaiten");
             var rota = Quaternion.LookRotation(movement, Vector3.up);
             var diffAngle = Vector3.Angle(_transform.forward, movement);
             var targetAngle = Mathf.SmoothDampAngle(0, diffAngle, ref _currentVelocity, _smoothTime, _maxSpeed);
             var nextRot = Quaternion.RotateTowards(_transform.rotation, rota, targetAngle);
-            Debug.Log(movement);
-            _transform.rotation = rota;
+            _transform.rotation = nextRot;
         }
-            
-        
+
+        Debug.Log(movement);
 
     }
 
@@ -86,7 +87,7 @@ public class PlayerDemo : MonoBehaviour
             canMove = true;
         }
 
-        if (rb.velocity.x >= 0.1f || rb.velocity.z >= 0.1f)
+        if (rb.velocity.x != 0f || rb.velocity.z != 0f)
         {
             anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
