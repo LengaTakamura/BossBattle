@@ -45,7 +45,7 @@ public class PlayerDemo : MonoBehaviour
 
     void Moving()
     {
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed * -1, 0, Input.GetAxis("Vertical") * speed * -1  );
+        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed , 0, Input.GetAxis("Vertical") * speed);
 
         
     }
@@ -91,13 +91,14 @@ public class PlayerDemo : MonoBehaviour
             anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.D))
         {
             waitTime += Time.deltaTime;
         }
-        else if (Input.GetKeyUp(KeyCode.W))
+        else if (Input.GetKeyUp(KeyCode.W)|| Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D))
         {
             waitTime = 0f;
+            speed = 5;
         }
         else if (Input.GetKeyUp(KeyCode.E))
         {
@@ -108,9 +109,10 @@ public class PlayerDemo : MonoBehaviour
             anim.SetTrigger("Ult");
         }
 
-        if(Input.GetKey(KeyCode.W) && waitTime >= 3f)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.D)) && waitTime >= 3f)
         {
             anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
+            speed = 10;
         }
 
         if(rb.velocity == Vector3.zero)
