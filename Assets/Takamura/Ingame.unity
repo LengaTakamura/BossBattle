@@ -253,7 +253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 722596022912902845, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
       propertyPath: _smoothTime
-      value: 1
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
       propertyPath: m_LocalPosition.x

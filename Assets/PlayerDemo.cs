@@ -11,23 +11,23 @@ public class PlayerDemo : MonoBehaviour
     [SerializeField]
     int speed = 0 ;
     MotionIndex motionIndex;
-    Animator anim;
+    Animator _anim;
     public float waitTime = 0;
     private Vector3 pos;
     private Transform _transform;
     private float _currentVelocity = 0;
     public float _smoothTime = 0; 
     public float _maxSpeed = 360f;
-    bool canMove = true;
+    bool _canMove = true;
     
     void Awake()
     {
         _transform = transform;
         
         
-        anim = GetComponent<Animator>();
+        _anim = GetComponent<Animator>();
         rb= GetComponent<Rigidbody>();
-        anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
+        _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class PlayerDemo : MonoBehaviour
     {
         AnimationManagement();
 
-        if (canMove)
+        if (_canMove)
         {
             Moving();
             Rotating();
@@ -47,8 +47,7 @@ public class PlayerDemo : MonoBehaviour
     void Moving()
     {
         rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed , 0, Input.GetAxis("Vertical") * speed);
-        
-        
+   
     }
 
     void Rotating()
@@ -72,53 +71,59 @@ public class PlayerDemo : MonoBehaviour
 
     }
 
+    bool GroundCheck()
+    {
+        bool isGround = false;
+        return isGround;
+    }
+
 
 
     void AnimationManagement()
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
 
         if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
         {
-            canMove = false;
+            _canMove = false;
         }
         else
         {
-            canMove = true;
+            _canMove = true;
         }
 
         if (rb.velocity.x != 0f || rb.velocity.z != 0f)
         {
-            anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
+            _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
 
         if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.D))
         {
             waitTime += Time.deltaTime;
         }
-        else if (Input.GetKeyUp(KeyCode.W)|| Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D))
+        else if (Input.GetKeyUp(KeyCode.W)&& Input.GetKeyUp(KeyCode.A) && Input.GetKeyUp(KeyCode.S) && Input.GetKeyUp(KeyCode.D))
         {
             waitTime = 0f;
             speed = 5;
         }
         else if (Input.GetKeyUp(KeyCode.E))
         {
-            anim.SetTrigger("Skil");
+            _anim.SetTrigger("Skil");
         }
         else if (Input.GetKeyUp(KeyCode.Q))
         {
-            anim.SetTrigger("Ult");
+            _anim.SetTrigger("Ult");
         }
 
         if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.D)) && waitTime >= 3f)
         {
-            anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
+            _anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
             speed = 10;
         }
 
         if(rb.velocity == Vector3.zero)
         {
-            anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
+            _anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
         }
 
         
