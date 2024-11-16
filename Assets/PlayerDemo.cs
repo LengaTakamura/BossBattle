@@ -97,11 +97,11 @@ public class PlayerDemo : MonoBehaviour
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
 
-        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.D) && motionIndex == MotionIndex.Walk)
         {
             waitTime += Time.deltaTime;
         }
-        else if (Input.GetKeyUp(KeyCode.W)&& Input.GetKeyUp(KeyCode.A) && Input.GetKeyUp(KeyCode.S) && Input.GetKeyUp(KeyCode.D))
+        else if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
         {
             waitTime = 0f;
             speed = 5;
