@@ -7,27 +7,28 @@ using UnityEngine.UIElements;
 
 public class PlayerDemo : MonoBehaviour
 {
-    Rigidbody rb;
+    Rigidbody _rb;
     [SerializeField]
-    int speed = 0 ;
-    MotionIndex motionIndex;
+    int _speed = 0 ;
+    MotionIndex _motionIndex;
     Animator _anim;
-    public float waitTime = 0;
-    private Vector3 pos;
+    public float _waitTime = 0;
+    private Vector3 _pos;
     private Transform _transform;
     private float _currentVelocity = 0;
     public float _smoothTime = 0; 
     public float _maxSpeed = 360f;
-    bool _canMove = true;
-    
+    public bool _canMove = true;
+    [SerializeField]
+    private int _dashSpeed = 10;
+    [SerializeField]
+    private int _defalutSpeed = 5;
+
     void Awake()
     {
         _transform = transform;
-        
-        
         _anim = GetComponent<Animator>();
-        rb= GetComponent<Rigidbody>();
-        _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
+        _rb= GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -40,13 +41,13 @@ public class PlayerDemo : MonoBehaviour
             Moving();
             Rotating();
         }
-      
+        Debug.Log(_rb.velocity);
         
     }
 
     void Moving()
     {
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * speed , 0, Input.GetAxis("Vertical") * speed);
+        _rb.velocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
    
     }
 
@@ -55,20 +56,16 @@ public class PlayerDemo : MonoBehaviour
         //var position = _transform.position;
         //var movement = position - _lastPosition;
         //_lastPosition = position;
-        var movement = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        var movement = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
 
         if (movement.magnitude != 0f)
         {
-            Debug.Log("kaiten");
             var rota = Quaternion.LookRotation(movement, Vector3.up);
             var diffAngle = Vector3.Angle(_transform.forward, movement);
             var targetAngle = Mathf.SmoothDampAngle(0, diffAngle, ref _currentVelocity, _smoothTime, _maxSpeed);
             var nextRot = Quaternion.RotateTowards(_transform.rotation, rota, targetAngle);
             _transform.rotation = nextRot;
         }
-
-        Debug.Log(movement);
-
     }
 
     bool GroundCheck()
@@ -92,36 +89,38 @@ public class PlayerDemo : MonoBehaviour
             _canMove = true;
         }
 
-        if (rb.velocity.x != 0f || rb.velocity.z != 0f)
+        if (_rb.velocity.x != 0f || _rb.velocity.z != 0f)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
         }
 
-        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.D) && motionIndex == MotionIndex.Walk)
+        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.D) && _motionIndex == MotionIndex.Walk)
         {
-            waitTime += Time.deltaTime;
+            _waitTime += Time.deltaTime;
         }
         else if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
         {
-            waitTime = 0f;
-            speed = 5;
+            _waitTime = 0f;
+            _speed = _defalutSpeed;
         }
-        else if (Input.GetKeyUp(KeyCode.E))
+
+        if (Input.GetKeyUp(KeyCode.E))
         {
             _anim.SetTrigger("Skil");
         }
-        else if (Input.GetKeyUp(KeyCode.Q))
+
+        if (Input.GetKeyUp(KeyCode.Q))
         {
             _anim.SetTrigger("Ult");
         }
 
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.D)) && waitTime >= 3f)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && _waitTime >= 3f)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
-            speed = 10;
+            _speed = _dashSpeed;
         }
 
-        if(rb.velocity == Vector3.zero)
+        if(_rb.velocity == Vector3.zero)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
         }
