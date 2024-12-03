@@ -38,12 +38,15 @@ public class PlayermanagerDemo : MonoBehaviour
     {
         Vector3 pos = Vector3.zero;
         Vector3 forward = Vector3.zero;
+        int a = 0;
         foreach (var player in _players)
         {
             if (player.activeSelf)
             {
                 pos = player.transform.position;
-                forward = player.transform.forward;
+                forward = player.transform.forward;            
+                a = (int)player.GetComponent<PlayerDemo>().Anim;
+                Debug.Log(a);
                 player.SetActive(false);
             }
 
@@ -51,6 +54,7 @@ public class PlayermanagerDemo : MonoBehaviour
         _players[i].SetActive(true);
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
+        _players[i].GetComponent<PlayerDemo>().AnimSet(a);
     }
 
     private void ChangeAnim()

@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
+
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class PlayerDemo : MonoBehaviour
 {
     Rigidbody _rb;
     [SerializeField]
     int _speed = 0 ;
-    MotionIndex _motionIndex;
     Animator _anim;
-    public float _waitTime = 0;
     private Vector3 _pos;
     private Transform _transform;
     private float _currentVelocity = 0;
@@ -23,6 +18,11 @@ public class PlayerDemo : MonoBehaviour
     private int _dashSpeed = 10;
     [SerializeField]
     private int _defalutSpeed = 5;
+
+    private MotionIndex _motionIndex;
+
+    public MotionIndex Anim { get { return _motionIndex; } set { _motionIndex = value; } }
+
 
     void Awake()
     {
@@ -35,13 +35,11 @@ public class PlayerDemo : MonoBehaviour
     void Update()
     {
         AnimationManagement();
-
         if (_canMove)
         {
             Moving();
             Rotating();
         }
-        Debug.Log(_rb.velocity);
         
     }
 
@@ -68,14 +66,6 @@ public class PlayerDemo : MonoBehaviour
         }
     }
 
-    bool GroundCheck()
-    {
-        bool isGround = false;
-        return isGround;
-    }
-
-
-
     void AnimationManagement()
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
@@ -88,25 +78,23 @@ public class PlayerDemo : MonoBehaviour
         {
             _canMove = true;
         }
-
-        if (_rb.velocity.x != 0f || _rb.velocity.z != 0f)
+ 
+        if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
         {
-            _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
-        }
-
-        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.D) && _motionIndex == MotionIndex.Walk)
-        {
-            _waitTime += Time.deltaTime;
-        }
-        else if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
-        {
-            _waitTime = 0f;
             _speed = _defalutSpeed;
+            AnimSet(0);
+            _motionIndex = MotionIndex.Idol;
+        }
+        else
+        {
+            AnimSet(10);
+            _motionIndex =MotionIndex.Walk;
         }
 
         if (Input.GetKeyUp(KeyCode.E))
         {
             _anim.SetTrigger("Skil");
+           
         }
 
         if (Input.GetKeyUp(KeyCode.Q))
@@ -114,22 +102,23 @@ public class PlayerDemo : MonoBehaviour
             _anim.SetTrigger("Ult");
         }
 
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && _waitTime >= 3f)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& _rb.velocity.magnitude >= 5)
         {
-            _anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
+            AnimSet(20);
+            _motionIndex =MotionIndex.Run;  
             _speed = _dashSpeed;
         }
-
-        if(_rb.velocity == Vector3.zero)
-        {
-            _anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
-        }
-
         
 
     }
 
-    enum MotionIndex 
+
+    public void AnimSet(int motion)
+    {
+        _anim.SetInteger("MotionIndex", motion);
+    }
+
+    public  enum MotionIndex
     {
         Idol = 0,Walk = 10,Run = 20, Avoid = 30
     }
