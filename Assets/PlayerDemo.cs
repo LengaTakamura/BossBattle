@@ -91,13 +91,13 @@ public class PlayerDemo : MonoBehaviour
             _motionIndex =MotionIndex.Walk;
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E)&& _canMove)
         {
             _anim.SetTrigger("Skil");
            
         }
 
-        if (Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.Q) && _canMove)
         {
             _anim.SetTrigger("Ult");
         }
