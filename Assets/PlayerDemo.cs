@@ -45,7 +45,7 @@ public class PlayerDemo : MonoBehaviour
 
     void Moving()
     {
-        _rb.velocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
+        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
    
     }
 
@@ -54,7 +54,7 @@ public class PlayerDemo : MonoBehaviour
         //var position = _transform.position;
         //var movement = position - _lastPosition;
         //_lastPosition = position;
-        var movement = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+        var movement = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
 
         if (movement.magnitude != 0f)
         {
@@ -73,6 +73,8 @@ public class PlayerDemo : MonoBehaviour
         if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
         {
             _canMove = false;
+            _rb.linearVelocity = Vector3.zero;
+            
         }
         else
         {
@@ -102,7 +104,7 @@ public class PlayerDemo : MonoBehaviour
             _anim.SetTrigger("Ult");
         }
 
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& _rb.velocity.magnitude >= 5)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& _rb.linearVelocity.magnitude >= 5)
         {
             AnimSet(20);
             _motionIndex =MotionIndex.Run;  
