@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
+
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class PlayerDemo : MonoBehaviour
 {
     Rigidbody _rb;
     [SerializeField]
     int _speed = 0 ;
+<<<<<<< HEAD
     public MotionIndex motionIndex;
+=======
+>>>>>>> origin/sub
     Animator _anim;
-    public float _waitTime = 0;
     private Vector3 _pos;
     private Transform _transform;
     private float _currentVelocity = 0;
@@ -23,6 +22,11 @@ public class PlayerDemo : MonoBehaviour
     private int _dashSpeed = 10;
     [SerializeField]
     private int _defalutSpeed = 5;
+
+    private MotionIndex _motionIndex;
+
+    public MotionIndex Anim { get { return _motionIndex; } set { _motionIndex = value; } }
+
 
     void Awake()
     {
@@ -40,18 +44,29 @@ public class PlayerDemo : MonoBehaviour
             Moving();
             Rotating();
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> origin/sub
     }
 
     void Moving()
     {
-        _rb.velocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
+        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
    
     }
 
     void Rotating()
     {
+<<<<<<< HEAD
         var movement = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+=======
+        //var position = _transform.position;
+        //var movement = position - _lastPosition;
+        //_lastPosition = position;
+        var movement = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
+>>>>>>> origin/sub
 
         if (movement.magnitude != 0f)
         {
@@ -63,14 +78,6 @@ public class PlayerDemo : MonoBehaviour
         }
     }
 
-    bool GroundCheck()
-    {
-        bool isGround = false;
-        return isGround;
-    }
-
-
-
     void AnimationManagement()
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
@@ -78,11 +85,14 @@ public class PlayerDemo : MonoBehaviour
         if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
         {
             _canMove = false;
+            _rb.linearVelocity = Vector3.zero;
+            
         }
         else
         {
             _canMove = true;
         }
+<<<<<<< HEAD
 
         if (_rb.velocity.magnitude > 0.05f)
         {
@@ -97,21 +107,35 @@ public class PlayerDemo : MonoBehaviour
         else if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
         {
             _waitTime = 0f;
+=======
+ 
+        if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+        {
+>>>>>>> origin/sub
             _speed = _defalutSpeed;
+            AnimSet(0);
+            _motionIndex = MotionIndex.Idol;
+        }
+        else
+        {
+            AnimSet(10);
+            _motionIndex =MotionIndex.Walk;
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E)&& _canMove)
         {
             _anim.SetTrigger("Skil");
+           
         }
 
-        if (Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.Q) && _canMove)
         {
             _anim.SetTrigger("Ult");
         }
 
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && _waitTime >= 3f)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& _rb.linearVelocity.magnitude >= 5)
         {
+<<<<<<< HEAD
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
             motionIndex = MotionIndex.Run;
             _speed = _dashSpeed;
@@ -126,6 +150,23 @@ public class PlayerDemo : MonoBehaviour
     }
 
     public void ChangeMotionIndex(MotionIndex mo)
+=======
+            AnimSet(20);
+            _motionIndex =MotionIndex.Run;  
+            _speed = _dashSpeed;
+        }
+        
+
+    }
+
+
+    public void AnimSet(int motion)
+    {
+        _anim.SetInteger("MotionIndex", motion);
+    }
+
+    public  enum MotionIndex
+>>>>>>> origin/sub
     {
         motionIndex = mo;
     }
