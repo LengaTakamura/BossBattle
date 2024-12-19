@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayermanagerDemo : MonoBehaviour
 {
     [SerializeField] GameObject[] _players;
-
+    PlayerDemo.MotionIndex motionIndex;
     private void Start()
     {
         _players[0].SetActive(true);
@@ -44,11 +44,14 @@ public class PlayermanagerDemo : MonoBehaviour
             {
                 pos = player.transform.position;
                 forward = player.transform.forward;
+                motionIndex = player.GetComponent<PlayerDemo>().motionIndex;
                 player.SetActive(false);
             }
 
         }
         _players[i].SetActive(true);
+        var comp  = _players[i].GetComponent<PlayerDemo>();
+        comp.ChangeMotionIndex(motionIndex);
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
     }

@@ -10,7 +10,7 @@ public class PlayerDemo : MonoBehaviour
     Rigidbody _rb;
     [SerializeField]
     int _speed = 0 ;
-    MotionIndex _motionIndex;
+    public MotionIndex motionIndex;
     Animator _anim;
     public float _waitTime = 0;
     private Vector3 _pos;
@@ -35,14 +35,12 @@ public class PlayerDemo : MonoBehaviour
     void Update()
     {
         AnimationManagement();
-
         if (_canMove)
         {
             Moving();
             Rotating();
         }
-        Debug.Log(_rb.velocity);
-        
+
     }
 
     void Moving()
@@ -53,9 +51,6 @@ public class PlayerDemo : MonoBehaviour
 
     void Rotating()
     {
-        //var position = _transform.position;
-        //var movement = position - _lastPosition;
-        //_lastPosition = position;
         var movement = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
 
         if (movement.magnitude != 0f)
@@ -89,12 +84,13 @@ public class PlayerDemo : MonoBehaviour
             _canMove = true;
         }
 
-        if (_rb.velocity.x != 0f || _rb.velocity.z != 0f)
+        if (_rb.velocity.magnitude > 0.05f)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
+            motionIndex = MotionIndex.Walk;
         }
 
-        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.D) && _motionIndex == MotionIndex.Walk)
+        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.D) && motionIndex == MotionIndex.Walk)
         {
             _waitTime += Time.deltaTime;
         }
@@ -117,20 +113,24 @@ public class PlayerDemo : MonoBehaviour
         if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && _waitTime >= 3f)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Run);
+            motionIndex = MotionIndex.Run;
             _speed = _dashSpeed;
         }
 
         if(_rb.velocity == Vector3.zero)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
+            motionIndex = MotionIndex.Idol;
         }
-
-        
 
     }
 
-    enum MotionIndex 
+    public void ChangeMotionIndex(MotionIndex mo)
     {
-        Idol = 0,Walk = 10,Run = 20, Avoid = 30
+        motionIndex = mo;
+    }
+    public enum MotionIndex
+    {
+        Idol = 0, Walk = 10, Run = 20, Avoid = 30
     }
 }
