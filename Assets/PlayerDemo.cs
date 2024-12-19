@@ -45,13 +45,13 @@ public class PlayerDemo : MonoBehaviour
 
     void Moving()
     {
-        _rb.velocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
+        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
    
     }
 
     void Rotating()
     {
-        var movement = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+        var movement = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
 
         if (movement.magnitude != 0f)
         {
@@ -84,7 +84,7 @@ public class PlayerDemo : MonoBehaviour
             _canMove = true;
         }
 
-        if (_rb.velocity.magnitude > 0.05f)
+        if (_rb.linearVelocity.magnitude > 0.05f)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Walk);
             motionIndex = MotionIndex.Walk;
@@ -117,7 +117,7 @@ public class PlayerDemo : MonoBehaviour
             _speed = _dashSpeed;
         }
 
-        if(_rb.velocity == Vector3.zero)
+        if(_rb.linearVelocity == Vector3.zero)
         {
             _anim.SetInteger("MotionIndex", (int)MotionIndex.Idol);
             motionIndex = MotionIndex.Idol;
