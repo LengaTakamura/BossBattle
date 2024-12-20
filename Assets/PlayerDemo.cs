@@ -91,18 +91,18 @@ public class PlayerDemo : MonoBehaviour
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
+        if (stateInfo.IsName("Skil") || stateInfo.IsName("Ult"))
         {
             _canMove = false;
             _rb.linearVelocity = Vector3.zero;
-            
+
         }
         else
         {
             _canMove = true;
         }
- 
-        if (!Input.GetKey(KeyCode.W)&& !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
         {
             _speed = _defalutSpeed;
             AnimSet(0);
@@ -111,13 +111,13 @@ public class PlayerDemo : MonoBehaviour
         else
         {
             AnimSet(10);
-            _motionIndex =MotionIndex.Walk;
+            _motionIndex = MotionIndex.Walk;
         }
 
-        if (Input.GetKeyUp(KeyCode.E)&& _canMove)
+        if (Input.GetKeyUp(KeyCode.E) && _canMove)
         {
             _anim.SetTrigger("Skil");
-           
+
         }
 
         if (Input.GetKeyUp(KeyCode.Q) && _canMove)
@@ -128,15 +128,17 @@ public class PlayerDemo : MonoBehaviour
         Vector3 vect = transform.position - _lastPosition;
         _lastPosition = transform.position;
 
-        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& (Mathf.Abs(vect.z)>= 0.03f || Mathf.Abs(vect.x) >= 0.03f))
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && (Mathf.Abs(vect.z) >= 0.03f || Mathf.Abs(vect.x) >= 0.03f))
         {
             AnimSet(20);
-            _motionIndex =MotionIndex.Run;  
+            _motionIndex = MotionIndex.Run;
             _speed = _dashSpeed;
         }
-        
 
+        _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
+        
     }
+    
 
 
     public void AnimSet(int motion)
