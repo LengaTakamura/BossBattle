@@ -1,5 +1,7 @@
 
+using System;
 using UnityEngine;
+using UnityEngine.Android;
 
 
 public class PlayerDemo : MonoBehaviour
@@ -9,7 +11,6 @@ public class PlayerDemo : MonoBehaviour
     int _speed = 0 ;
     Animator _anim;
     private Vector3 _pos;
-    private Transform _transform;
     private float _currentVelocity = 0;
     public float _smoothTime = 0; 
     public float _maxSpeed = 360f;
@@ -23,10 +24,12 @@ public class PlayerDemo : MonoBehaviour
 
     public MotionIndex Anim { get { return _motionIndex; } set { _motionIndex = value; } }
 
+    [SerializeField]
+    private Vector3 _offSet ;
 
+    private Vector3 _lastPosition ;
     void Awake()
     {
-        _transform = transform;
         _anim = GetComponent<Animator>();
         _rb= GetComponent<Rigidbody>();
     }
@@ -34,35 +37,53 @@ public class PlayerDemo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         AnimationManagement();
+        Rotating();
+        
+        
+    }
+
+    private void FixedUpdate()
+    {
         if (_canMove)
         {
-            Moving();
-            Rotating();
+            Douwn();
         }
+    }
+
+    void Douwn()
+    {
+
+        bool raycastHit = Physics.Raycast(transform.position + new Vector3(0,1,0), _offSet * -1, out RaycastHit hit,1.2f);
         
+        if (raycastHit)
+        {
+            var angle = Vector3.Angle(hit.normal, Vector3.up);
+            Moving();
+
+        }
+        else
+        {
+            
+        }
     }
 
     void Moving()
     {
-        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , 0, Input.GetAxis("Vertical") * _speed);
+        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , -1, Input.GetAxis("Vertical") * _speed);
+
+       
    
     }
 
     void Rotating()
     {
-        //var position = _transform.position;
-        //var movement = position - _lastPosition;
-        //_lastPosition = position;
-        var movement = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
-
-        if (movement.magnitude != 0f)
+        var vect = _rb.linearVelocity;
+        vect.y = 0;       
+        if (vect.magnitude > 0)
         {
-            var rota = Quaternion.LookRotation(movement, Vector3.up);
-            var diffAngle = Vector3.Angle(_transform.forward, movement);
-            var targetAngle = Mathf.SmoothDampAngle(0, diffAngle, ref _currentVelocity, _smoothTime, _maxSpeed);
-            var nextRot = Quaternion.RotateTowards(_transform.rotation, rota, targetAngle);
-            _transform.rotation = nextRot;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(vect), 0.5f);
         }
     }
 
@@ -104,7 +125,10 @@ public class PlayerDemo : MonoBehaviour
             _anim.SetTrigger("Ult");
         }
 
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& _rb.linearVelocity.magnitude >= 5)
+        Vector3 vect = transform.position - _lastPosition;
+        _lastPosition = transform.position;
+
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))&& (Mathf.Abs(vect.z)>= 0.03f || Mathf.Abs(vect.x) >= 0.03f))
         {
             AnimSet(20);
             _motionIndex =MotionIndex.Run;  
