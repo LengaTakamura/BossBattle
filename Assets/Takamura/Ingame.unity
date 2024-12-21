@@ -450,34 +450,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551114484}
     m_Modifications:
-    - target: {fileID: 2006462614286518725, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: m_Drag
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2006462614286518725, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: m_Mass
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2006462614286518725, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: m_AngularDrag
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2006462614286518725, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2006462614286518725, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137904022440466497, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: _dashSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137904022440466497, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-      propertyPath: _defalutSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.04

@@ -71,17 +71,18 @@ public class PlayerDemo : MonoBehaviour
 
     void Moving()
     {
-        _rb.linearVelocity = new Vector3(Input.GetAxis("Horizontal") * _speed , -1, Input.GetAxis("Vertical") * _speed);
+        var velo = new Vector3(Input.GetAxis("Horizontal") , 0, Input.GetAxis("Vertical")).normalized;
 
-       
+        _rb.linearVelocity = velo * _speed;
+
+        velo.y = -1;
    
     }
 
     void Rotating()
     {
-        var vect = _rb.linearVelocity;
-        vect.y = 0;       
-        if (vect.magnitude > 0)
+        var vect = _rb.linearVelocity;      
+        if (Mathf.Abs(vect.x) > 0 && Mathf.Abs(vect.z) > 0)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(vect), 0.5f);
         }
