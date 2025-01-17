@@ -39,20 +39,22 @@ public class PlayerDemo : MonoBehaviour
     {
 
         AnimationManagement();
-        Rotating();
+       
         
         
     }
 
     private void FixedUpdate()
     {
+       
         if (_canMove)
         {
-            Douwn();
+            Rotating();
+            Down();
         }
     }
 
-    void Douwn()
+    void Down()
     {
 
         bool raycastHit = Physics.Raycast(transform.position + new Vector3(0,1,0), _offSet * -1, out RaycastHit hit,1.2f);
@@ -76,16 +78,21 @@ public class PlayerDemo : MonoBehaviour
         _rb.linearVelocity = velo * _speed;
 
         velo.y = -1;
-   
+
+        if (Mathf.Abs(velo.x) > 0 && Mathf.Abs(velo.z) > 0)
+        {
+            var rot = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(velo),0.1f);
+            rot.x = 0;
+            rot.z = 0;
+            transform.rotation = rot;
+        }
+
     }
 
     void Rotating()
     {
-        var vect = _rb.linearVelocity;      
-        if (Mathf.Abs(vect.x) > 0 && Mathf.Abs(vect.z) > 0)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(vect), 0.5f);
-        }
+        var velo = _rb.linearVelocity;
+        
     }
 
     void AnimationManagement()
