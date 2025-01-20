@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5251107426523682287}
   - component: {fileID: 3306707535934527283}
   - component: {fileID: 432789503742086792}
-  - component: {fileID: 722596022912902845}
   - component: {fileID: -1386164309464478694}
+  - component: {fileID: 185606416791778415}
   m_Layer: 0
   m_Name: Magician_RIO 1
   m_TagString: Untagged
@@ -55,7 +55,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.53
+  m_Radius: 0.5
   m_Height: 1.96
   m_Direction: 1
   m_Center: {x: 0, y: 0.95, z: 0}
@@ -86,22 +86,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &722596022912902845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7940719953895527930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7342266eb4e7d8d4d9987a2a4131deae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  waitTime: 0
-  _smoothTime: 0
-  _maxSpeed: 360
 --- !u!95 &-1386164309464478694
 Animator:
   serializedVersion: 7
@@ -111,7 +95,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7940719953895527930}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 35c44a97c30e4e946a0f4d3310613b95, type: 3}
   m_Controller: {fileID: 9100000, guid: 3a9633676d9a6ac43b4a6e82a5c88692, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -124,6 +108,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &185606416791778415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940719953895527930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29b77c0a581acc4980229faf912569a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 2.66
+  _maxSpeed: 360
+  _dashSpeed: 10
+  _defalutSpeed: 5
+  _offSet: {x: 0, y: 1.2, z: 0}
+  _range: 0.5
+  _skateSpeed: 0.57
 --- !u!1001 &8488196711846185449
 PrefabInstance:
   m_ObjectHideFlags: 0

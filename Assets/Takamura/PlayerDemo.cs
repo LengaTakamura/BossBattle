@@ -37,11 +37,7 @@ public class PlayerDemo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         AnimationManagement();
-       
-        
-        
     }
 
     private void FixedUpdate()
@@ -56,12 +52,10 @@ public class PlayerDemo : MonoBehaviour
 
     void Down()
     {
-
         bool raycastHit = Physics.Raycast(transform.position + new Vector3(0,1,0), _offSet * -1, out RaycastHit hit,1.2f);
         
         if (raycastHit)
         {
-            var angle = Vector3.Angle(hit.normal, Vector3.up);
             Moving();
 
         }
