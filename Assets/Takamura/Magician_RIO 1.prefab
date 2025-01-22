@@ -120,13 +120,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29b77c0a581acc4980229faf912569a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 2.66
+  _speed: 10
   _maxSpeed: 360
   _dashSpeed: 10
   _defalutSpeed: 5
   _offSet: {x: 0, y: 1.2, z: 0}
   _range: 0.5
-  _skateSpeed: 0.57
+  _skateSpeed: 5
 --- !u!1001 &8488196711846185449
 PrefabInstance:
   m_ObjectHideFlags: 0

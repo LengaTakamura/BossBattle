@@ -1,3 +1,4 @@
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
@@ -28,7 +29,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     private Vector3 _lastPosition;
 
-
+    RaycastHit _hit;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -47,10 +48,18 @@ public abstract class PlayerBase : MonoBehaviour
         {         
             Moving();
         }
+
+
+        if (Anim == MotionIndex.Skate)
+        {
+            var hited = _hit.transform.position;
+            transform.parent.gameObject.transform.position = hited;
+
+        }
     }
     void Moving()
     {
-        bool raycastHit = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, 1.2f);
+        bool raycastHit = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out _hit, 1.2f);
         Debug.DrawRay(transform.position ,transform.TransformDirection(Vector3.down), Color.blue, 5);
         if (raycastHit && Anim != MotionIndex.Skate)
         {
@@ -67,11 +76,6 @@ public abstract class PlayerBase : MonoBehaviour
             }
         }
 
-        if (raycastHit && Anim == MotionIndex.Skate)
-        {
-            var down = (transform.TransformDirection(Vector3.down) + hit.normal).normalized;
-            _rb.AddForce(down * 5, ForceMode.VelocityChange);
-        }
 
     }
 
