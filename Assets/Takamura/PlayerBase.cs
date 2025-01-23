@@ -1,5 +1,7 @@
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using R3;
+using R3.Collections;
 
 public abstract class PlayerBase : MonoBehaviour
 {
@@ -22,18 +24,26 @@ public abstract class PlayerBase : MonoBehaviour
 
     private MotionIndex _motionIndex;
 
-    public MotionIndex Anim { get { return _motionIndex; } set { _motionIndex = value; } }
+    public MotionIndex State { get { return _motionIndex; } set { _motionIndex = value; } }
 
     [SerializeField]
-    private Vector3 _offSet;
+    private float _length;
 
     private Vector3 _lastPosition;
 
     RaycastHit _hit;
+
+    private bool _isGround;
+    public bool IsGround { get => _isGround  ; set { _isGround = value; } }
+
+    public bool CanSkating = false;
     private void Awake()
     {
+        
         _rb = GetComponent<Rigidbody>();
-        _anim = GetComponent<Animator>();
+        _anim = GetComponentInChildren<Animator>();
+        _rb.useGravity = false;
+       
     }
 
    protected virtual void Update()
@@ -48,20 +58,15 @@ public abstract class PlayerBase : MonoBehaviour
         {         
             Moving();
         }
+        _rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 
-
-        if (Anim == MotionIndex.Skate)
-        {
-            var hited = _hit.transform.position;
-            transform.parent.gameObject.transform.position = hited;
-
-        }
-    }
+     }
+    
     void Moving()
     {
-        bool raycastHit = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out _hit, 1.2f);
-        Debug.DrawRay(transform.position ,transform.TransformDirection(Vector3.down), Color.blue, 5);
-        if (raycastHit && Anim != MotionIndex.Skate)
+         IsGround = Physics.Raycast(transform.position,transform.TransformDirection(Vector3.down).normalized * _length, out _hit,1.3f);
+        Debug.DrawRay(transform.position ,transform.TransformDirection(Vector3.down).normalized * _length, Color.magenta);
+        if (IsGround && State != MotionIndex.Skate)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
@@ -69,18 +74,16 @@ public abstract class PlayerBase : MonoBehaviour
 
             velo.y = 0;
 
-            if (velo.magnitude > 0  && Anim != MotionIndex.Skate)
+            if (velo.magnitude > 0 && State != MotionIndex.Skate)
             {
                 var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(velo), 10f);
                 transform.rotation = rot;
             }
+
+            
         }
 
-
     }
-
-   
-
     void AnimationManagement()
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
@@ -96,18 +99,18 @@ public abstract class PlayerBase : MonoBehaviour
             _canMove = true;
         }
 
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && IsGround)
         {
             _speed = _defalutSpeed;
             AnimSet(0);
-            _motionIndex = MotionIndex.Idol;
+            State = MotionIndex.Idol;
         }
 
 
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) && IsGround)
         {
             AnimSet(10);
-            _motionIndex = MotionIndex.Walk;
+            State = MotionIndex.Walk;
         }
 
         if (Input.GetKeyUp(KeyCode.E) && _canMove)
@@ -123,18 +126,21 @@ public abstract class PlayerBase : MonoBehaviour
         Vector3 vect = transform.position - _lastPosition;
         _lastPosition = transform.position;
 
-        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && (Mathf.Abs(vect.z) >= 0.03f || Mathf.Abs(vect.x) >= 0.03f))
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && (Mathf.Abs(vect.z) >= 0.03f || Mathf.Abs(vect.x) >= 0.03f) && IsGround)
         {
             AnimSet(20);
-            _motionIndex = MotionIndex.Run;
+            State = MotionIndex.Run;
             _speed = _dashSpeed;
         }
 
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
-        Debug.Log(_rb.linearVelocity.magnitude);
-
     }
 
+
+    public void StateChange(MotionIndex motion)
+    {
+        State = motion;
+    }
 
 
     public void AnimSet(int motion)

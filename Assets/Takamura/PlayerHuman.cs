@@ -11,6 +11,8 @@ public class PlayerHuman : PlayerBase
     private float _skateSpeed;
 
     RaycastHit _hit;
+
+
     protected override void Update()
     {
         base.Update();
@@ -22,30 +24,26 @@ public class PlayerHuman : PlayerBase
 
         base.FixedUpdate();
 
-        if (Anim == MotionIndex.Skate)
-        {
-            var velo = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0 ).normalized;
+        //if (State == MotionIndex.Skate)
+        //{
+        //    var velo = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0 ).normalized;
 
-            _rb.linearVelocity = velo * _skateSpeed;
+        //    _rb.linearVelocity = velo * _skateSpeed;
 
-            _rb.useGravity = false;
-        }
+        //}
+
        
+
     }
     async void Rotate()
     {
-        bool raycastHit = Physics.Raycast(transform.position + transform.TransformDirection(Vector3.up),transform.forward, out _hit, 1.2f);
-        Debug.DrawRay(transform.position + transform.TransformDirection(Vector3.up) * 2, transform.forward, Color.red);
-        if (raycastHit && Anim != MotionIndex.Skate)
-        {
-            var hitNormal = _hit.normal;
-            _rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
-            Debug.Log("maehoukouKabe");
-            Quaternion targetRot = Quaternion.AngleAxis(-90, Vector3.right);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 100f);
-            _rb.constraints |= RigidbodyConstraints.FreezeRotationX;
+        CanSkating = Physics.Raycast(transform.position ,transform.forward.normalized * 0.5f, out _hit, 1.2f);
+        Debug.DrawRay(transform.position , transform.forward.normalized * 0.5f, Color.red);
+        if (CanSkating && Input.GetKeyDown(KeyCode.F))
+        { 
+            _rb.AddForce(new Vector3(0,10,0),ForceMode.Impulse);   
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
-            Anim = MotionIndex.Skate;
+            State = MotionIndex.Skate;  
             Speed = _skateSpeed ;
            
         }
