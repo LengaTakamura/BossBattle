@@ -1,22 +1,43 @@
 using Cysharp.Threading.Tasks;
-using System;
+using R3;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class PlayerHuman : PlayerBase
 {
-    [SerializeField]
-    private float _range;
-    [SerializeField]
-    private float _skateSpeed;
+    private void Start()
+    {
+        var clickF = Observable.EveryUpdate()
+             .Where(_ => Input.GetKeyDown(KeyCode.F))
+             .Scan(MotionIndex.Idol, (currentState, input) =>
+             {
+                 if (currentState == MotionIndex.Skating)
+                 {
+                     if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+                     {
+                         return MotionIndex.Run;
+                     }
+                     else
+                     {
+                         return MotionIndex.Idol;
+                     }
+                 }
+                 else
+                 {
+                     return MotionIndex.Skating;
+                 }
 
-    RaycastHit _hit;
+             })
+             .Subscribe(newState =>
+             {
+                 StateChange(newState);
 
+             }).AddTo(this);
+
+    }
 
     protected override void Update()
     {
         base.Update();
-        Rotate();
     }
 
     protected override void FixedUpdate()
@@ -24,32 +45,5 @@ public class PlayerHuman : PlayerBase
 
         base.FixedUpdate();
 
-        //if (State == MotionIndex.Skate)
-        //{
-        //    var velo = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0 ).normalized;
-
-        //    _rb.linearVelocity = velo * _skateSpeed;
-
-        //}
-
-       
-
     }
-    async void Rotate()
-    {
-        CanSkating = Physics.Raycast(transform.position ,transform.forward.normalized * 0.5f, out _hit, 1.2f);
-        Debug.DrawRay(transform.position , transform.forward.normalized * 0.5f, Color.red);
-        if (CanSkating && Input.GetKeyDown(KeyCode.F))
-        { 
-            _rb.AddForce(new Vector3(0,10,0),ForceMode.Impulse);   
-            await UniTask.Delay(TimeSpan.FromSeconds(1f));
-            State = MotionIndex.Skate;  
-            Speed = _skateSpeed ;
-           
-        }
-       
-    }
-
-
-
 }

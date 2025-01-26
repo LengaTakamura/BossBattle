@@ -8,20 +8,11 @@ public class PlayermanagerDemo : MonoBehaviour
 
     [SerializeField] CinemachineCamera _camera;
 
-    
-    int _playerCount = 2;
-
-    private int _priority = 10;
-
-    private int _lessPriority = 0;
-
     [SerializeField]
-    int _firstIndex = 0;
-
+    EnemyManager _enemyManager;
 
     private void Awake()
     {
-
         _players[0].SetActive(true);
         for (int i = 1; i < _players.Length; i++)
         {
@@ -30,6 +21,8 @@ public class PlayermanagerDemo : MonoBehaviour
         }
 
         InitCamera();
+
+        _enemyManager.SetTarget(_players[0]);
     }
 
     void InitCamera()
@@ -45,15 +38,23 @@ public class PlayermanagerDemo : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ChasngeCara(1);
+            _enemyManager.SetTarget(_players[1]);
             
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ChasngeCara(0);
-            
+            _enemyManager.SetTarget(_players[0]);
+
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChasngeCara(2);
+            _enemyManager.SetTarget(_players[2]);
+
         }
 
-      
+
     }
 
     private void ChasngeCara(int i)
@@ -69,7 +70,7 @@ public class PlayermanagerDemo : MonoBehaviour
             {
                 pos = player.transform.position;
                 forward = player.transform.forward;            
-                a = (int)player.GetComponent<PlayerDemo>().Anim;
+                a = (int)player.GetComponent<PlayerBase>().State;
                 Debug.Log(a);
                 player.SetActive(false);
             }
@@ -78,11 +79,12 @@ public class PlayermanagerDemo : MonoBehaviour
         _players[i].SetActive(true);
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
-        _players[i].GetComponent<PlayerDemo>().AnimSet(a);
+        _players[i].GetComponent<PlayerBase>().StateChange((PlayerBase.MotionIndex)a);
         _camera.Follow = _players[i].transform;
 
        
     }
 
-   
+
+  
 }
