@@ -244,12 +244,16 @@ public abstract class PlayerBase : MonoBehaviour
 
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
-
+            Vector3 cameraRight = _camera.transform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+            cameraRight *= move.x;
+            move += cameraRight;
             if (move == Vector3.zero)
             {
                 return;
             }
-
+            
             
             foreach (var hit in hits)
             {
