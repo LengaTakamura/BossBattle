@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
@@ -33,6 +34,8 @@ public abstract class PlayerBase : MonoBehaviour
 
     CapsuleCollider _capsuleCollider;
 
+    [SerializeField]
+    private LayerMask _layerMask;
     private void Awake()
     {
 
@@ -47,6 +50,10 @@ public abstract class PlayerBase : MonoBehaviour
         AnimationManagement();
         GroundCheck();
         WallCheck();
+        if(State == MotionIndex.Skating)
+        {
+            WallRun();
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -58,7 +65,7 @@ public abstract class PlayerBase : MonoBehaviour
         else
         {
             SkatingMove();
-            WallRun();
+           
         }
 
         AddGravity();
@@ -182,7 +189,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     void SkatingMove()
     {
-        if (IsGround && _canMove)
+        if (IsGround && _canMove &&!WallFlg)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
@@ -194,26 +201,33 @@ public abstract class PlayerBase : MonoBehaviour
                 transform.rotation = rot;
             }
         }
-        if (WallFlg && IsGround)
-        {
-            transform.position += new Vector3(0, 1, 0);
-            Debug.Log("Hop");
-        }
 
     }
 
     public void WallRun()
     {
-        if (!IsGround)
+        if (WallFlg)
         {
-            var move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            _rb.isKinematic = true;
+            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
 
             if (move == Vector3.zero)
             {
                 return;
             }
-            
-            var bottum = (gameObject.transform.GetChild(0).transform.position) + _capsuleCollider.center - Vector3.up *( _capsuleCollider.height / 2 - _capsuleCollider.radius);
+
+            var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
+            var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
+
+            var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius + 0.5f,_layerMask);
+
+            foreach (var hit in hits)
+            {
+                var normal  = hit.ClosestPoint(transform.position) - transform.position;
+                normal.Normalize();
+                var onplane = Vector3.ProjectOnPlane(move,normal);
+                transform.position += onplane * _wallRunSpeed * Time.deltaTime;
+            }
         }
     }
 
