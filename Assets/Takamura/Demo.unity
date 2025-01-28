@@ -1315,7 +1315,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413345171}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18975718, y: 0.0028430072, z: -0.0005494666, w: 0.9818268}
+  m_LocalRotation: {x: 0.18975715, y: 0.002842988, z: -0.0005494628, w: 0.9818268}
   m_LocalPosition: {x: 59.50928, y: 7.0072055, z: 102.66517}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1739,6 +1739,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 1c2300e487e6d0743812edf012afde27, type: 2}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 1933551199}
     - target: {fileID: 8298239935863708481, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_Name
       value: Player2
@@ -3214,6 +3218,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   _maxRayRange: 0
+  _camera: {fileID: 1933551199}
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3228,6 +3233,7 @@ GameObject:
   - component: {fileID: 1933551197}
   - component: {fileID: 1933551196}
   - component: {fileID: 1933551195}
+  - component: {fileID: 1933551201}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -3451,6 +3457,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1933551201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933551194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 864e40a8347c8c043817d90bea294d84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputName: Mouse ScrollWheel
+  _inputScale: 100
+  _minFOV: 10
+  _maxFOV: 90
 --- !u!1 &2000576094 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 168864, guid: 281a986484325de459dc1b3709335bc5, type: 3}
@@ -3696,8 +3718,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _speed
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 1933551199}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _maxRayRange
       value: 0.8

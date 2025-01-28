@@ -108,7 +108,6 @@ public abstract class PlayerBase : MonoBehaviour
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             Vector3 cameraForward = _camera.transform.forward;          
             cameraForward.y = 0;
-            Debug.Log(cameraForward);
             cameraForward.Normalize();
             Vector3 cameraRight = _camera.transform.right;
             cameraRight.y = 0; 
@@ -211,12 +210,18 @@ public abstract class PlayerBase : MonoBehaviour
         if (IsGround && _canMove &&!WallFlg)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-
-            _rb.linearVelocity = velo * _skatingSpeed;
+            Vector3 cameraForward = _camera.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+            Vector3 cameraRight = _camera.transform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+            Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
+            _rb.linearVelocity = moveDirection * _skatingSpeed;
 
             if (velo.magnitude > 0)
             {
-                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(velo), 10f);
+                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDirection), 10f);
                 transform.rotation = rot;
             }
         }

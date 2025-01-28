@@ -27,7 +27,7 @@ public class PlayermanagerDemo : MonoBehaviour
 
     void InitCamera()
     {
-        _camera.Follow = _players[0].transform;    
+        _camera.Target.TrackingTarget = _players[0].transform;    
     }
 
 
@@ -80,9 +80,10 @@ public class PlayermanagerDemo : MonoBehaviour
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
         _players[i].GetComponent<PlayerBase>().StateChange((PlayerBase.MotionIndex)a);
-        _camera.Follow = _players[i].transform;
+        _camera.Target.TrackingTarget = _players[i].transform;
+        Debug.Log(_camera.Target.TrackingTarget);
 
-       
+
     }
 
 
