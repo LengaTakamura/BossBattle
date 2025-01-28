@@ -24,12 +24,14 @@ public abstract class PlayerBase : MonoBehaviour
     public bool WallFlg = false;
 
     [SerializeField]
-    private float _jumpPower;
-
-    [SerializeField]
     private float _skatingSpeed;
 
     Vector3 _footPosition;
+
+    [SerializeField]
+    private float _wallRunSpeed;
+
+    CapsuleCollider _capsuleCollider;
 
     private void Awake()
     {
@@ -37,7 +39,7 @@ public abstract class PlayerBase : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;
-
+        _capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     protected virtual void Update()
@@ -49,15 +51,16 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if(State != MotionIndex.Skating)
+        if (State != MotionIndex.Skating)
         {
             Moving();
         }
         else
         {
             SkatingMove();
+            WallRun();
         }
-       
+
         AddGravity();
     }
 
@@ -70,7 +73,7 @@ public abstract class PlayerBase : MonoBehaviour
         else
         {
             if (IsGround)
-            _rb.AddForce(_footPosition - transform.position, ForceMode.Acceleration);
+                _rb.AddForce(_footPosition - transform.position, ForceMode.Acceleration);
         }
 
     }
@@ -106,8 +109,8 @@ public abstract class PlayerBase : MonoBehaviour
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Skil") || stateInfo.IsName("Ult") || stateInfo.IsName("Attack") 
-            || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3"))      
+        if (stateInfo.IsName("Skil") || stateInfo.IsName("Ult") || stateInfo.IsName("Attack")
+            || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3"))
         {
             _canMove = false;
             _rb.linearVelocity = Vector3.zero;
@@ -190,20 +193,34 @@ public abstract class PlayerBase : MonoBehaviour
                 var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(velo), 10f);
                 transform.rotation = rot;
             }
-
-
         }
-
         if (WallFlg && IsGround)
         {
             transform.position += new Vector3(0, 1, 0);
             Debug.Log("Hop");
         }
+
     }
+
+    public void WallRun()
+    {
+        if (!IsGround)
+        {
+            var move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+
+            if (move == Vector3.zero)
+            {
+                return;
+            }
+            
+            var bottum = (gameObject.transform.GetChild(0).transform.position) + _capsuleCollider.center - Vector3.up *( _capsuleCollider.height / 2 - _capsuleCollider.radius);
+        }
+    }
+
 
     public void Jumping()
     {
-        
+
     }
 
     public void AnimSet(int motion)
