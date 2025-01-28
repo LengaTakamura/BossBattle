@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
@@ -36,6 +37,13 @@ public abstract class PlayerBase : MonoBehaviour
 
     [SerializeField]
     private LayerMask _layerMask;
+
+    [SerializeField]
+    private float _maxRayRange;
+
+    [SerializeField]
+    CinemachineCamera _camera;  
+
     private void Awake()
     {
 
@@ -98,16 +106,21 @@ public abstract class PlayerBase : MonoBehaviour
         if (IsGround && _canMove)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-
-            _rb.linearVelocity = velo * _speed;
+            Vector3 cameraForward = _camera.transform.forward;          
+            cameraForward.y = 0;
+            Debug.Log(cameraForward);
+            cameraForward.Normalize();
+            Vector3 cameraRight = _camera.transform.right;
+            cameraRight.y = 0; 
+            cameraRight.Normalize();
+            Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
+            _rb.linearVelocity = moveDirection * _speed;
 
             if (velo.magnitude > 0)
             {
-                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(velo), 10f);
+                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDirection), 10f);
                 transform.rotation = rot;
             }
-
-
         }
 
 
@@ -183,8 +196,14 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void WallCheck()
     {
-        WallFlg = Physics.Raycast(transform.position, transform.forward.normalized * 0.5F, out RaycastHit hit, 0.6f);
+        WallFlg = Physics.Raycast(transform.position, transform.forward.normalized * 0.5F, out RaycastHit hit, _maxRayRange,_layerMask)
+        || Physics.Raycast(transform.position, transform.right.normalized * 0.5F, out RaycastHit hit2, _maxRayRange,_layerMask)
+         || Physics.Raycast(transform.position, -transform.right.normalized * 0.5F, out RaycastHit hit3, _maxRayRange, _layerMask)
+          || Physics.Raycast(transform.position, -transform.forward.normalized * 0.5F, out RaycastHit hit4, _maxRayRange, _layerMask);
         Debug.DrawRay(transform.position, transform.forward.normalized * 0.5f, Color.red);
+        Debug.DrawRay(transform.position, transform.right.normalized * 0.5F, Color.red);
+        Debug.DrawRay(transform.position, -transform.right.normalized * 0.5F, Color.red);
+        Debug.DrawRay(transform.position, -transform.forward.normalized * 0.5F, Color.red);
     }
 
     void SkatingMove()
@@ -208,26 +227,39 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if (WallFlg)
         {
+            var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
+            var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
+            var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius, _layerMask);
+            Vector3 normal = Vector3.zero;
+            Vector3 gap = Vector3.zero;
+            if(hits.Length == 0)
+            {
+                return;
+            }
+
             _rb.isKinematic = true;
-            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
+            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
 
             if (move == Vector3.zero)
             {
                 return;
             }
 
-            var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
-            var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
-
-            var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius + 0.5f,_layerMask);
-
+            
             foreach (var hit in hits)
             {
-                var normal  = hit.ClosestPoint(transform.position) - transform.position;
-                normal.Normalize();
-                var onplane = Vector3.ProjectOnPlane(move,normal);
+                var point = hit.ClosestPoint(transform.position) - transform.position;
+                normal += point;
+            }
+            normal.Normalize();
+            if (hits.Length > 0)
+            {
+                normal /= hits.Length;
+                var onplane = Vector3.ProjectOnPlane(move, normal);
+                Debug.Log(onplane);
                 transform.position += onplane * _wallRunSpeed * Time.deltaTime;
             }
+
         }
     }
 
