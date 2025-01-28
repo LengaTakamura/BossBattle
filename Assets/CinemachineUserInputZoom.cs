@@ -15,7 +15,6 @@ public class CinemachineUserInputZoom : CinemachineExtension
 
     // ユーザー入力を必要とする
 
-
     private float _scrollDelta;
     private float _adjustFOV;
 
