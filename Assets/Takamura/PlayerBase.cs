@@ -241,14 +241,16 @@ public abstract class PlayerBase : MonoBehaviour
             {
                 return;
             }
-
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
+            Vector3 cameraForward = _camera.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
             Vector3 cameraRight = _camera.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
-            cameraRight = (cameraRight * move.x);
-            move += cameraRight;
+            var cameraInput = (cameraRight * move.x) + (cameraRight * move.z);
+            move += cameraInput;
             if (move == Vector3.zero)
             {
                 return;
@@ -264,7 +266,7 @@ public abstract class PlayerBase : MonoBehaviour
             if (hits.Length > 0)
             {
                 normal /= hits.Length;
-                var onplane = Vector3.ProjectOnPlane(move, normal);
+                var onplane = Vector3.ProjectOnPlane(move, normal).normalized;
                 Debug.Log(onplane);
                 transform.position += onplane * _wallRunSpeed * Time.deltaTime;
             }

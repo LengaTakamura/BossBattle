@@ -1,3 +1,4 @@
+
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -13,10 +14,19 @@ public class CinemachineUserInputZoom : CinemachineExtension
     [SerializeField, Range(1, 179)] private float _minFOV = 10;
     [SerializeField, Range(1, 179)] private float _maxFOV = 90;
 
+    // 変化するおおよその時間[s]
+    [SerializeField] private float _smoothTime = 0.1f;
+    // 変化の最大速度
+    [SerializeField] private float _maxSpeed = Mathf.Infinity;
+
     // ユーザー入力を必要とする
 
     private float _scrollDelta;
-    private float _adjustFOV;
+
+    // 滑らかに変化するFOVの計算用変数
+    private float _targetAdjustFOV;
+    private float _currentAdjustFOV;
+    private float _currentAdjustFOVVelocity;
 
     private void Update()
     {
@@ -41,8 +51,8 @@ public class CinemachineUserInputZoom : CinemachineExtension
         if (!Mathf.Approximately(_scrollDelta, 0))
         {
             // FOVの補正量を計算
-            _adjustFOV = Mathf.Clamp(
-                _adjustFOV - _scrollDelta * _inputScale,
+            _targetAdjustFOV = Mathf.Clamp(
+                _targetAdjustFOV - _scrollDelta * _inputScale,
                 _minFOV - lens.FieldOfView,
                 _maxFOV - lens.FieldOfView
             );
@@ -50,9 +60,19 @@ public class CinemachineUserInputZoom : CinemachineExtension
             _scrollDelta = 0;
         }
 
+        // 滑らかに変化するFOV値を計算
+        _currentAdjustFOV = Mathf.SmoothDamp(
+            _currentAdjustFOV,
+            _targetAdjustFOV,
+            ref _currentAdjustFOVVelocity,
+            _smoothTime,
+            _maxSpeed,
+            deltaTime
+        );
+
         // stateの内容は毎回リセットされるので、
         // 毎回補正する必要がある
-        lens.FieldOfView += _adjustFOV;
+        lens.FieldOfView += _currentAdjustFOV;
 
         state.Lens = lens;
     }
