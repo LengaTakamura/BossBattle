@@ -11,7 +11,7 @@ public class InputSystem : MonoBehaviour
              .Scan(0, (count, _) => count + 1)
              .Subscribe(count =>
              {
-                 if (count % 5 == 0)
+                 if (count % 3 == 0)
                  {
 
                  }

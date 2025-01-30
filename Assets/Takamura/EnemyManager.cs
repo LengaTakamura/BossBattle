@@ -10,11 +10,15 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     public int _health = 1000;
 
-    int IDamageable.Health {  get { return _health; } set { _health = value; } }
+    int IDamageable.MaxHealth {  get { return _health; } set { _health = value; } }
+
+    [SerializeField]
+    private int _currentHealth = 1000;
+    int IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        _currentHealth = _health;
     }
 
     private void Update()
@@ -38,17 +42,20 @@ public class EnemyManager : MonoBehaviour,IDamageable
         _target = target;
     }
 
-    void IDamageable.AddDamage(int damage)
+    void IDamageable.HitDamage(int damage)
     {
-
+        _currentHealth -= damage;
+        Debug.Log($"hit{damage}");
     }
 
  
 }
 public interface IDamageable
 {
-    int Health { get; set; }
+    int MaxHealth { get; set; }
 
-    void AddDamage(int damage);
+    int CurrentHealth { get; set; }
+
+    void HitDamage(int damage);
 
 }

@@ -1,16 +1,15 @@
 
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public abstract class PlayerBase : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour,IDamageable
 {
 
     protected Rigidbody _rb;
     [SerializeField]
     private float _speed = 1;
     public float Speed { get { return _speed; } set { _speed = value; } }
-    Animator _anim;
+    public Animator _anim;
     private bool _canMove = true;
     private MotionIndex _motionIndex;
 
@@ -48,6 +47,14 @@ public abstract class PlayerBase : MonoBehaviour
     [SerializeField]
     float _radiusOffset = 0.2f;
 
+    int _health = 100;
+
+    int IDamageable.MaxHealth { get { return _health; } set { _health = value; } }
+
+    [SerializeField]
+    private int _currentHealth = 100;
+    int IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
+
     private void Awake()
     {
 
@@ -62,7 +69,7 @@ public abstract class PlayerBase : MonoBehaviour
         AnimationManagement();
         GroundCheck();
         WallCheck();
-        if(State == MotionIndex.Skating)
+        if (State == MotionIndex.Skating)
         {
             WallRun();
         }
@@ -77,7 +84,7 @@ public abstract class PlayerBase : MonoBehaviour
         else
         {
             SkatingMove();
-           
+
         }
 
         AddGravity();
@@ -110,11 +117,11 @@ public abstract class PlayerBase : MonoBehaviour
         if (IsGround && _canMove)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            Vector3 cameraForward = Camera.main.transform.forward;          
+            Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
             Vector3 cameraRight = Camera.main.transform.right;
-            cameraRight.y = 0; 
+            cameraRight.y = 0;
             cameraRight.Normalize();
             Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
             _rb.linearVelocity = moveDirection * _speed;
@@ -193,6 +200,12 @@ public abstract class PlayerBase : MonoBehaviour
         _anim.SetTrigger("Attack");
     }
 
+    void IDamageable.HitDamage(int damage)
+    {
+
+    }
+
+
     public void SkateIn()
     {
     }
@@ -208,12 +221,12 @@ public abstract class PlayerBase : MonoBehaviour
         //Debug.DrawRay(transform.position, -transform.right.normalized * 0.5F, Color.red);
         //Debug.DrawRay(transform.position, -transform.forward.normalized * 0.5F, Color.red);
 
-      
+
     }
 
     void SkatingMove()
     {
-        if (IsGround && _canMove &&!WallFlg)
+        if (IsGround && _canMove && !WallFlg)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             Vector3 cameraForward = Camera.main.transform.forward;
@@ -255,7 +268,7 @@ public abstract class PlayerBase : MonoBehaviour
             Vector3 normal = Vector3.zero;
             float gapSum = 0;
             _rb.isKinematic = true;
-            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
+            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
             Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
@@ -269,27 +282,20 @@ public abstract class PlayerBase : MonoBehaviour
                 return;
             }
 
-            if (Vector3.Dot((cameraRight * move.x) + (cameraRight * move.z), move) < 0)
-            {
-                moveDirection = -(cameraRight * move.x + cameraRight * move.z) + move;
-            }
-            else
-            {
-                moveDirection = (cameraRight * move.x + cameraRight * move.z) + move;
-            }
-
-
-
+           
+           moveDirection = ((cameraForward * move.x + cameraRight * move.x) + move).normalized;
+         
+           
             foreach (var hit in hits)
             {
                 var point = hit.ClosestPoint(transform.position) - transform.position;
-                if(point.magnitude < 0.4)
+                if (point.magnitude < 0.4)
                 {
                     var gap = _capsuleCollider.radius - point.magnitude;
                     gapSum += gap;
                 }
                 normal += point;
-                
+
             }
             normal.Normalize();
             if (hits.Length > 0)
@@ -297,20 +303,21 @@ public abstract class PlayerBase : MonoBehaviour
                 normal /= hits.Length;
                 var onplane = Vector3.ProjectOnPlane(moveDirection, normal).normalized;
                 transform.position += -gapSum * normal.normalized + onplane * _wallRunSpeed * Time.deltaTime;
-                var foot = transform.GetChild(0);
-                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
-                Debug.Log(rot);
-                rot.z = 0;
-                foot.transform.rotation = rot;
+                //var foot = transform.GetChild(0);
+                //var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
+                //rot.x = 0;
+                //foot.transform.rotation = rot;
+                _radiusOffset = 0.5f;
 
             }
-           
+
         }
         else
         {
             if (!IsGround)
             {
-                _radiusOffset += 0.1f;            }
+                _radiusOffset += 0.1f;
+            }
         }
     }
 
