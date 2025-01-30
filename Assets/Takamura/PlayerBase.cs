@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -42,7 +42,10 @@ public abstract class PlayerBase : MonoBehaviour
     private float _maxRayRange;
 
     [SerializeField]
-    CinemachineCamera _camera;  
+    CinemachineCamera _camera;
+
+    [SerializeField]
+    float _radiusOffset = 0.2f;
 
     private void Awake()
     {
@@ -195,14 +198,16 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void WallCheck()
     {
-        WallFlg = Physics.Raycast(transform.position, transform.forward.normalized * 0.5F, out RaycastHit hit, _maxRayRange,_layerMask)
-        || Physics.Raycast(transform.position, transform.right.normalized * 0.5F, out RaycastHit hit2, _maxRayRange,_layerMask)
-         || Physics.Raycast(transform.position, -transform.right.normalized * 0.5F, out RaycastHit hit3, _maxRayRange, _layerMask)
-          || Physics.Raycast(transform.position, -transform.forward.normalized * 0.5F, out RaycastHit hit4, _maxRayRange, _layerMask);
-        Debug.DrawRay(transform.position, transform.forward.normalized * 0.5f, Color.red);
-        Debug.DrawRay(transform.position, transform.right.normalized * 0.5F, Color.red);
-        Debug.DrawRay(transform.position, -transform.right.normalized * 0.5F, Color.red);
-        Debug.DrawRay(transform.position, -transform.forward.normalized * 0.5F, Color.red);
+        //WallFlg = Physics.Raycast(transform.position, transform.forward.normalized * 0.5F, out RaycastHit hit, _maxRayRange,_layerMask)
+        //|| Physics.Raycast(transform.position, transform.right.normalized * 0.5F, out RaycastHit hit2, _maxRayRange,_layerMask)
+        // || Physics.Raycast(transform.position, -transform.right.normalized * 0.5F, out RaycastHit hit3, _maxRayRange, _layerMask)
+        //  || Physics.Raycast(transform.position, -transform.forward.normalized * 0.5F, out RaycastHit hit4, _maxRayRange, _layerMask);
+        //Debug.DrawRay(transform.position, transform.forward.normalized * 0.5f, Color.red);
+        //Debug.DrawRay(transform.position, transform.right.normalized * 0.5F, Color.red);
+        //Debug.DrawRay(transform.position, -transform.right.normalized * 0.5F, Color.red);
+        //Debug.DrawRay(transform.position, -transform.forward.normalized * 0.5F, Color.red);
+
+      
     }
 
     void SkatingMove()
@@ -230,17 +235,22 @@ public abstract class PlayerBase : MonoBehaviour
 
     public void WallRun()
     {
+
+        var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
+        var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
+        var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius + _radiusOffset, _layerMask);
+        if (hits.Length == 0)
+        {
+            WallFlg = false;
+        }
+        else
+        {
+            WallFlg = true;
+        }
         if (WallFlg)
         {
-            var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
-            var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
-            var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius, _layerMask);
             Vector3 normal = Vector3.zero;
-            Vector3 gap = Vector3.zero;
-            if(hits.Length == 0)
-            {
-                return;
-            }
+            float gapSum = 0;
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
             Vector3 cameraForward = _camera.transform.forward;
@@ -260,17 +270,29 @@ public abstract class PlayerBase : MonoBehaviour
             foreach (var hit in hits)
             {
                 var point = hit.ClosestPoint(transform.position) - transform.position;
+                Debug.Log(point.magnitude);
+                if(point.magnitude < 0.4)
+                {
+                    var gap = _capsuleCollider.radius - point.magnitude;
+                    gapSum += gap;
+                }
                 normal += point;
+                
             }
             normal.Normalize();
             if (hits.Length > 0)
             {
                 normal /= hits.Length;
                 var onplane = Vector3.ProjectOnPlane(move, normal).normalized;
-                Debug.Log(onplane);
-                transform.position += onplane * _wallRunSpeed * Time.deltaTime;
+                transform.position += -gapSum * normal.normalized + onplane * _wallRunSpeed * Time.deltaTime;
             }
-
+           
+        }
+        else
+        {
+            if (!IsGround)
+            {
+                _radiusOffset += 0.1f;            }
         }
     }
 
