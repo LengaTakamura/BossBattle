@@ -1,6 +1,7 @@
 
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public abstract class PlayerBase : MonoBehaviour
 {
@@ -109,10 +110,10 @@ public abstract class PlayerBase : MonoBehaviour
         if (IsGround && _canMove)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            Vector3 cameraForward = _camera.transform.forward;          
+            Vector3 cameraForward = Camera.main.transform.forward;          
             cameraForward.y = 0;
             cameraForward.Normalize();
-            Vector3 cameraRight = _camera.transform.right;
+            Vector3 cameraRight = Camera.main.transform.right;
             cameraRight.y = 0; 
             cameraRight.Normalize();
             Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
@@ -215,10 +216,10 @@ public abstract class PlayerBase : MonoBehaviour
         if (IsGround && _canMove &&!WallFlg)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            Vector3 cameraForward = _camera.transform.forward;
+            Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
-            Vector3 cameraRight = _camera.transform.right;
+            Vector3 cameraRight = Camera.main.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
             Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
@@ -247,30 +248,41 @@ public abstract class PlayerBase : MonoBehaviour
         {
             WallFlg = true;
         }
+
+
         if (WallFlg)
         {
             Vector3 normal = Vector3.zero;
             float gapSum = 0;
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
-            Vector3 cameraForward = _camera.transform.forward;
+            Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
-            Vector3 cameraRight = _camera.transform.right;
+            Vector3 cameraRight = Camera.main.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
-            var cameraInput = (cameraRight * move.x) + (cameraRight * move.z);
-            move += cameraInput;
+            Vector3 moveDirection = Vector3.zero;
+
             if (move == Vector3.zero)
             {
                 return;
             }
-            
-            
+
+            if (Vector3.Dot((cameraRight * move.x) + (cameraRight * move.z), move) < 0)
+            {
+                moveDirection = -(cameraRight * move.x + cameraRight * move.z) + move;
+            }
+            else
+            {
+                moveDirection = (cameraRight * move.x + cameraRight * move.z) + move;
+            }
+
+
+
             foreach (var hit in hits)
             {
                 var point = hit.ClosestPoint(transform.position) - transform.position;
-                Debug.Log(point.magnitude);
                 if(point.magnitude < 0.4)
                 {
                     var gap = _capsuleCollider.radius - point.magnitude;
@@ -283,8 +295,14 @@ public abstract class PlayerBase : MonoBehaviour
             if (hits.Length > 0)
             {
                 normal /= hits.Length;
-                var onplane = Vector3.ProjectOnPlane(move, normal).normalized;
+                var onplane = Vector3.ProjectOnPlane(moveDirection, normal).normalized;
                 transform.position += -gapSum * normal.normalized + onplane * _wallRunSpeed * Time.deltaTime;
+                var foot = transform.GetChild(0);
+                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
+                Debug.Log(rot);
+                rot.z = 0;
+                foot.transform.rotation = rot;
+
             }
            
         }

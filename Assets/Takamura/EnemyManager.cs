@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
     [SerializeField]
     float _distance;
 
-    int _health = 1000;
+    public int _health = 1000;
 
     int IDamageable.Health {  get { return _health; } set { _health = value; } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,11 +43,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     }
 
-    void IDamageable.GetDamage(int damage)
-    {
-
-    }
-
+ 
 }
 public interface IDamageable
 {
@@ -55,5 +51,4 @@ public interface IDamageable
 
     void AddDamage(int damage);
 
-    void GetDamage(int damage);
 }
