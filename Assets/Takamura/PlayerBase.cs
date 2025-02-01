@@ -72,9 +72,9 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     {
         AnimationManagement();
         GroundCheck();
-       
         if (State == MotionIndex.Skating)
         {
+
             WallRun(WallCheck());
         }
     }
@@ -269,7 +269,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             float gap = 0;
             _normal = Vector3.zero;
             _rb.isKinematic = true;
-            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
+            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
             if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
             {
                 _cameraF = _camera.transform.forward;
@@ -303,10 +303,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                      gap = _normal.magnitude - (_capsuleCollider.radius + _radiusOffset);
                 }
                 _normal.Normalize();
-                var onplane = Vector3.ProjectOnPlane(moveDirection, _normal).normalized;
-                transform.position += (-gap * _normal.normalized + onplane) * _wallRunSpeed * Time.deltaTime;
+                var onplaneX = Vector3.Cross(transform.up, _normal);
+                var onplaneY = Vector3.Cross(_normal, onplaneX);
+                var m = onplaneX * moveDirection.x + onplaneY * moveDirection.y;
+                transform.position += (-gap * _normal.normalized + m) * _wallRunSpeed * Time.deltaTime;
                 var foot = transform.GetChild(0);
-                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
+                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplaneX), 10f);
                 rot.x = 0;
                 rot.z = 0;
                 foot.transform.rotation = rot;
@@ -314,10 +316,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             }
 
         }
-        else
-        {
-
-        }
+    
     }
 
 
