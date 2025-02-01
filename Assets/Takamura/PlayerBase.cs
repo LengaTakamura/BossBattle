@@ -2,7 +2,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-public abstract class PlayerBase : MonoBehaviour,IDamageable
+public abstract class PlayerBase : MonoBehaviour, IDamageable
 {
 
     protected Rigidbody _rb;
@@ -57,7 +57,8 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
 
     Vector3 _cameraF = Vector3.zero;
     Vector3 _cameraR = Vector3.zero;
-
+    float _gapSum = 0;
+    Vector3 _normal = Vector3.zero;
     private void Awake()
     {
 
@@ -71,10 +72,10 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
     {
         AnimationManagement();
         GroundCheck();
-        WallCheck();
+       
         if (State == MotionIndex.Skating)
         {
-            WallRun();
+            WallRun(WallCheck());
         }
     }
 
@@ -191,7 +192,7 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
             AttackAnim();
         }
 
-        if (!Input.GetMouseButton(0)) 
+        if (!Input.GetMouseButton(0))
         {
             _anim.SetBool("AttackBool", false);
         }
@@ -219,17 +220,21 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
     {
     }
 
-    public void WallCheck()
+    public Collider[] WallCheck()
     {
-        //WallFlg = Physics.Raycast(transform.position, transform.forward.normalized * 0.5F, out RaycastHit hit, _maxRayRange,_layerMask)
-        //|| Physics.Raycast(transform.position, transform.right.normalized * 0.5F, out RaycastHit hit2, _maxRayRange,_layerMask)
-        // || Physics.Raycast(transform.position, -transform.right.normalized * 0.5F, out RaycastHit hit3, _maxRayRange, _layerMask)
-        //  || Physics.Raycast(transform.position, -transform.forward.normalized * 0.5F, out RaycastHit hit4, _maxRayRange, _layerMask);
-        //Debug.DrawRay(transform.position, transform.forward.normalized * 0.5f, Color.red);
-        //Debug.DrawRay(transform.position, transform.right.normalized * 0.5F, Color.red);
-        //Debug.DrawRay(transform.position, -transform.right.normalized * 0.5F, Color.red);
-        //Debug.DrawRay(transform.position, -transform.forward.normalized * 0.5F, Color.red);
+        var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
+        var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
+        var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius + _radiusOffset, _layerMask);
+        if (hits.Length == 0)
+        {
+            WallFlg = false;
+        }
+        else
+        {
+            WallFlg = true;
+        }
 
+        return hits;
 
     }
 
@@ -256,38 +261,26 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
 
     }
 
-    public void WallRun()
+    public void WallRun(Collider[] hits)
     {
-
-        var bottum = transform.position - Vector3.up * (_capsuleCollider.height / 2 + _capsuleCollider.radius) + _capsuleCollider.center;
-        var top = transform.position + Vector3.up * (_capsuleCollider.height / 2 - _capsuleCollider.radius) + _capsuleCollider.center;
-        var hits = Physics.OverlapCapsule(bottum, top, _capsuleCollider.radius + _radiusOffset, _layerMask);
-        if (hits.Length == 0)
-        {
-            WallFlg = false;
-        }
-        else
-        {
-            WallFlg = true;
-        }
-
 
         if (WallFlg)
         {
-            Vector3 normal = Vector3.zero;
-            float gapSum = 0;
+            float gap = 0;
+            _normal = Vector3.zero;
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
             if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
             {
-                _cameraF = Camera.main.transform.forward;
+                _cameraF = _camera.transform.forward;
                 _cameraF.y = 0;
                 _cameraF.Normalize();
-                _cameraR = Camera.main.transform.right;
+                _cameraR = _camera.transform.right;
                 _cameraR.y = 0;
                 _cameraR.Normalize();
+
             }
-           
+
             Vector3 moveDirection = Vector3.zero;
 
             if (move == Vector3.zero)
@@ -295,43 +288,35 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
                 return;
             }
 
-           moveDirection = ((_cameraF * move.x + _cameraR * move.x) + move).normalized;
-         
-           
+            moveDirection = ((_cameraF * move.x + _cameraR * move.x) + move).normalized;
             foreach (var hit in hits)
             {
                 var point = hit.ClosestPoint(transform.position) - transform.position;
-                if (point.magnitude < 0.4)
-                {
-                    var gap = _capsuleCollider.radius - point.magnitude;
-                    gapSum += gap;
-                }
-                normal += point;
+                _normal += point;
 
             }
-            normal.Normalize();
             if (hits.Length > 0)
             {
-                normal /= hits.Length;
-                var onplane = Vector3.ProjectOnPlane(moveDirection, normal).normalized;
-                Debug.Log(hits.Length);
-                transform.position += -gapSum * normal.normalized + onplane * _wallRunSpeed * Time.deltaTime;
+                _normal /= hits.Length;
+                if (_normal.magnitude > 0.8f)
+                {
+                     gap = _normal.magnitude - (_capsuleCollider.radius + _radiusOffset);
+                }
+                _normal.Normalize();
+                var onplane = Vector3.ProjectOnPlane(moveDirection, _normal).normalized;
+                transform.position += (-gap * _normal.normalized + onplane) * _wallRunSpeed * Time.deltaTime;
                 var foot = transform.GetChild(0);
                 var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
                 rot.x = 0;
                 rot.z = 0;
                 foot.transform.rotation = rot;
-                _radiusOffset = 0.5f;
 
             }
 
         }
         else
         {
-            if (!IsGround)
-            {
-                _radiusOffset += 0.1f;
-            }
+
         }
     }
 
