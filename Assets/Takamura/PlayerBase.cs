@@ -55,6 +55,9 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
     private int _currentHealth = 100;
     int IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
 
+    Vector3 _cameraF = Vector3.zero;
+    Vector3 _cameraR = Vector3.zero;
+
     private void Awake()
     {
 
@@ -275,12 +278,16 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
             float gapSum = 0;
             _rb.isKinematic = true;
             var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-            Vector3 cameraRight = Camera.main.transform.right;
-            cameraRight.y = 0;
-            cameraRight.Normalize();
+            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
+            {
+                _cameraF = Camera.main.transform.forward;
+                _cameraF.y = 0;
+                _cameraF.Normalize();
+                _cameraR = Camera.main.transform.right;
+                _cameraR.y = 0;
+                _cameraR.Normalize();
+            }
+           
             Vector3 moveDirection = Vector3.zero;
 
             if (move == Vector3.zero)
@@ -288,8 +295,7 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
                 return;
             }
 
-           
-           moveDirection = ((cameraForward * move.x + cameraRight * move.x) + move).normalized;
+           moveDirection = ((_cameraF * move.x + _cameraR * move.x) + move).normalized;
          
            
             foreach (var hit in hits)
@@ -308,11 +314,13 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
             {
                 normal /= hits.Length;
                 var onplane = Vector3.ProjectOnPlane(moveDirection, normal).normalized;
+                Debug.Log(hits.Length);
                 transform.position += -gapSum * normal.normalized + onplane * _wallRunSpeed * Time.deltaTime;
-                //var foot = transform.GetChild(0);
-                //var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
-                //rot.x = 0;
-                //foot.transform.rotation = rot;
+                var foot = transform.GetChild(0);
+                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplane), 10f);
+                rot.x = 0;
+                rot.z = 0;
+                foot.transform.rotation = rot;
                 _radiusOffset = 0.5f;
 
             }
