@@ -183,9 +183,14 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
 
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             AttackAnim();
+        }
+
+        if (!Input.GetMouseButton(0)) 
+        {
+            _anim.SetBool("AttackBool", false);
         }
     }
 
@@ -197,6 +202,7 @@ public abstract class PlayerBase : MonoBehaviour,IDamageable
 
     public void AttackAnim()
     {
+        _anim.SetBool("AttackBool", true);
         _anim.SetTrigger("Attack");
     }
 
