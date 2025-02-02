@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwordManager : MonoBehaviour
 {
-    public int Damage = 100;
+    public float Damage = 100;
     [SerializeField]
     private GameObject _model;
 
@@ -24,29 +24,11 @@ public class SwordManager : MonoBehaviour
 
    
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IDamageable damage))
         {
-
-            var name = _clipInfo[0].clip.name;
-
-            if (name == "Attack")
-            {
-                damage.HitDamage(Damage);
-                Debug.Log("Attack1");
-
-            }
-            else if (name == "Attack2")
-            {
-                damage.HitDamage(Damage * 2);
-                Debug.Log("Attack2");
-            }
-            else if (name == "Attack3")
-            {
-                damage.HitDamage(Damage * 3);
-                Debug.Log("Attack3");
-            }
+            damage.HitDamage(Damage);
         }
     }
 

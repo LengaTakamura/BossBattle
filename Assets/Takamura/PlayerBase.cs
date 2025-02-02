@@ -1,5 +1,6 @@
 
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour, IDamageable
@@ -47,13 +48,13 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField]
     float _radiusOffset = 0.2f;
 
-    int _health = 100;
+    float _health = 100;
 
-    int IDamageable.MaxHealth { get { return _health; } set { _health = value; } }
+    float IDamageable.MaxHealth { get { return _health; } set { _health = value; } }
 
     [SerializeField]
-    private int _currentHealth = 100;
-    int IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
+    private float _currentHealth = 100;
+    float IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
 
     Vector3 _cameraF = Vector3.zero;
     Vector3 _cameraR = Vector3.zero;
@@ -210,7 +211,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _anim.SetTrigger("Attack");
     }
 
-    void IDamageable.HitDamage(int damage)
+    void IDamageable.HitDamage(float damage)
     {
 
     }
@@ -269,7 +270,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             float gap = 0;
             _normal = Vector3.zero;
             _rb.isKinematic = true;
-            var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"),0).normalized;
+            var input = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"),0).normalized;
+
+            if (input == Vector3.zero)
+            {
+                return;
+            }
             if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
             {
                 _cameraF = _camera.transform.forward;
@@ -281,17 +287,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
             }
 
-            Vector3 moveDirection = Vector3.zero;
-
-            if (move == Vector3.zero)
-            {
-                return;
-            }
-
-            moveDirection = ((_cameraF * move.x + _cameraR * move.x) + move).normalized;
+            Vector3 moveDirectionX = Vector3.zero;
+            Vector3 moveDirectionY = Vector3.zero;
+            moveDirectionY = new Vector3(0,input.y,0);
             foreach (var hit in hits)
             {
-                var point = hit.ClosestPoint(transform.position) - transform.position;
+                var point = transform.position - hit.ClosestPoint(transform.position);
                 _normal += point;
 
             }
@@ -303,12 +304,22 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                      gap = _normal.magnitude - (_capsuleCollider.radius + _radiusOffset);
                 }
                 _normal.Normalize();
-                var onplaneX = Vector3.Cross(transform.up, _normal);
-                var onplaneY = Vector3.Cross(_normal, onplaneX);
-                var m = onplaneX * moveDirection.x + onplaneY * moveDirection.y;
-                transform.position += (-gap * _normal.normalized + m) * _wallRunSpeed * Time.deltaTime;
+               
+                var onplaneX = Vector3.Cross(_normal, Vector3.up);
+                var onplaneY = Vector3.Cross(onplaneX,_normal );
+                Vector3 m = Vector3.zero;
+                if (Vector3.Dot(_cameraR,onplaneX)< 0)
+                {
+                    m = -(onplaneX * input.x) + onplaneY * moveDirectionY.y;
+                }
+                else
+                {
+                    m = onplaneX * input.x + onplaneY * moveDirectionY.y;
+                }
+                m.Normalize();
+                transform.position += (gap * _normal.normalized + m) * _wallRunSpeed * Time.deltaTime;
                 var foot = transform.GetChild(0);
-                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(onplaneX), 10f);
+                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(m), 10f);
                 rot.x = 0;
                 rot.z = 0;
                 foot.transform.rotation = rot;
