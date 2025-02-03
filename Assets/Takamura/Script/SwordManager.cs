@@ -26,7 +26,7 @@ public class SwordManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out IDamageable damage))
+        if (other.transform.parent.TryGetComponent(out IDamageable damage))
         {
             damage.HitDamage(Damage);
         }
