@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class FlameParticleManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private float _damage = 100f;
 
-    // Update is called once per frame
-    void Update()
+    private void OnParticleCollision(GameObject other)
     {
-        
+        if(other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
+        {
+            damage.HitDamage(_damage);
+        }
     }
 }
