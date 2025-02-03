@@ -18,7 +18,14 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     [SerializeField]
     EnemyHealthBarManager _enemyHealthBarManager;
+
+    Animator _animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
     void Start()
     {
         _currentHealth = _health;
@@ -50,6 +57,10 @@ public class EnemyManager : MonoBehaviour,IDamageable
         _currentHealth -= damage;
         Debug.Log($"hit{damage}");
         _enemyHealthBarManager.FillUpdate(_currentHealth / _health);
+        if(_currentHealth / _health < 0.2)
+        {
+            _animator.SetTrigger("Ult");
+        }
     }
 
  
