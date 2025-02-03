@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.2
   _delayTime: 0.5
-  _damage: 50
+  _damage: 5
 --- !u!1101 &-7882717839436372734
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.2
   _delayTime: 0.5
-  _damage: 100
+  _damage: 7
 --- !u!1102 &-3160627226710174872
 AnimatorState:
   serializedVersion: 6
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.2
   _delayTime: 0.5
-  _damage: 300
+  _damage: 10
 --- !u!1102 &4281619606644689558
 AnimatorState:
   serializedVersion: 6

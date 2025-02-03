@@ -48,9 +48,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField]
     float _radiusOffset = 0.2f;
 
-    float _health = 100;
+    [SerializeField]
+    float _maxHealth = 100;
 
-    float IDamageable.MaxHealth { get { return _health; } set { _health = value; } }
+    float IDamageable.MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
 
     [SerializeField]
     private float _currentHealth = 100;
