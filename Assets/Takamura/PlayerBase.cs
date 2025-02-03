@@ -214,7 +214,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     void IDamageable.HitDamage(float damage)
     {
-
+        _currentHealth -= damage;
+        if (_currentHealth < 0)
+        {
+            Debug.Log($"Ž€–S{gameObject}");
+        }
     }
 
 
