@@ -1,4 +1,6 @@
 
+using R3;
+using System;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -61,6 +63,15 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     Vector3 _cameraR = Vector3.zero;
     float _gapSum = 0;
     Vector3 _normal = Vector3.zero;
+
+    private Subject<float> _onDamage = new Subject<float>();
+    
+    public Observable<float> Ondamaged
+    {
+        get { return _onDamage; }
+    }
+
+
     private void Awake()
     {
 
@@ -68,6 +79,18 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;
         _capsuleCollider = GetComponent<CapsuleCollider>();
+    }
+
+    private void Start()
+    {
+        _onDamage.Subscribe(damage =>
+        {
+            if (_currentHealth < 0)
+            {
+                Debug.Log($"Ž€–S{gameObject}");
+            }
+        }
+        ).AddTo(this);
     }
 
     protected virtual void Update()
@@ -215,10 +238,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     void IDamageable.HitDamage(float damage)
     {
         _currentHealth -= damage;
-        if (_currentHealth < 0)
-        {
-            Debug.Log($"Ž€–S{gameObject}");
-        }
+        _onDamage.OnNext(damage);
+       
     }
 
 

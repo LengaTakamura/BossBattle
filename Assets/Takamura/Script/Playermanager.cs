@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using R3;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -25,6 +27,15 @@ public class Playermanager : MonoBehaviour
         _enemyManager.SetTarget(_players[0]);
         var damage = _players[0].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
+        foreach( var player in _players)
+        {
+            var pl = player.GetComponent<PlayerBase>();
+            pl.Ondamaged.Subscribe(damage =>
+            {
+                PlayerHPBarUpdate(pl.GetComponent<IDamageable>());
+            }).AddTo(this);
+        }
+  
     }
    
     void InitCamera()
