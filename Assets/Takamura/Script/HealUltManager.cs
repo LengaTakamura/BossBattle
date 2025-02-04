@@ -25,11 +25,19 @@ public class HealUltManager : MonoBehaviour
         _ct = _cts.Token;
         if (other.TryGetComponent(out IDamageable damage))
         {
-            while (_isHealing)
+            try
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(_delayTime), cancellationToken: _ct);
-                damage.HitHeal(_healValue);
+                while (_isHealing)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(_delayTime), cancellationToken: _ct);
+                    damage.HitHeal(_healValue);
+                }
             }
+            catch (Exception ex)
+            {
+                
+            }
+            
 
         }
     }
@@ -38,11 +46,15 @@ public class HealUltManager : MonoBehaviour
         
     }
 
-    async void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         _isHealing = false;
-        await UniTask.Delay(TimeSpan.FromSeconds(3),cancellationToken: _ct);
+    }
+
+    private void OnDestroy()
+    {
         _cts.Cancel();
+        _cts.Dispose();
     }
 
 }

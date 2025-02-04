@@ -26,16 +26,12 @@ public class SwordManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.TryGetComponent(out IDamageable damage))
+        if (other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.transform.parent.gameObject.tag == "Enemy")
         {
             damage.HitDamage(Damage);
         }
     }
 
-    async void AwaitAnim(IDamageable damage)
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(0.25));
-
-    }
+  
 
 }
