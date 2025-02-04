@@ -6,33 +6,7 @@ public class PlayerHuman : PlayerBase
 {
     private void Start()
     {
-        var clickF = Observable.EveryUpdate()
-             .Where(_ => Input.GetKeyDown(KeyCode.F))
-             .Scan(MotionIndex.Idol, (currentState, input) =>
-             {
-                 if (currentState == MotionIndex.Skating)
-                 {
-                     if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-                     {
-                         return MotionIndex.Run;
-                     }
-                     else
-                     {
-                         return MotionIndex.Idol;
-                     }
-                 }
-                 else
-                 {
-                     return MotionIndex.Skating;
 
-                 }
-
-             })
-             .Subscribe(newState =>
-             {
-                 StateChange(newState);
-
-             }).AddTo(this);
 
     }
 

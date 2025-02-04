@@ -185,12 +185,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             return;
         }
 
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && IsGround)
-        {
-            AnimSet(0);
-            State = MotionIndex.Idol;
-        }
-
         if (Input.GetKeyUp(KeyCode.E) && _canMove)
         {
             _anim.SetTrigger("Skil");
@@ -201,18 +195,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
             _anim.SetTrigger("Ult");
         }
-        Vector3 vect = transform.position - _lastPosition;
-        _lastPosition = transform.position;
+     
 
-        //if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && IsGround)
-        //{
-        //    AnimSet(20);
-        //    State = MotionIndex.Run;
-        //}
-
+     
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             AttackAnim();
         }
@@ -226,6 +214,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
             _anim.SetTrigger("Avoid");
         }
+
+        
     }
 
     public void StateChange(MotionIndex motion)
@@ -242,9 +232,13 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     void IDamageable.HitDamage(float damage)
     {
-        _currentHealth -= damage;
-        _onDamage.OnNext(damage);
-       
+        if(State != MotionIndex.Avoid)
+        {
+            _currentHealth -= damage;
+            _onDamage.OnNext(damage);
+
+        }
+
     }
 
     void IDamageable.HitHeal(float value)
@@ -384,6 +378,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public enum MotionIndex
     {
-        Idol = 0, Run = 20, Avoid = 30, Skating = 40
+       NonAvoid = 0,Avoid = 10,Skating = 30
     }
 }
