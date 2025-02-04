@@ -169,7 +169,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("Skil") || stateInfo.IsName("Ult") || stateInfo.IsName("Attack")
-            || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3"))
+            || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3")|| stateInfo.IsName("Avoid"))
         {
             _canMove = false;
             _rb.linearVelocity = Vector3.zero;
@@ -204,11 +204,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         Vector3 vect = transform.position - _lastPosition;
         _lastPosition = transform.position;
 
-        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && IsGround)
-        {
-            AnimSet(20);
-            State = MotionIndex.Run;
-        }
+        //if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && IsGround)
+        //{
+        //    AnimSet(20);
+        //    State = MotionIndex.Run;
+        //}
 
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
 
@@ -220,6 +220,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         if (!Input.GetMouseButton(0))
         {
             _anim.SetBool("AttackBool", false);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            _anim.SetTrigger("Avoid");
         }
     }
 

@@ -83,8 +83,6 @@ public class Playermanager : MonoBehaviour
             {
                 pos = player.transform.position;
                 forward = player.transform.forward;
-                a = (int)player.GetComponent<PlayerBase>().State;
-                Debug.Log(a);
                 player.SetActive(false);
             }
 
