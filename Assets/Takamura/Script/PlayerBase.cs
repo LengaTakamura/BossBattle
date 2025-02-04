@@ -200,7 +200,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
      
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             AttackAnim();
         }
