@@ -24665,3 +24665,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4341595082f50784a98f2c4c5cabd0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _delayTime: 1.5
+  _healValue: 100

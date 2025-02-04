@@ -242,6 +242,16 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
        
     }
 
+    void IDamageable.HitHeal(float value)
+    {
+        _currentHealth += value;
+        if (_currentHealth > _maxHealth)
+        {
+            _currentHealth = _maxHealth;
+        } 
+        _onDamage.OnNext(value);
+    }
+
 
     public void SkateIn()
     {

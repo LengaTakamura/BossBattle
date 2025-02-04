@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38eb17445113cfd4a97998d2d17bb28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _awaitTime: 0.2
+  _awaitTime: 0.4
   _delayTime: 0.5
   _damage: 7
 --- !u!1102 &-3160627226710174872
@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38eb17445113cfd4a97998d2d17bb28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _awaitTime: 0.2
+  _awaitTime: 0.4
   _delayTime: 0.5
   _damage: 100
 --- !u!1102 &4281619606644689558

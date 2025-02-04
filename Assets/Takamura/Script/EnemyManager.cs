@@ -63,6 +63,12 @@ public class EnemyManager : MonoBehaviour,IDamageable
         }
     }
 
+    void IDamageable.HitHeal(float value)
+    {
+       
+
+    }
+
  
 }
 public interface IDamageable
@@ -72,5 +78,7 @@ public interface IDamageable
     float CurrentHealth { get; set; }
 
     void HitDamage(float damage);
+
+    void HitHeal(float value);
 
 }
