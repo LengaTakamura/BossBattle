@@ -36,6 +36,7 @@ public class Attack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         cts.Cancel();
+        cts.Dispose();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

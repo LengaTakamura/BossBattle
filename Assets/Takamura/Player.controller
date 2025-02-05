@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _awaitTime: 0.2
-  _delayTime: 0.5
+  _delayTime: 0.1
   _damage: 5
 --- !u!1101 &-7882717839436372734
 AnimatorStateTransition:
@@ -79,10 +79,10 @@ AnimatorStateMachine:
     m_Position: {x: -240, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1670320994377541945}
-    m_Position: {x: -50, y: 340, z: 0}
+    m_Position: {x: -60, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4281619606644689558}
-    m_Position: {x: -370, y: 360, z: 0}
+    m_Position: {x: -380, y: 410, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3160627226710174872}
     m_Position: {x: 240, y: 280, z: 0}
@@ -94,7 +94,7 @@ AnimatorStateMachine:
     m_Position: {x: 220, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4113447069032744133}
-    m_Position: {x: -73.02655, y: 570.1151, z: 0}
+    m_Position: {x: -220, y: 580, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -202,8 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38eb17445113cfd4a97998d2d17bb28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _awaitTime: 0.4
-  _delayTime: 0.5
+  _awaitTime: 0.8
+  _delayTime: 0.1
   _damage: 7
 --- !u!1102 &-3160627226710174872
 AnimatorState:
@@ -609,8 +609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38eb17445113cfd4a97998d2d17bb28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _awaitTime: 0.4
-  _delayTime: 0.5
+  _awaitTime: 0.8
+  _delayTime: 0.2
   _damage: 100
 --- !u!1102 &4281619606644689558
 AnimatorState:

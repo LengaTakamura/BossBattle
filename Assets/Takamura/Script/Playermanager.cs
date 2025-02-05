@@ -13,12 +13,14 @@ public class Playermanager : MonoBehaviour
     EnemyManager _enemyManager;
     [SerializeField]
     PlayerheealthBarManager _playerheealthBarManager;
+    [SerializeField]
+    StaminaBarManager _staminaBarM;
 
-    
+    GameObject _target;
     private void Start()
     {
-
         _players[0].SetActive(true);
+        _target = _players[0];
         for (int i = 1; i < _players.Length; i++)
         {
             _players[i].SetActive(false);
@@ -27,7 +29,9 @@ public class Playermanager : MonoBehaviour
         _enemyManager.SetTarget(_players[0]);
         var damage = _players[0].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
-        foreach( var player in _players)
+        var playerBase = _target.GetComponent<PlayerBase>();
+        playerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
+        foreach ( var player in _players)
         {
             var pl = player.GetComponent<PlayerBase>();
             pl.Ondamaged.Subscribe(damage =>
@@ -67,7 +71,16 @@ public class Playermanager : MonoBehaviour
 
         }
 
-
+        if (Input.GetMouseButtonDown(1))
+        {
+            var anim = _target.GetComponentInChildren<Animator>();
+            anim.SetTrigger("Avoid");
+            var player = _target.GetComponent<PlayerBase>();
+            player.ReduceStamina();
+            player.OnStaminaChanged?.Invoke(player.CurrentStamina/player.MaxStamina);
+        }
+        
+       
     }
     
     private void ChasngeCara(int i)
@@ -88,6 +101,7 @@ public class Playermanager : MonoBehaviour
 
         }
         _players[i].SetActive(true);
+        _target = _players[i];
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
         _players[i].GetComponent<PlayerBase>().StateChange((PlayerBase.MotionIndex)a);

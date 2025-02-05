@@ -1,8 +1,12 @@
 
+using Cysharp.Threading.Tasks;
 using R3;
 using System;
+using System.Threading;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour, IDamageable
@@ -65,16 +69,18 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     Vector3 _normal = Vector3.zero;
 
     private Subject<float> _onDamage = new Subject<float>();
-    
+    public float MaxStamina = 5f;
+    public float CurrentStamina = 5f;
     public Observable<float> Ondamaged
     {
         get { return _onDamage; }
     }
 
-
+    public Action<float> OnStaminaChanged;
+    CancellationTokenSource _cts;
     private void Awake()
     {
-
+        _cts = new CancellationTokenSource();
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;
@@ -91,6 +97,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             }
         }
         ).AddTo(this);
+
+        CurrentStamina = MaxStamina;
+       
+        RecoveryStamina(_cts.Token);
     }
 
     protected virtual void Update()
@@ -210,10 +220,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             _anim.SetBool("AttackBool", false);
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            _anim.SetTrigger("Avoid");
-        }
+      
 
         
     }
@@ -366,10 +373,23 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
 
-    public void Jumping()
+    public float ReduceStamina()
     {
-
+        CurrentStamina -= 1;
+        OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+        return CurrentStamina / MaxStamina;
     }
+
+   private async void RecoveryStamina(CancellationToken token)
+   {
+        while(State != MotionIndex.Avoid && CurrentStamina < MaxStamina)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(1.5f),cancellationToken:token);
+            Debug.Log("aaa");
+            CurrentStamina += 1;
+            OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+        }
+   }
 
     public void AnimSet(int motion)
     {
@@ -379,5 +399,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public enum MotionIndex
     {
        NonAvoid = 0,Avoid = 10,Skating = 30
+    }
+
+    private void OnDestroy()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }
