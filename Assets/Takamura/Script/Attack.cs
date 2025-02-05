@@ -14,6 +14,8 @@ public class Attack : StateMachineBehaviour
     CancellationTokenSource cts = null;
     [SerializeField]
     int _damage = 100;
+    [SerializeField]
+    GameObject _slashObj;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -75,6 +77,10 @@ public class Attack : StateMachineBehaviour
         sword.Damage = _damage;
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         _sword.enabled = true;
+        if(!info.IsName("Attack"))
+        {
+            var inst = Instantiate(_slashObj, _sword.transform.position, Quaternion.identity);
+        }
         await UniTask.Delay(TimeSpan.FromSeconds(_delayTime), cancellationToken: ct);
         _sword.enabled = false;
     }
