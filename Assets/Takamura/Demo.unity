@@ -1642,7 +1642,7 @@ Transform:
   m_GameObject: {fileID: 413345171}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18805493, y: 0, z: 0, w: 0.98215854}
-  m_LocalPosition: {x: 42.63, y: 7.04, z: 101.47}
+  m_LocalPosition: {x: 42.63, y: 6.9230003, z: 101.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2132,6 +2132,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: c54126f734b228244956af3a67a6f8f7, type: 2}
+    - target: {fileID: 3759480324870928527, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3759480324870928527, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5487942806316547262, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
@@ -2149,8 +2157,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1933551199}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: MaxStamina
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _maxHealth
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: CurrentStamina
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _currentHealth
@@ -4565,8 +4581,8 @@ MonoBehaviour:
   _radiusOffset: 0.2
   _maxHealth: 50
   _currentHealth: 50
-  MaxStamina: 5
-  CurrentStamina: 5
+  MaxStamina: 3
+  CurrentStamina: 3
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4771,7 +4787,7 @@ Transform:
   m_GameObject: {fileID: 1933551194}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18805493, y: 0, z: 0, w: 0.98215854}
-  m_LocalPosition: {x: 42.63, y: 7.04, z: 101.47}
+  m_LocalPosition: {x: 42.63, y: 6.9230003, z: 101.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5209,7 +5225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2905322545484664229, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.88
+      value: 4.763
       objectReference: {fileID: 0}
     - target: {fileID: 2905322545484664229, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5416,12 +5432,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1933551199}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: MaxStamina
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _maxHealth
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _radiusOffset
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: CurrentStamina
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _currentHealth

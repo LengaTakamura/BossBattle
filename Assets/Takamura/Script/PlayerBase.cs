@@ -69,14 +69,14 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     Vector3 _normal = Vector3.zero;
 
     private Subject<float> _onDamage = new Subject<float>();
-    public float MaxStamina = 5f;
-    public float CurrentStamina = 5f;
+    public float MaxStamina = 3f;
+    public static float CurrentStamina = 3f;
     public Observable<float> Ondamaged
     {
         get { return _onDamage; }
     }
 
-    public Action<float> OnStaminaChanged;
+    public static Action<float> OnStaminaChanged;
 
     private void Awake()
     {

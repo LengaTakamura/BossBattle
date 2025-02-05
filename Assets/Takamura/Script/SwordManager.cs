@@ -8,13 +8,11 @@ public class SwordManager : MonoBehaviour
     [SerializeField]
     private GameObject _model;
 
-    private Animator _animator;
 
-    AnimatorClipInfo[] _clipInfo;
     private void Start()
     {
-        _animator = _model.GetComponent<Animator>();
-        _clipInfo = _animator.GetCurrentAnimatorClipInfo(0);
+      
+      
     }
 
 

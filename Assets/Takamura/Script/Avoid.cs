@@ -36,7 +36,7 @@ public class Avoid : StateMachineBehaviour
     {
         _cts2?.Cancel();
         _player.ReduceStamina();
-        _player.OnStaminaChanged?.Invoke(_player.CurrentStamina / _player.MaxStamina);
+        PlayerBase.OnStaminaChanged?.Invoke(PlayerBase.CurrentStamina / _player.MaxStamina);
         _cts?.Cancel();
         _cts = new CancellationTokenSource();
         await RecoveryDelay(_player,_cts.Token);

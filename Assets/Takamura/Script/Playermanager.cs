@@ -19,10 +19,9 @@ public class Playermanager : MonoBehaviour
     StaminaBarManager _staminaBarM;
 
     GameObject _target;
-    CancellationTokenSource _cts;
+
     private void Start()
     {
-        _cts = new CancellationTokenSource();
         _players[0].SetActive(true);
         _target = _players[0];
         for (int i = 1; i < _players.Length; i++)
@@ -33,8 +32,7 @@ public class Playermanager : MonoBehaviour
         _enemyManager.SetTarget(_players[0]);
         var damage = _players[0].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
-        var playerBase = _target.GetComponent<PlayerBase>();
-        playerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
+        PlayerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
         foreach ( var player in _players)
         {
             var pl = player.GetComponent<PlayerBase>();
@@ -54,7 +52,7 @@ public class Playermanager : MonoBehaviour
 
 
     
-    async private void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -78,17 +76,14 @@ public class Playermanager : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             var player = _target.GetComponent<PlayerBase>();
-            if(player.CurrentStamina != 0)
+            if( PlayerBase.CurrentStamina != 0)
             {
                 var anim = _target.GetComponentInChildren<Animator>();
                 anim.SetTrigger("Avoid");
 
             }
 
-
         }
-        
-       
     }
 
 
@@ -119,9 +114,6 @@ public class Playermanager : MonoBehaviour
         _camera.Target.TrackingTarget = _players[i].transform.GetChild(1);
         var damage = _players[i].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
-        Debug.Log(_camera.Target.TrackingTarget);
-
-
     }
     
     public void PlayerHPBarUpdate(IDamageable damage)
@@ -129,11 +121,7 @@ public class Playermanager : MonoBehaviour
         _playerheealthBarManager?.FillUpdate(damage.CurrentHealth / damage.MaxHealth);
     }
 
-    private void OnDestroy()
-    {
-        _cts.Cancel();
-        _cts.Dispose();
-    }
+ 
 
 }
     
