@@ -77,10 +77,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
     public Action<float> OnStaminaChanged;
-    CancellationTokenSource _cts;
+
     private void Awake()
     {
-        _cts = new CancellationTokenSource();
+
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;
@@ -100,7 +100,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
         CurrentStamina = MaxStamina;
        
-        RecoveryStamina(_cts.Token);
+      
     }
 
     protected virtual void Update()
@@ -373,25 +373,28 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
 
+    public void RecoveryStamina()
+    {
+        if (CurrentStamina < MaxStamina && State != MotionIndex.Avoid)
+            CurrentStamina += 1;
+        OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+    }
+
     public float ReduceStamina()
     {
         CurrentStamina -= 1;
         OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+        if (CurrentStamina < 0)
+        {
+            CurrentStamina = 0;
+            return 0;
+        }
+        
         return CurrentStamina / MaxStamina;
     }
 
-   private async void RecoveryStamina(CancellationToken token)
-   {
-        while(State != MotionIndex.Avoid && CurrentStamina < MaxStamina)
-        {
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f),cancellationToken:token);
-            Debug.Log("aaa");
-            CurrentStamina += 1;
-            OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
-        }
-   }
-
-    public void AnimSet(int motion)
+ 
+       public void AnimSet(int motion)
     {
         _anim.SetInteger("MotionIndex", motion);
     }
@@ -401,9 +404,5 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
        NonAvoid = 0,Avoid = 10,Skating = 30
     }
 
-    private void OnDestroy()
-    {
-        _cts.Cancel();
-        _cts.Dispose();
-    }
+  
 }

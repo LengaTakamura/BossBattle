@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using R3;
+using System;
+using System.Threading;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -17,8 +19,10 @@ public class Playermanager : MonoBehaviour
     StaminaBarManager _staminaBarM;
 
     GameObject _target;
+    CancellationTokenSource _cts;
     private void Start()
     {
+        _cts = new CancellationTokenSource();
         _players[0].SetActive(true);
         _target = _players[0];
         for (int i = 1; i < _players.Length; i++)
@@ -50,7 +54,7 @@ public class Playermanager : MonoBehaviour
 
 
     
-    private void Update()
+    async private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -73,15 +77,22 @@ public class Playermanager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            var anim = _target.GetComponentInChildren<Animator>();
-            anim.SetTrigger("Avoid");
             var player = _target.GetComponent<PlayerBase>();
-            player.ReduceStamina();
-            player.OnStaminaChanged?.Invoke(player.CurrentStamina/player.MaxStamina);
+            if(player.CurrentStamina != 0)
+            {
+                var anim = _target.GetComponentInChildren<Animator>();
+                anim.SetTrigger("Avoid");
+
+            }
+
+
         }
         
        
     }
+
+
+  
     
     private void ChasngeCara(int i)
     {
@@ -118,6 +129,11 @@ public class Playermanager : MonoBehaviour
         _playerheealthBarManager?.FillUpdate(damage.CurrentHealth / damage.MaxHealth);
     }
 
+    private void OnDestroy()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 
 }
     
