@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
-using System;
 using System.Threading;
+using System;
 using UnityEngine;
 
-public class Ult : StateMachineBehaviour
+public class Skill : StateMachineBehaviour
 {
     [SerializeField]
-    GameObject _ultPrefab;
+    GameObject _skillPrefab;
 
     CancellationTokenSource cts = null;
     [SerializeField]
@@ -42,10 +42,10 @@ public class Ult : StateMachineBehaviour
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
 
-    async void UltTiming(CancellationToken ct,Animator anim)
+    async void UltTiming(CancellationToken ct, Animator anim)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
-        var effect = Instantiate(_ultPrefab,anim.transform.position,Quaternion.identity);
-     
+        var effect = Instantiate(_skillPrefab, anim.transform.position + Vector3.up , anim.transform.rotation);
+
     }
 }
