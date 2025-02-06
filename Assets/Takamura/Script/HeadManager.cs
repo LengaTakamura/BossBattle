@@ -8,7 +8,6 @@ public class HeadManager : MonoBehaviour
         if (other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
         {
             damage.HitDamage(Damage);
-            Debug.Log("HIT");
         }
     }
 }
