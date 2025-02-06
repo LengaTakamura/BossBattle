@@ -13,6 +13,10 @@ public class PlayerHuman : PlayerBase
     protected override void Update()
     {
         base.Update();
+        if (Input.GetMouseButtonDown(0))
+        {
+            AttackAnim();
+        }
     }
 
     protected override void FixedUpdate()
@@ -21,4 +25,11 @@ public class PlayerHuman : PlayerBase
         base.FixedUpdate();
 
     }
+
+
+    public void AttackAnim()
+    {
+        _anim.SetTrigger("Attack");
+    }
+
 }

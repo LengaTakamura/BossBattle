@@ -179,16 +179,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     {
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("Skil") || stateInfo.IsName("Ult") || stateInfo.IsName("Attack")
-            || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3")|| stateInfo.IsName("Avoid"))
+        if (stateInfo.IsTag("CanMove"))
         {
-            _canMove = false;
-            _rb.linearVelocity = Vector3.zero;
+          
+            _canMove = true;
 
         }
         else
         {
-            _canMove = true;
+            _canMove = false;
+            _rb.linearVelocity = Vector3.zero;
+
         }
 
         if (State == MotionIndex.Skating)
@@ -211,18 +212,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
      
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            AttackAnim();
-        }
-
-        if (!Input.GetMouseButton(0))
-        {
-            _anim.SetBool("AttackBool", false);
-        }
-
       
-
+     
         
     }
 
@@ -232,12 +223,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _anim.SetInteger("MotionIndex", (int)motion);
     }
 
-    public void AttackAnim()
-    {
-        _anim.SetBool("AttackBool", true);
-        _anim.SetTrigger("Attack");
-    }
-
+    
     void IDamageable.HitDamage(float damage)
     {
         if(State != MotionIndex.Avoid)
