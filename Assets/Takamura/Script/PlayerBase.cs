@@ -80,7 +80,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;

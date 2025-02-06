@@ -80,19 +80,19 @@ AnimatorStateMachine:
     m_Position: {x: -240, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1670320994377541945}
-    m_Position: {x: -60, y: 330, z: 0}
+    m_Position: {x: -50, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4281619606644689558}
     m_Position: {x: -380, y: 410, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3160627226710174872}
-    m_Position: {x: 240, y: 280, z: 0}
+    m_Position: {x: 250, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5209305060347429110}
-    m_Position: {x: 240, y: 380, z: 0}
+    m_Position: {x: 280, y: 310, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4974533617042411616}
-    m_Position: {x: 220, y: 460, z: 0}
+    m_Position: {x: 310, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4113447069032744133}
     m_Position: {x: -220, y: 580, z: 0}
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ebc6da3af56a74f85cde1cb50503d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillPrefab: {fileID: 2715471840370901047, guid: df9374346b76e444dbbb2b019de4da25, type: 3}
+  _skillPrefab: {fileID: 1314945738539566, guid: 32c9fd11a72259d45aa26ae41c34c5aa, type: 3}
   _awaitTime: 0.5
 --- !u!1101 &916564347963577536
 AnimatorStateTransition:

@@ -45,7 +45,7 @@ public class Skill : StateMachineBehaviour
     async void UltTiming(CancellationToken ct, Animator anim)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
-        var effect = Instantiate(_skillPrefab, anim.transform.position + Vector3.up , anim.transform.rotation);
+        var effect = Instantiate(_skillPrefab, anim.transform.position + anim.transform.forward, anim.transform.rotation);
 
     }
 }
