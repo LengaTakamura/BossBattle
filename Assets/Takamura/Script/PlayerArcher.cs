@@ -4,6 +4,11 @@ using UnityEngine;
 public class PlayerArcher : PlayerBase
 {
     bool _isAiming = false;
+    [SerializeField]
+    float _aimMoveSpeed = 1f;
+
+    float _speedX = 0f;
+    float _speedY = 0f;
     private void Start()
     {
         Aiming();
@@ -14,12 +19,20 @@ public class PlayerArcher : PlayerBase
         base.Update();
        
         Attack();
+        
+
     }
 
     protected override void FixedUpdate()
     {
 
         base.FixedUpdate();
+        if (_isAiming)
+        {
+            MoveParam();
+            MoveWithAim();
+
+        }
 
     }
 
@@ -53,6 +66,62 @@ public class PlayerArcher : PlayerBase
         {
             _anim.SetTrigger("Attack");
         }
+    }
+
+    private void MoveWithAim()
+    {    
+            var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+            Vector3 cameraRight = Camera.main.transform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+            Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
+            _rb.linearVelocity = moveDirection * _aimMoveSpeed;
+
+    }
+
+    private void MoveParam()
+    {
+        if (Input.GetKey(KeyCode.W) && _speedY < 0.5)
+        {
+            _speedY += 0.01f;
+        }
+        else if (Input.GetKey(KeyCode.A) && _speedX > -0.5)
+        {
+            _speedX -= 0.01f;
+        }
+        else if (Input.GetKey(KeyCode.S) && _speedY > -0.5)  
+        {
+            _speedY -= 0.01f;
+        }
+        else if (Input.GetKey(KeyCode.D) && _speedX < 0.5)
+        {
+            _speedX += 0.01f;
+        }
+
+        if (!Input.GetKey(KeyCode.W) && _speedY > 0)
+        {
+            _speedY -= 0.01f;
+        }
+        if (!Input.GetKey(KeyCode.A) && _speedX < 0)
+        {
+            _speedX += 0.01f;
+        }
+        if (!Input.GetKey(KeyCode.S) && _speedY < 0)
+        {
+            _speedY += 0.01f;
+        }
+        if (!Input.GetKey(KeyCode.D) && _speedX > 0)
+        {
+            _speedX -= 0.01f;
+        }
+
+
+        _anim.SetFloat("BlendX",_speedX);
+        _anim.SetFloat("BlendY",_speedY);
+        Debug.Log((_speedX, _speedY));
     }
 
 
