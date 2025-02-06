@@ -13,7 +13,7 @@ public class PlayerArcher : PlayerBase
     {
         base.Update();
        
-
+        Attack();
     }
 
     protected override void FixedUpdate()
@@ -45,6 +45,14 @@ public class PlayerArcher : PlayerBase
                _anim.SetBool("Aim", _isAiming);
            });
 
+    }
+
+    private void Attack()
+    {
+        if (_isAiming && Input.GetMouseButtonDown(0))
+        {
+            _anim.SetTrigger("Attack");
+        }
     }
 
 
