@@ -7,18 +7,48 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Akai_MAT
+    second: {fileID: 2100000, guid: 7947a30d0d01d1742902cadb275c29fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Body_MAT
-    second: {fileID: 3914170164290499915, guid: a59b5fc3fdb488a42aa62af44225b5e0, type: 3}
+    second: {fileID: 2100000, guid: 7c5e76711b1445249957ed7f3d6ce07c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: EyeSpec_MAT
-    second: {fileID: -8184130765241199774, guid: a59b5fc3fdb488a42aa62af44225b5e0, type: 3}
+    second: {fileID: 2100000, guid: 376506f1aac203f478f434c86289390b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: eyelash_MAT
     second: {fileID: -3850736514843541464, guid: a1f45633e432b3642ae05ed67416dc7d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Erika_Archer_Clothes_diffuse
+    second: {fileID: 2800000, guid: aaa2f7808dace0641bb4c9711eaf90a2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Erika_Archer_Clothes_normal
+    second: {fileID: 2800000, guid: 9e41b381b526e4b4bb932c350ba6f3b2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: FemaleFitA_Body_diffuse
+    second: {fileID: 2800000, guid: bf28bbcf0913715419d7458021019e57, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: FemaleFitA_StdNM
+    second: {fileID: 2800000, guid: ff73830d61d61574eb829981aea4f383, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: FemaleFitA_eyelash_diffuse
+    second: {fileID: 2800000, guid: 13ba7922b2fa5c242a058d594f717f5a, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
