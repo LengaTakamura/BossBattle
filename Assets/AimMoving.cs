@@ -4,9 +4,6 @@ using UnityEngine;
 public class AimMoving : StateMachineBehaviour
 {
     Rigidbody _parent;
-    private Subject<Vector3> _onStateUpdate = new Subject<Vector3>();
-    public Observable<Vector3> OnStateUpdateObservable {  get { return _onStateUpdate; } }
-
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -16,15 +13,12 @@ public class AimMoving : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     { 
-        animator.rootPosition = _parent.transform.position - Vector3.up;
-        _onStateUpdate.OnNext(animator.rootPosition);
+        animator.rootPosition = _parent.transform.position - new Vector3(0,1.25f,0);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _onStateUpdate?.OnCompleted();
-        _onStateUpdate?.Dispose();
     }
 
     

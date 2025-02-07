@@ -1,5 +1,8 @@
 using R3;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class PlayerArcher : PlayerBase
 {
@@ -9,6 +12,10 @@ public class PlayerArcher : PlayerBase
 
     float _speedX = 0f;
     float _speedY = 0f;
+    [SerializeField]
+    RectTransform _cursor;
+    [SerializeField]
+    float _bowDamage = 10f; 
     private void Start()
     {
         Aiming();
@@ -17,9 +24,9 @@ public class PlayerArcher : PlayerBase
     protected override void Update()
     {
         base.Update();
-       
+
         Attack();
-        
+
 
     }
 
@@ -65,25 +72,39 @@ public class PlayerArcher : PlayerBase
         if (_isAiming && Input.GetMouseButtonDown(0))
         {
             _anim.SetTrigger("Attack");
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(null,_cursor.position);
+            Ray screeenRay = Camera.main.ScreenPointToRay(screenPoint);
+            var dir = screeenRay.direction.normalized;
+            Ray ray = new Ray(transform.position, dir);
+            if(Physics.Raycast(ray,out RaycastHit hit))
+            {
+
+                if (hit.transform.parent != null && hit.transform.parent.TryGetComponent(out IDamageable damage) && hit.transform.gameObject.tag == "Enemy")
+                {
+                    Debug.Log("HitBow");
+                   // damage.HitDamage(_bowDamage);
+                }
+            }
+            Debug.DrawRay(transform.position, dir * 10000f, Color.magenta);
         }
     }
 
     private void MoveWithAim()
-    {    
-            var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-            Vector3 cameraRight = Camera.main.transform.right;
-            cameraRight.y = 0;
-            cameraRight.Normalize();
-            Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
-            _rb.linearVelocity = moveDirection * _aimMoveSpeed;
+    {
+        var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraRight.y = 0;
+        cameraRight.Normalize();
+        Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
+        _rb.linearVelocity = moveDirection * _aimMoveSpeed;
         if (velo.magnitude > 0)
-            {
-                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(cameraForward), 10f);
-                transform.rotation = rot;
-            }
+        {
+            var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(cameraForward), 10f);
+            transform.rotation = rot;
+        }
 
     }
 
@@ -97,7 +118,7 @@ public class PlayerArcher : PlayerBase
         {
             _speedX -= 0.01f;
         }
-        else if (Input.GetKey(KeyCode.S) && _speedY > -0.5)  
+        else if (Input.GetKey(KeyCode.S) && _speedY > -0.5)
         {
             _speedY -= 0.01f;
         }
@@ -124,9 +145,8 @@ public class PlayerArcher : PlayerBase
         }
 
 
-        _anim.SetFloat("BlendX",_speedX);
-        _anim.SetFloat("BlendY",_speedY);
-        Debug.Log((_speedX, _speedY));
+        _anim.SetFloat("BlendX", _speedX);
+        _anim.SetFloat("BlendY", _speedY);
     }
 
 

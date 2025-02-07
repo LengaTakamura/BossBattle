@@ -49,7 +49,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     private float _maxRayRange;
 
     [SerializeField]
-    CinemachineCamera _camera;
+    protected CinemachineCamera _camera;
 
     [SerializeField]
     float _radiusOffset = 0.2f;
