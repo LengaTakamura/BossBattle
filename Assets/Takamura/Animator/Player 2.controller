@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e9dfacecb5d314f9614ce35dd5daf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ultPrefab: {fileID: 7986504087968017091, guid: 7aa65142cef40d6449d390cff4017aaa, type: 3}
+  _ultPrefab: {fileID: 7986504087968017091, guid: 7428a3ea26a33eb4b9f1fc848d44d618, type: 3}
   _awaitTime: 0.5
 --- !u!206 &-1750973279449044921
 BlendTree:

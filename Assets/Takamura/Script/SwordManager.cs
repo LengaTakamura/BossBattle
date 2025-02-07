@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SwordManager : MonoBehaviour
 {
-    public float DamageMag = 1;
+    public float DamageBuff = 1;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class SwordManager : MonoBehaviour
         if (other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.transform.parent.gameObject.tag == "Enemy")
         {
             var player = transform.root.GetComponent<IDamageable>();
-            damage.HitDamage(player.AttackPower * DamageMag);
+            damage.HitDamage(player.AttackPower + DamageBuff);
         }
     }
 

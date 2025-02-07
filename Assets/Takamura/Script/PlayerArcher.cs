@@ -11,7 +11,7 @@ public class PlayerArcher : PlayerBase
     [SerializeField]
     RectTransform _cursor;
     [SerializeField]
-    float _bowDamageMag = 1f; 
+    float _bowDamageBuff = 1f; 
     private void Start()
     {
         Aiming();
@@ -83,15 +83,15 @@ public class PlayerArcher : PlayerBase
                     
                     if(hit.transform.gameObject.name == "Jaw3")
                     {
-                        _bowDamageMag = 100;
-                        damage.HitDamage(_attackPower *_bowDamageMag );
+                        _bowDamageBuff = 100;
+                        damage.HitDamage(_attackPower + _bowDamageBuff );
                         Debug.Log("Headshot");
                     }
                     else
                     {
                         Debug.Log("HitBow");
-                        _bowDamageMag = 1;
-                        damage.HitDamage(_attackPower * _bowDamageMag);
+                        _bowDamageBuff = 1;
+                        damage.HitDamage(_attackPower + _bowDamageBuff);
                     }
                 }
             }

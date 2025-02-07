@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.2
   _delayTime: 0.1
-  _damage: 5
+  _damageBuff: 1
   _slashObj: {fileID: 1171201465392465800, guid: 4aa9f30a28a77224ba84b2a2c334c71b, type: 3}
 --- !u!1101 &-7882717839436372734
 AnimatorStateTransition:
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.5
   _delayTime: 0.5
-  _damage: 7
+  _damageBuff: 1
   _slashObj: {fileID: 1171201465392465800, guid: 4aa9f30a28a77224ba84b2a2c334c71b, type: 3}
 --- !u!1102 &-3160627226710174872
 AnimatorState:
@@ -629,7 +629,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _awaitTime: 0.6
   _delayTime: 0.2
-  _damage: 100
+  _damageBuff: 1
   _slashObj: {fileID: 1171201465392465800, guid: 4aa9f30a28a77224ba84b2a2c334c71b, type: 3}
 --- !u!1102 &4281619606644689558
 AnimatorState:

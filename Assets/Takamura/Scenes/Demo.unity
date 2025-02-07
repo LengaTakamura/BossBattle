@@ -2787,7 +2787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec1396b9aaf2a24796659c9ba1ebe25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
+  _damageMag: 1
 --- !u!1 &1805138608
 GameObject:
   m_ObjectHideFlags: 0
@@ -3220,6 +3220,7 @@ MonoBehaviour:
   _radiusOffset: 0.2
   _maxHealth: 50
   _currentHealth: 50
+  _attackPower: 100
   MaxStamina: 3
 --- !u!1 &1933551194
 GameObject:
@@ -3626,8 +3627,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distance: 0
-  _health: 100
-  _currentHealth: 100
+  _health: 500
+  _currentHealth: 500
+  _attackPower: 10
   _enemyHealthBarManager: {fileID: 1984697833}
 --- !u!4 &2000576104 stripped
 Transform:
@@ -3740,10 +3742,11 @@ MonoBehaviour:
   _radiusOffset: 0.5
   _maxHealth: 100
   _currentHealth: 100
+  _attackPower: 100
   MaxStamina: 3
   _aimMoveSpeed: 1
   _cursor: {fileID: 2029497110}
-  _bowDamage: 10
+  _bowDamageBuff: 1
 --- !u!4 &1716853616345391238 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2905322545484664229, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
@@ -3808,10 +3811,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6986044073177018854, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_Size.x
+      value: 3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986044073177018854, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_Size.y
+      value: 13.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986044073177018854, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_Size.z
+      value: 3.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986044073177018854, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: m_Center.y
+      value: 2.82
+      objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _camera
       value: 
       objectReference: {fileID: 1933551199}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: _attackPower
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8298239935863708481, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_Name
       value: Player
