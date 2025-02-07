@@ -79,10 +79,22 @@ public class PlayerArcher : PlayerBase
             if(Physics.Raycast(ray,out RaycastHit hit))
             {
 
-                if (hit.transform.parent != null && hit.transform.parent.TryGetComponent(out IDamageable damage) && hit.transform.gameObject.tag == "Enemy")
+                if (hit.transform.root != null && hit.transform.root.TryGetComponent(out IDamageable damage) && hit.transform.gameObject.tag == "Enemy")
                 {
-                    Debug.Log("HitBow");
-                   // damage.HitDamage(_bowDamage);
+                  
+                    
+                    if(hit.transform.gameObject.name == "Jaw3")
+                    {
+                        _bowDamage = 100;
+                        damage.HitDamage(_bowDamage);
+                        Debug.Log("Headshot");
+                    }
+                    else
+                    {
+                        Debug.Log("HitBow");
+                        _bowDamage = 5;
+                        damage.HitDamage(_bowDamage);
+                    }
                 }
             }
             Debug.DrawRay(transform.position, dir * 10000f, Color.magenta);
