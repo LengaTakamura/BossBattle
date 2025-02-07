@@ -79,6 +79,11 @@ public class PlayerArcher : PlayerBase
             cameraRight.Normalize();
             Vector3 moveDirection = cameraForward * velo.z + cameraRight * velo.x;
             _rb.linearVelocity = moveDirection * _aimMoveSpeed;
+        if (velo.magnitude > 0)
+            {
+                var rot = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(cameraForward), 10f);
+                transform.rotation = rot;
+            }
 
     }
 

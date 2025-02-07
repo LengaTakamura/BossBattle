@@ -17,9 +17,9 @@ public class Avoid : StateMachineBehaviour
     {
         _cts2 = new CancellationTokenSource();
         _player = animator.transform.parent.GetComponent<PlayerBase>();
-        await UniTask.Delay(TimeSpan.FromSeconds(_avoidDelay));
+        await UniTask.Delay(TimeSpan.FromSeconds(_avoidDelay),cancellationToken:_cts2.Token);
         _player.State = PlayerBase.MotionIndex.Avoid;
-        await UniTask.Delay(TimeSpan.FromSeconds(_avoidTime));
+        await UniTask.Delay(TimeSpan.FromSeconds(_avoidTime), cancellationToken: _cts2.Token);
         _player.State = PlayerBase.MotionIndex.NonAvoid;
     }
 
@@ -35,9 +35,11 @@ public class Avoid : StateMachineBehaviour
     override async public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _cts2?.Cancel();
+        _cts2?.Dispose();
         _player.ReduceStamina();
         PlayerBase.OnStaminaChanged?.Invoke(PlayerBase.CurrentStamina / _player.MaxStamina);
         _cts?.Cancel();
+        _cts?.Dispose();
         _cts = new CancellationTokenSource();
         await RecoveryDelay(_player,_cts.Token);
 
@@ -66,8 +68,6 @@ public class Avoid : StateMachineBehaviour
             }
         }
         catch { }
-
-
 
     }
 }
