@@ -19747,7 +19747,7 @@ GameObject:
   - component: {fileID: 6211125795773073634}
   - component: {fileID: 959509697232157438}
   - component: {fileID: 8376397103496988021}
-  - component: {fileID: 1880159207188365119}
+  - component: {fileID: -7456493263679793434}
   m_Layer: 0
   m_Name: BuffUlt
   m_TagString: Untagged
@@ -24653,7 +24653,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.9
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1880159207188365119
+--- !u!114 &-7456493263679793434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24662,8 +24662,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 7986504087968017091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4341595082f50784a98f2c4c5cabd0ba, type: 3}
+  m_Script: {fileID: 11500000, guid: c3e0230134d1b794b8fb23c7eccd60c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _delayTime: 1.5
-  _healValue: 100
+  _delayTime: 1
+  _isBuffValue: 100

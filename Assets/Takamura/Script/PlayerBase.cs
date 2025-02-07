@@ -63,6 +63,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     private float _currentHealth = 100;
     float IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
 
+    [SerializeField]
+    private float _attackPower = 100;
+    float IDamageable.AttackPower { get { return _attackPower; } set { _attackPower = value; } }
+
     Vector3 _cameraF = Vector3.zero;
     Vector3 _cameraR = Vector3.zero;
     float _gapSum = 0;

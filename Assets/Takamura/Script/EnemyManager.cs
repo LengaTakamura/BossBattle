@@ -17,6 +17,10 @@ public class EnemyManager : MonoBehaviour,IDamageable
     float IDamageable.CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
 
     [SerializeField]
+    private float _attackPower = 100;
+    float IDamageable.AttackPower {  get { return _attackPower; } set {_attackPower = value; } }
+
+    [SerializeField]
     EnemyHealthBarManager _enemyHealthBarManager;
 
     Animator _animator;
@@ -80,5 +84,7 @@ public interface IDamageable
     void HitDamage(float damage);
 
     void HitHeal(float value);
+
+    float AttackPower {  get; set; }
 
 }

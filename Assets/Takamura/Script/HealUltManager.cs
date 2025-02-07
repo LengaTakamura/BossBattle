@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HealUltManager : MonoBehaviour
@@ -23,7 +22,7 @@ public class HealUltManager : MonoBehaviour
         _isHealing = true;
         _cts = new CancellationTokenSource();
         _ct = _cts.Token;
-        if (other.TryGetComponent(out IDamageable damage))
+        if (other.TryGetComponent(out IDamageable damage)&& other.gameObject.tag =="Player")
         {
             try
             {
@@ -33,7 +32,7 @@ public class HealUltManager : MonoBehaviour
                     damage.HitHeal(_healValue);
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 
             }
