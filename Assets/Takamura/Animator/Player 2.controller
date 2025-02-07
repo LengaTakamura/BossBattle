@@ -88,7 +88,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4528363171831319314}
-    m_Position: {x: -360, y: 250, z: 0}
+    m_Position: {x: -360, y: 240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2737898054809083832}
     m_Position: {x: -240, y: 150, z: 0}
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e9dfacecb5d314f9614ce35dd5daf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ultPrefab: {fileID: 7986504087968017091, guid: 07a46026c83979d48a7ab5fc8f9c2ebc, type: 3}
+  _ultPrefab: {fileID: 7986504087968017091, guid: 7aa65142cef40d6449d390cff4017aaa, type: 3}
   _awaitTime: 0.5
 --- !u!206 &-1750973279449044921
 BlendTree:

@@ -1152,6 +1152,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jaw3
       objectReference: {fileID: 0}
+    - target: {fileID: 147590, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.0000038146973
@@ -3647,7 +3651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2029497110
 RectTransform:
   m_ObjectHideFlags: 0
