@@ -56,11 +56,13 @@ public class PlayerArcher : PlayerBase
                if (count % 2 != 0)
                {
                    _isAiming = true;
+                   _cursor.gameObject.SetActive(true);
 
                }
                else
                {
                    _isAiming = false;
+                   _cursor.gameObject.SetActive(false);
                }
                _anim.SetBool("Aim", _isAiming);
            });
