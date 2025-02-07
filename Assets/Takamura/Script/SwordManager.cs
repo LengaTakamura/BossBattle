@@ -1,13 +1,9 @@
-using Cysharp.Threading.Tasks;
-using System;
+
 using UnityEngine;
 
 public class SwordManager : MonoBehaviour
 {
-    public float Damage = 100;
-    [SerializeField]
-    private GameObject _model;
-
+    public float DamageMag = 1;
 
     private void Start()
     {
@@ -26,7 +22,8 @@ public class SwordManager : MonoBehaviour
     {
         if (other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.transform.parent.gameObject.tag == "Enemy")
         {
-            damage.HitDamage(Damage);
+            var player = transform.root.GetComponent<IDamageable>();
+            damage.HitDamage(player.AttackPower * DamageMag);
         }
     }
 

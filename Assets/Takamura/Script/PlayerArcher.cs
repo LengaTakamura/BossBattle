@@ -1,9 +1,5 @@
 using R3;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
-
 public class PlayerArcher : PlayerBase
 {
     bool _isAiming = false;
@@ -15,7 +11,7 @@ public class PlayerArcher : PlayerBase
     [SerializeField]
     RectTransform _cursor;
     [SerializeField]
-    float _bowDamage = 10f; 
+    float _bowDamageMag = 1f; 
     private void Start()
     {
         Aiming();
@@ -87,15 +83,15 @@ public class PlayerArcher : PlayerBase
                     
                     if(hit.transform.gameObject.name == "Jaw3")
                     {
-                        _bowDamage = 100;
-                        damage.HitDamage(_bowDamage);
+                        _bowDamageMag = 100;
+                        damage.HitDamage(_attackPower *_bowDamageMag );
                         Debug.Log("Headshot");
                     }
                     else
                     {
                         Debug.Log("HitBow");
-                        _bowDamage = 5;
-                        damage.HitDamage(_bowDamage);
+                        _bowDamageMag = 1;
+                        damage.HitDamage(_attackPower * _bowDamageMag);
                     }
                 }
             }

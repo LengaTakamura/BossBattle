@@ -13,7 +13,7 @@ public class Attack : StateMachineBehaviour
     float _delayTime = 0.5f;
     CancellationTokenSource cts = null;
     [SerializeField]
-    int _damage = 100;
+    float _damageMag = 1;
     [SerializeField]
     GameObject _slashObj;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -74,7 +74,7 @@ public class Attack : StateMachineBehaviour
     async void AttackTiming(CancellationToken ct,AnimatorStateInfo info)
     {
         var sword = _sword.GetComponent<SwordManager>();
-        sword.Damage = _damage;
+        sword.DamageMag = _damageMag;
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         _sword.enabled = true;
         if(!info.IsName("Attack"))

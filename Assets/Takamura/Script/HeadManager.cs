@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class HeadManager : MonoBehaviour
 {
-    public float Damage = 10;
+    public float _damageMag = 1;
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
         {
-            damage.HitDamage(Damage);
+            var enemy = transform.root.GetComponent<IDamageable>();
+            damage.HitDamage(enemy.AttackPower * _damageMag);
         }
     }
 }

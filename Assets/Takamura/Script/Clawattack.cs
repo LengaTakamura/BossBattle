@@ -15,7 +15,7 @@ public class Clawattack : StateMachineBehaviour
     [SerializeField]
     float _distance = 5;
     [SerializeField]
-    float _damage = 5;
+    float _damageMag = 5;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _cts = new CancellationTokenSource();
@@ -55,14 +55,16 @@ public class Clawattack : StateMachineBehaviour
         if(Vector3.Distance(_target.position,_parent.position) < _distance)
         {
             var player = _target.GetComponent<IDamageable>();
-            player.HitDamage(_damage);
+            var enemy = _parent.GetComponent<IDamageable>();
+            player.HitDamage(enemy.AttackPower * _damageMag);
         }
         await UniTask.Delay(TimeSpan.FromSeconds(_derayTime), cancellationToken: ct);
         _target = GameObject.FindAnyObjectByType<PlayerBase>().GetComponent<Transform>();
         if (Vector3.Distance(_target.position, _parent.position) < _distance)
         {
             var player = _target.GetComponent<IDamageable>();
-            player.HitDamage(_damage);
+            var enemy = _parent.GetComponent<IDamageable>();
+            player.HitDamage(enemy.AttackPower * _damageMag);
         }
     }
 }
