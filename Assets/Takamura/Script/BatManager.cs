@@ -10,18 +10,17 @@ public class BatManager : MonoBehaviour
     float _lifeTime = 5f;
     [SerializeField]
     GameObject _attackEffect;
-    [SerializeField]
+
     GameObject _target;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        var archer = transform.root.GetComponent<PlayerArcher>();
-
-        if (archer != null)
+        var players = Resources.FindObjectsOfTypeAll<PlayerBase>();
+        foreach (var player in players)
         {
-            archer.AttackAction += AttackWith;
-
+            player.AttackAction += AttackWith;
         }
+        _target = GameObject.Find("Boss");
         _cts = new CancellationTokenSource();
         await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime));
         Destroy(gameObject);

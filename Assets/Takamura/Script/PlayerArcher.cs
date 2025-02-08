@@ -13,7 +13,7 @@ public class PlayerArcher : PlayerBase
     RectTransform _cursor;
     [SerializeField]
     float _bowDamageBuff = 1f;
-    public Action AttackAction;
+ 
     private void Start()
     {
         Aiming();

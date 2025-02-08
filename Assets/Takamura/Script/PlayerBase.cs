@@ -82,6 +82,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public static Action<float> OnStaminaChanged;
 
+    public Action AttackAction;
     private void Awake()
     {
         Cursor.visible = false;

@@ -46,7 +46,6 @@ public class BatSkill : StateMachineBehaviour
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         var bat = Instantiate(_batPrefab, anim.transform.position + anim.transform.forward, anim.transform.rotation);
-        bat.transform.SetParent(anim.transform);
 
     }
 }
