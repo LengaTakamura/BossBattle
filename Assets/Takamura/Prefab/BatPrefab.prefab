@@ -311,4 +311,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 15
-  _attackEffect: {fileID: 1900756431413560, guid: 63f72496a5fc14d4b97f56ed5b71eb60, type: 3}
+  _attackEffect: {fileID: 2913109700948106872, guid: 3d225810810b6394dadf8e2d4116b785, type: 3}

@@ -49,7 +49,8 @@ public class BatManager : MonoBehaviour
 
     public void AttackWith()
     {
-        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0), Quaternion.LookRotation(_target.transform.position));
+        Quaternion lookTarget = Quaternion.LookRotation(_target.transform.position);
+        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0),lookTarget * _attackEffect.transform.rotation); 
         effect.GetComponent<BatEffectManager>().Initialized(this);
     }
 

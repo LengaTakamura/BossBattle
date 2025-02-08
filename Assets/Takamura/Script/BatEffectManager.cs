@@ -16,7 +16,6 @@ public class BatEffectManager : MonoBehaviour
     private void Update()
     {
         MoveToTarget();
-        Debug.Log(_currentTargetPosition);
     }
 
     private void UpdateTartgetPos(Vector3 newPos)
