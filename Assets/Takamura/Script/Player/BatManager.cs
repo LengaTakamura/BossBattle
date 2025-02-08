@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class BatManager : MonoBehaviour
     GameObject _attackEffect;
 
     GameObject _target;
+
+    public Action<Vector3> GetTargetPos;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
@@ -20,7 +23,7 @@ public class BatManager : MonoBehaviour
         {
             player.AttackAction += AttackWith;
         }
-        _target = GameObject.Find("Boss");
+        _target = GameObject.Find("EnemyCol");
         _cts = new CancellationTokenSource();
         await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime));
         foreach (var player in players)
@@ -36,15 +39,21 @@ public class BatManager : MonoBehaviour
         var rot = _target.transform.position;
         rot.y = transform.position.y;
         transform.LookAt(rot);
+        OnTargetPosUpdate();
     }
 
-
+   private void OnTargetPosUpdate()
+    {
+        GetTargetPos?.Invoke(_target.transform.position);
+    }
 
     public void AttackWith()
     {
-        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0),Quaternion.identity);
-        effect.transform.eulerAngles = new Vector3(-90,0,0);
+        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0), Quaternion.LookRotation(_target.transform.position));
+        effect.GetComponent<BatEffectManager>().Initialized(this);
     }
+
+
 
     private void OnDestroy()
     {
