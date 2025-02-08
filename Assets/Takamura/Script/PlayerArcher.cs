@@ -1,4 +1,5 @@
 using R3;
+using System;
 using UnityEngine;
 public class PlayerArcher : PlayerBase
 {
@@ -11,7 +12,8 @@ public class PlayerArcher : PlayerBase
     [SerializeField]
     RectTransform _cursor;
     [SerializeField]
-    float _bowDamageBuff = 1f; 
+    float _bowDamageBuff = 1f;
+    public Action AttackAction;
     private void Start()
     {
         Aiming();
@@ -93,6 +95,8 @@ public class PlayerArcher : PlayerBase
                         _bowDamageBuff = 1;
                         damage.HitDamage(_attackPower + _bowDamageBuff);
                     }
+
+                    AttackAction?.Invoke();
                 }
             }
             Debug.DrawRay(transform.position, dir * 10000f, Color.magenta);
