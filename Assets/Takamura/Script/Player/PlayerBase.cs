@@ -1,12 +1,9 @@
-
 using Cysharp.Threading.Tasks;
 using R3;
 using System;
 using System.Threading;
+using TMPro;
 using Unity.Cinemachine;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour, IDamageable
@@ -83,6 +80,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public static Action<float> OnStaminaChanged;
 
     public Action AttackAction;
+
+    [SerializeField]
+    float _coolTime = 15f;
+
+    private bool _isCoolDown = false;
+
+    CancellationTokenSource _cts;
+    [SerializeField]
+    TextMeshProUGUI _tmp;
+    [SerializeField]
+    float _coolDownTime = 0;
     private void Awake()
     {
         Cursor.visible = false;
@@ -91,9 +99,19 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _anim = GetComponentInChildren<Animator>();
         _rb.useGravity = false;
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        _cts = new CancellationTokenSource();
     }
 
-    private void Start()
+    protected virtual void Start()
+    {
+        InitOnDamage();
+        _coolDownTime = 0f;
+        UpdateSkillUI();
+        CurrentStamina = MaxStamina;
+        Debug.Log("Start");
+    }
+
+    private void InitOnDamage()
     {
         _onDamage.Subscribe(damage =>
         {
@@ -103,10 +121,35 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             }
         }
         ).AddTo(this);
+    }
 
-        CurrentStamina = MaxStamina;
+    private void UpdateSkillUI()
+    {
+        _tmp.text = _coolDownTime > 0 ? $"{_coolDownTime}" : "E";
+        Debug.Log(_coolDownTime);
+    }
        
-      
+
+    private async UniTask UseSkill(CancellationToken token)
+    {
+        try
+        {
+            _isCoolDown = true;
+            _coolDownTime = _coolTime;
+            _anim.SetTrigger("Skil");
+            while(_coolDownTime > 0)
+            {
+                await UniTask.Delay(100, cancellationToken: token);
+                _coolDownTime -= 0.1f;
+                UpdateSkillUI() ;
+            }
+            _coolDownTime = 0;
+            _isCoolDown = false;
+            UpdateSkillUI();
+        }
+        catch { }
+       
+
     }
 
     protected virtual void Update()
@@ -117,6 +160,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
 
             WallRun(WallCheck());
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown)
+        {
+            UseSkill(_cts.Token).Forget();
         }
     }
 
@@ -202,13 +250,13 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             return;
         }
 
-        if (Input.GetKeyUp(KeyCode.E) && _canMove)
+        if (Input.GetKeyUp(KeyCode.E))
         {
-            _anim.SetTrigger("Skil");
+          
 
         }
 
-        if (Input.GetKeyUp(KeyCode.Q) && _canMove)
+        if (Input.GetKeyUp(KeyCode.Q))
         {
             _anim.SetTrigger("Ult");
         }
@@ -385,10 +433,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         return CurrentStamina / MaxStamina;
     }
 
- 
-       public void AnimSet(int motion)
+
+    private void OnDestroy()
     {
-        _anim.SetInteger("MotionIndex", motion);
+        _cts.Cancel();
+        _cts.Dispose();
     }
 
     public enum MotionIndex

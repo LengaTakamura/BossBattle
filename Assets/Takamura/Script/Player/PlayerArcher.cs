@@ -14,8 +14,9 @@ public class PlayerArcher : PlayerBase
     [SerializeField]
     float _bowDamageBuff = 1f;
  
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         Aiming();
     }
 

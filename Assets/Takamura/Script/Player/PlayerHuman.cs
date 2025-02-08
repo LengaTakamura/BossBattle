@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerHuman : PlayerBase
 {
-    private void Start()
+    protected override void Start()
     {
-
-
+        base.Start();
     }
 
     protected override void Update()

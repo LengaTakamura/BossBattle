@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class PlayerMash : PlayerBase
 {
+
+    protected override void Start()
+    {
+        base.Start();
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
