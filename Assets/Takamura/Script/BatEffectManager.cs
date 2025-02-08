@@ -7,6 +7,9 @@ public class BatEffectManager : MonoBehaviour
 
     GameObject _bat;
 
+    [SerializeField]
+    float _damage = 5f;
+
     private Vector3 _currentTargetPosition;
     public void Initialized(BatManager bat)
     {
@@ -25,5 +28,14 @@ public class BatEffectManager : MonoBehaviour
     public void MoveToTarget()
     {
         transform.position = Vector3.MoveTowards(transform.position, _currentTargetPosition + new Vector3(0,3,0), Time.deltaTime * _speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Enemy")
+        {
+            damage.HitDamage(_damage);
+            Destroy(gameObject);
+        }
     }
 }
