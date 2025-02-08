@@ -23,6 +23,10 @@ public class BatManager : MonoBehaviour
         _target = GameObject.Find("Boss");
         _cts = new CancellationTokenSource();
         await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime));
+        foreach (var player in players)
+        {
+            player.AttackAction -= AttackWith;
+        }
         Destroy(gameObject);
     }
 
@@ -38,7 +42,8 @@ public class BatManager : MonoBehaviour
 
     public void AttackWith()
     {
-        var effect = Instantiate(_attackEffect,transform.forward,transform.rotation);
+        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0),Quaternion.identity);
+        effect.transform.eulerAngles = new Vector3(-90,0,0);
     }
 
     private void OnDestroy()

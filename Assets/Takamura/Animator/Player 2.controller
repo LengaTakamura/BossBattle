@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f688aa42aa3bcdd4ea542b087fa376a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillPrefab: {fileID: 919132149155446097, guid: 9cbca15fca8ba4d4fbddec1742291dd7, type: 3}
+  _batPrefab: {fileID: 6537493377709287581, guid: 1aaa301c4638ce04d803cecdc637446f, type: 3}
   _awaitTime: 0.5
 --- !u!1101 &3280124003711625673
 AnimatorStateTransition:

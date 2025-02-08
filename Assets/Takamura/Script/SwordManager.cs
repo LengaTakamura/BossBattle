@@ -24,6 +24,8 @@ public class SwordManager : MonoBehaviour
         {
             var player = transform.root.GetComponent<IDamageable>();
             damage.HitDamage(player.AttackPower + DamageBuff);
+            var playerBase = transform.root.GetComponent<PlayerBase>();
+            playerBase.AttackAction?.Invoke();
         }
     }
 

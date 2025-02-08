@@ -16,7 +16,6 @@ public class PlayerHuman : PlayerBase
         if (Input.GetMouseButtonDown(0))
         {
             AttackAnim();
-            AttackAction?.Invoke();
         }
     }
 

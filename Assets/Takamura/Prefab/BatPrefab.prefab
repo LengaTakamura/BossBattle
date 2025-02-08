@@ -310,6 +310,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc86b8a76639234f8313ea69684c391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifeTime: 5
+  _lifeTime: 15
   _attackEffect: {fileID: 1900756431413560, guid: 63f72496a5fc14d4b97f56ed5b71eb60, type: 3}
-  _target: {fileID: 0}
