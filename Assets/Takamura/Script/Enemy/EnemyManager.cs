@@ -1,4 +1,7 @@
 
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour,IDamageable
@@ -24,11 +27,17 @@ public class EnemyManager : MonoBehaviour,IDamageable
     EnemyHealthBarManager _enemyHealthBarManager;
 
     Animator _animator;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField]
+    float _speed = 5f;
+
+    CancellationTokenSource _cts;
+
+    private EnemyState _enemyState;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _cts = new CancellationTokenSource();
     }
     void Start()
     {
@@ -36,20 +45,61 @@ public class EnemyManager : MonoBehaviour,IDamageable
     }
 
     private void Update()
-    {
+    {       
         LookTarget();
+        ChangeState();
     }
 
     private void LookTarget()
     {
-        if (Vector3.Distance(transform.position, _target.transform.position) > _distance)
+        var rot = _target.transform.position;
+        rot.y = transform.position.y;
+        transform.LookAt(rot);
+    }
+
+
+    public void ChangeState()
+    {
+        EnemyState state = _enemyState;
+        switch (_enemyState) 
         {
-            var rot = _target.transform.position;
-            rot.y = transform.position.y;
-            transform.LookAt(rot);
+            case EnemyState.Sleep:
+                Sleep();
+                break;
+            case EnemyState.Attack:
+                Attack();
+                break;
+            case EnemyState.OnBattle:
+                OnBattle();
+                break;
+            case EnemyState.Move:
+                Move();
+                break;
+
         }
 
     }
+
+    void Sleep()
+    {
+
+    }
+
+    void OnBattle()
+    {
+
+    }
+
+    void Attack()
+    {
+
+    }
+
+    void Move()
+    {
+
+    }
+ 
 
     public void SetTarget(GameObject target)
     {
@@ -64,21 +114,43 @@ public class EnemyManager : MonoBehaviour,IDamageable
         if(_currentHealth / _health < 0.5)
         {
             _animator.SetTrigger("Ult");
+            _cts.Cancel();
         }
-        if(_currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             _animator.SetTrigger("Death");
+            _cts.Cancel();
+            _cts.Dispose();
         }
     }
 
     void IDamageable.HitHeal(float value)
     {
-       
+
 
     }
 
- 
+
 }
+
+
+/// <summary>
+/// 敵の行動の種類
+/// </summary>
+public enum EnemyState
+{
+    OnBattle,
+    Attack,
+    Sleep,
+    Move
+
+
+}
+
+
+/// <summary>
+/// HP増減処理を管理するインターフェース
+/// </summary>
 public interface IDamageable
 {
     float MaxHealth { get; set; }
