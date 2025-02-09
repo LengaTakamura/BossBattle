@@ -10,7 +10,8 @@ public class FlameUltManager : MonoBehaviour
         if (other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
         {
             var enemy = transform.root.GetComponent<IDamageable>();
-            damage.HitDamage( _damage);
+            if (damage.CurrentHealth > 0)
+                damage.HitDamage( _damage);
         }
     }
 }

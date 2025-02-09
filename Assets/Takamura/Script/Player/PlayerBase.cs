@@ -89,6 +89,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public float CoolDownTime = 0;
 
     public Action<PlayerBase> OnCoolDownChanged;
+
+    public Action DeathAction;
+
+    public int CaraIndex = 0;
     private void Awake()
     {
         Cursor.visible = false;
@@ -111,7 +115,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     {
         _onDamage.Subscribe(damage =>
         {
-            if (_currentHealth < 0)
+            if (_currentHealth <= 0)
             {
                 Debug.Log($"Ž€–S{gameObject}");
                 _anim.SetTrigger("Death");

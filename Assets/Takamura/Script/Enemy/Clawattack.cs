@@ -56,7 +56,8 @@ public class Clawattack : StateMachineBehaviour
         {
             var player = _target.GetComponent<IDamageable>();
             var enemy = _parent.GetComponent<IDamageable>();
-            player.HitDamage(enemy.AttackPower + _damageBuff);
+            if (player.CurrentHealth > 0)
+                player.HitDamage(enemy.AttackPower + _damageBuff);
         }
         await UniTask.Delay(TimeSpan.FromSeconds(_derayTime), cancellationToken: ct);
         _target = GameObject.FindAnyObjectByType<PlayerBase>().GetComponent<Transform>();
@@ -64,7 +65,8 @@ public class Clawattack : StateMachineBehaviour
         {
             var player = _target.GetComponent<IDamageable>();
             var enemy = _parent.GetComponent<IDamageable>();
-            player.HitDamage(enemy.AttackPower + _damageBuff);
+            if (player.CurrentHealth > 0)
+                player.HitDamage(enemy.AttackPower + _damageBuff);
         }
     }
 }

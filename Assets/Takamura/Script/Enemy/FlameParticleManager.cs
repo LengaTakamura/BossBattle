@@ -10,7 +10,8 @@ public class FlameParticleManager : MonoBehaviour
         if(other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
         {
             var enemy = transform.root.GetComponent<IDamageable>();
-            damage.HitDamage(enemy.AttackPower + _damageBuff);
+            if (damage.CurrentHealth > 0)
+                damage.HitDamage(enemy.AttackPower + _damageBuff);
         }
     }
 }

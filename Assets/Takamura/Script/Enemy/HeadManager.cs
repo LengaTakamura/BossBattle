@@ -8,6 +8,7 @@ public class HeadManager : MonoBehaviour
         if (other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
         {
             var enemy = transform.root.GetComponent<IDamageable>();
+            if(damage.CurrentHealth > 0)
             damage.HitDamage(enemy.AttackPower * _damageMag);
         }
     }

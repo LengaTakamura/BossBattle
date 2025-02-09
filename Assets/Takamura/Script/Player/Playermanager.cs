@@ -3,7 +3,6 @@ using R3;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class Playermanager : MonoBehaviour
 {
