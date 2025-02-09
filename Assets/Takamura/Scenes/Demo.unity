@@ -939,8 +939,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413345171}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18805493, y: 0, z: 0, w: 0.98215854}
-  m_LocalPosition: {x: 42.63, y: 6.9230003, z: 101.47}
+  m_LocalRotation: {x: 0.18699068, y: 0, z: 0, w: 0.9823617}
+  m_LocalPosition: {x: 42.63, y: 6.9113455, z: 101.46885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1762,6 +1762,7 @@ MonoBehaviour:
   _playerheealthBarManager: {fileID: 114586933}
   _staminaBarM: {fileID: 1832950215}
   _tmp: {fileID: 657173122}
+  DeadPlayers: []
 --- !u!1 &1528623038
 GameObject:
   m_ObjectHideFlags: 0
@@ -2883,7 +2884,7 @@ MonoBehaviour:
   VerticalAxis:
     Value: 17.5
     Center: 17.5
-    Range: {x: -10, y: 45}
+    Range: {x: -10, y: 45.2}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -2951,8 +2952,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933551194}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18805493, y: 0, z: 0, w: 0.98215854}
-  m_LocalPosition: {x: 42.63, y: 6.9230003, z: 101.47}
+  m_LocalRotation: {x: 0.18699068, y: 0, z: 0, w: 0.9823617}
+  m_LocalPosition: {x: 42.63, y: 6.9113455, z: 101.46885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

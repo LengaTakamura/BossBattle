@@ -15,7 +15,8 @@ public class PlayerArcher : PlayerBase
     float _bowDamageBuff = 1f;
 
     public bool CanAttack = true;
- 
+    
+    AnimatorStateInfo _animatorState;
     protected override void Start()
     {
         base.Start();
@@ -35,7 +36,7 @@ public class PlayerArcher : PlayerBase
     {
 
         base.FixedUpdate();
-        if (_isAiming)
+        if (_isAiming && !_animatorState.IsName("AimStart"))
         {
             MoveParam();
             MoveWithAim();
@@ -46,11 +47,11 @@ public class PlayerArcher : PlayerBase
 
     private void Aiming()
     {
-        AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
+        _animatorState = _anim.GetCurrentAnimatorStateInfo(0);
         var attack = Observable.EveryUpdate()
            .Where(_ => Input.GetKeyDown(KeyCode.R))
            .Where(_ => gameObject.activeSelf)
-           .Where(_ => !stateInfo.IsName("AimStart"))
+           .Where(_ => !_animatorState.IsName("AimStart"))
            .Scan(0, (count, _) => count + 1)
            .Subscribe(count =>
            {
