@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using R3;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class Playermanager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _tmp;
 
+    public List<GameObject> DeadPlayers = new();
     private void Start()
     {
        Initialized();
@@ -64,22 +66,23 @@ public class Playermanager : MonoBehaviour
         _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime}" : "E";
     }
 
+
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !DeadPlayers.Contains(_players[1]))
         {
             ChangeChara(1);
             _enemyManager.SetTarget(_players[1]);
 
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        else if (Input.GetKeyDown(KeyCode.Alpha1)&& !DeadPlayers.Contains(_players[0]))
         {
             ChangeChara(0);
             _enemyManager.SetTarget(_players[0]);
 
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && !DeadPlayers.Contains(_players[2]))
         {
             ChangeChara(2);
             _enemyManager.SetTarget(_players[2]);
@@ -113,10 +116,14 @@ public class Playermanager : MonoBehaviour
         {
             if (player.activeSelf)
             {
+                var pl = player.GetComponent<PlayerBase>();
+                if(pl.CharaIndex == i)
+                {
+                    return;
+                }
                 pos = player.transform.position;
                 forward = player.transform.forward;
                 player.SetActive(false);
-                var pl = player.GetComponent<PlayerBase>();
                 pl.OnCoolDownChanged -= UpdateSkillText;
                 pl.DeathAction -= ChangeNextChara;
             }
@@ -139,6 +146,7 @@ public class Playermanager : MonoBehaviour
     void ChangeNextChara(int index)
     {
 
+        DeadPlayers.Add(_players[index]);
         if(index != 2)
         {
             ChangeChara(index + 1);
