@@ -114,6 +114,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             if (_currentHealth < 0)
             {
                 Debug.Log($"Ž€–S{gameObject}");
+                _anim.SetTrigger("Death");
             }
         }
         ).AddTo(this);
