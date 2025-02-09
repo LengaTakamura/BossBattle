@@ -13,6 +13,8 @@ public class PlayerArcher : PlayerBase
     RectTransform _cursor;
     [SerializeField]
     float _bowDamageBuff = 1f;
+
+    public bool CanAttack = true;
  
     protected override void Start()
     {
@@ -70,7 +72,7 @@ public class PlayerArcher : PlayerBase
 
     private void Attack()
     {
-        if (_isAiming && Input.GetMouseButtonDown(0))
+        if (_isAiming && Input.GetMouseButtonDown(0) && CanAttack)
         {
             _anim.SetTrigger("Attack");
             var screenPoint = RectTransformUtility.WorldToScreenPoint(null,_cursor.position);
@@ -100,6 +102,7 @@ public class PlayerArcher : PlayerBase
                     AttackAction?.Invoke();
                 }
             }
+            CanAttack = false;
             Debug.DrawRay(transform.position, dir * 10000f, Color.magenta);
         }
     }
