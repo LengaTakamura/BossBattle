@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
 using R3;
-using System;
-using System.Threading;
+using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class Playermanager : MonoBehaviour
 {
@@ -19,8 +19,15 @@ public class Playermanager : MonoBehaviour
     StaminaBarManager _staminaBarM;
 
     GameObject _target;
+    [SerializeField]
+    TextMeshProUGUI _tmp;
 
     private void Start()
+    {
+       Initialized();
+    }
+
+    private void Initialized()
     {
         _players[0].SetActive(true);
         _target = _players[0];
@@ -32,8 +39,11 @@ public class Playermanager : MonoBehaviour
         _enemyManager.SetTarget(_players[0]);
         var damage = _players[0].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
+        var playerBase = _players[0].GetComponent<PlayerBase>();
+        UpdateSkillText(playerBase);
+        playerBase.OnCoolDownChanged += UpdateSkillText;
         PlayerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
-        foreach ( var player in _players)
+        foreach (var player in _players)
         {
             var pl = player.GetComponent<PlayerBase>();
             pl.Ondamaged.Subscribe(damage =>
@@ -41,15 +51,18 @@ public class Playermanager : MonoBehaviour
                 PlayerHPBarUpdate(pl.GetComponent<IDamageable>());
             }).AddTo(this);
         }
-  
+
     }
-   
+
     void InitCamera()
     {
         _camera.Target.TrackingTarget = _players[0].transform.GetChild(1);
     }
 
-
+    void UpdateSkillText(PlayerBase player)
+    {
+        _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime}" : "E";
+    }
 
     
     private void Update()
@@ -103,6 +116,8 @@ public class Playermanager : MonoBehaviour
                 pos = player.transform.position;
                 forward = player.transform.forward;
                 player.SetActive(false);
+                var pl = player.GetComponent<PlayerBase>();
+                pl.OnCoolDownChanged -= UpdateSkillText;
             }
 
         }
@@ -110,7 +125,10 @@ public class Playermanager : MonoBehaviour
         _target = _players[i];
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
-        _players[i].GetComponent<PlayerBase>().StateChange((PlayerBase.MotionIndex)a);
+        var playerBase = _players[i].GetComponent<PlayerBase>();
+        playerBase.StateChange((PlayerBase.MotionIndex)a);
+        UpdateSkillText(playerBase);
+        playerBase.OnCoolDownChanged += UpdateSkillText;
         _camera.Target.TrackingTarget = _players[i].transform.GetChild(1);
         var damage = _players[i].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);

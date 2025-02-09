@@ -22,8 +22,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField]
     private float _length;
 
-    private Vector3 _lastPosition;
-
     private bool _isGround;
     public bool IsGround { get => _isGround; set { _isGround = value; } }
 
@@ -87,10 +85,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     private bool _isCoolDown = false;
 
     CancellationTokenSource _cts;
-    [SerializeField]
-    TextMeshProUGUI _tmp;
-    [SerializeField]
-    float _coolDownTime = 0;
+
+    public float CoolDownTime = 0;
+
+    public Action<PlayerBase> OnCoolDownChanged;
     private void Awake()
     {
         Cursor.visible = false;
@@ -105,10 +103,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     protected virtual void Start()
     {
         InitOnDamage();
-        _coolDownTime = 0f;
-        UpdateSkillUI();
+        CoolDownTime = 0f;
         CurrentStamina = MaxStamina;
-        Debug.Log("Start");
     }
 
     private void InitOnDamage()
@@ -123,11 +119,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         ).AddTo(this);
     }
 
-    private void UpdateSkillUI()
-    {
-        _tmp.text = _coolDownTime > 0 ? $"{_coolDownTime}" : "E";
-        Debug.Log(_coolDownTime);
-    }
+   
        
 
     private async UniTask UseSkill(CancellationToken token)
@@ -135,17 +127,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         try
         {
             _isCoolDown = true;
-            _coolDownTime = _coolTime;
+            CoolDownTime = _coolTime;
             _anim.SetTrigger("Skil");
-            while(_coolDownTime > 0)
+            while(CoolDownTime > 0)
             {
                 await UniTask.Delay(100, cancellationToken: token);
-                _coolDownTime -= 0.1f;
-                UpdateSkillUI() ;
+                CoolDownTime -= 0.1f;
+                OnCoolDownChanged?.Invoke(this);
             }
-            _coolDownTime = 0;
+            CoolDownTime = 0;
             _isCoolDown = false;
-            UpdateSkillUI();
+            OnCoolDownChanged?.Invoke(this);
         }
         catch { }
        
@@ -162,7 +154,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             WallRun(WallCheck());
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown)
+        if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown && gameObject.activeSelf)
         {
             UseSkill(_cts.Token).Forget();
         }
