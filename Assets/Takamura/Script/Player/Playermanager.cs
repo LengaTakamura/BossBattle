@@ -40,6 +40,7 @@ public class Playermanager : MonoBehaviour
         PlayerHPBarUpdate(damage);
         var playerBase = _players[0].GetComponent<PlayerBase>();
         UpdateSkillText(playerBase);
+        playerBase.DeathAction += ChangeNextChara;
         playerBase.OnCoolDownChanged += UpdateSkillText;
         PlayerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
         foreach (var player in _players)
@@ -68,19 +69,19 @@ public class Playermanager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            ChasngeCara(1);
+            ChangeChara(1);
             _enemyManager.SetTarget(_players[1]);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            ChasngeCara(0);
+            ChangeChara(0);
             _enemyManager.SetTarget(_players[0]);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            ChasngeCara(2);
+            ChangeChara(2);
             _enemyManager.SetTarget(_players[2]);
 
         }
@@ -101,7 +102,7 @@ public class Playermanager : MonoBehaviour
 
   
     
-    private void ChasngeCara(int i)
+    private void ChangeChara(int i)
     {
 
 
@@ -117,6 +118,7 @@ public class Playermanager : MonoBehaviour
                 player.SetActive(false);
                 var pl = player.GetComponent<PlayerBase>();
                 pl.OnCoolDownChanged -= UpdateSkillText;
+                pl.DeathAction -= ChangeNextChara;
             }
 
         }
@@ -128,9 +130,25 @@ public class Playermanager : MonoBehaviour
         playerBase.StateChange((PlayerBase.MotionIndex)a);
         UpdateSkillText(playerBase);
         playerBase.OnCoolDownChanged += UpdateSkillText;
+        playerBase.DeathAction += ChangeNextChara;
         _camera.Target.TrackingTarget = _players[i].transform.GetChild(1);
         var damage = _players[i].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
+    }
+
+    void ChangeNextChara(int index)
+    {
+
+        if(index != 2)
+        {
+            ChangeChara(index + 1);
+
+        }
+        else
+        {
+            ChangeChara(0);
+        }
+
     }
     
     public void PlayerHPBarUpdate(IDamageable damage)

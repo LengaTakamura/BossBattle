@@ -90,9 +90,9 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public Action<PlayerBase> OnCoolDownChanged;
 
-    public Action DeathAction;
+    public Action<int> DeathAction;
 
-    public int CaraIndex = 0;
+    public int CharaIndex = 0;
     private void Awake()
     {
         Cursor.visible = false;

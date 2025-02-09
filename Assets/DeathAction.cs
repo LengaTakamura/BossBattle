@@ -20,7 +20,9 @@ public class DeathAction : StateMachineBehaviour
         var player = animator.transform.root.GetComponent<PlayerBase>();
         if (player != null)
         {
-            player.DeathAction?.Invoke();
+            Debug.Log("action");
+            player.DeathAction?.Invoke(player.CharaIndex);
+            player.gameObject.SetActive(false);
         }
     }
 
