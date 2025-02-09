@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour,IDamageable
@@ -34,6 +35,13 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     private EnemyState _enemyState;
 
+    [SerializeField]
+    float _minDistance = 1;
+
+    private bool _onDamaged = false;
+
+    [SerializeField]
+    float _timer;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -47,7 +55,14 @@ public class EnemyManager : MonoBehaviour,IDamageable
     private void Update()
     {       
         LookTarget();
-        ChangeState();
+       EnemyState state = ChangeState(_enemyState);
+        if(state != _enemyState)
+        {
+            _enemyState = state;
+            SwitchState(state);
+        }
+        if(_enemyState == EnemyState.Move)
+        MoveUpdate(_target.transform.position);
     }
 
     private void LookTarget()
@@ -57,11 +72,10 @@ public class EnemyManager : MonoBehaviour,IDamageable
         transform.LookAt(rot);
     }
 
-
-    public void ChangeState()
+    public void SwitchState(EnemyState state)
     {
-        EnemyState state = _enemyState;
-        switch (_enemyState) 
+        
+        switch (_enemyState)
         {
             case EnemyState.Sleep:
                 Sleep();
@@ -69,23 +83,84 @@ public class EnemyManager : MonoBehaviour,IDamageable
             case EnemyState.Attack:
                 Attack();
                 break;
-            case EnemyState.OnBattle:
-                OnBattle();
+            case EnemyState.None:
+                None();
                 break;
             case EnemyState.Move:
-                Move();
+                //Move();
                 break;
 
         }
 
     }
 
+
+    public  EnemyState ChangeState(EnemyState state)
+    {
+         
+        switch (_enemyState) 
+        {
+            case EnemyState.Sleep:
+                {
+                    if(GetDistance(_target.transform.position) < _distance)
+                    {
+                        state = EnemyState.None;
+                    }
+
+                    if (_onDamaged)
+                    {
+                        state = EnemyState.None;
+                    }
+                }
+                break;
+            case EnemyState.Attack:
+                {
+                   
+                }
+                break;
+            case EnemyState.None:
+                {
+                    _timer = Time.time;
+                     Debug.Log(_timer);
+
+                    if (_timer + 3f < Time.time)
+                    {
+                        state = EnemyState.Attack;
+                    }
+                    if (GetDistance(_target.transform.position) > _distance)
+                    {
+                        state = EnemyState.Move;
+                    }
+                }
+               
+                break;
+            case EnemyState.Move:
+                {
+                    if (GetDistance(_target.transform.position) < _minDistance)
+                    {
+                        state = EnemyState.None;                    
+                    }
+                }
+                break;
+
+        }
+        return state;
+
+    }
+
+    float  GetDistance(Vector3 vect)
+    {
+        return Vector3.Distance(transform.position, vect);
+    }
+
+   
+
     void Sleep()
     {
 
     }
 
-    void OnBattle()
+    void None()
     {
 
     }
@@ -95,9 +170,9 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     }
 
-    void Move()
+    void MoveUpdate(Vector3 target)
     {
-
+        transform.position = Vector3.MoveTowards(transform.position, target + new Vector3(0, -1, 0), Time.deltaTime * _speed);
     }
  
 
@@ -111,6 +186,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
         _currentHealth -= damage;
         Debug.Log($"hit{damage}");
         _enemyHealthBarManager.FillUpdate(_currentHealth / _health);
+        _onDamaged = true;
         if(_currentHealth / _health < 0.5)
         {
             _animator.SetTrigger("Ult");
@@ -139,13 +215,12 @@ public class EnemyManager : MonoBehaviour,IDamageable
 /// </summary>
 public enum EnemyState
 {
-    OnBattle,
+    None,
     Attack,
     Sleep,
     Move
-
-
 }
+
 
 
 /// <summary>

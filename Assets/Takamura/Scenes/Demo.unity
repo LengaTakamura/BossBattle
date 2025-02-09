@@ -3315,8 +3315,16 @@ PrefabInstance:
       value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: _speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _distance
-      value: 5
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: _minDistance
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _enemyHealthBarManager
