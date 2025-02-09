@@ -23,7 +23,8 @@ public class SwordManager : MonoBehaviour
         if (other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.transform.parent.gameObject.tag == "Enemy")
         {
             var player = transform.root.GetComponent<IDamageable>();
-            damage.HitDamage(player.AttackPower + DamageBuff);
+            if (damage.CurrentHealth > 0)
+                damage.HitDamage(player.AttackPower + DamageBuff);
             var playerBase = transform.root.GetComponent<PlayerBase>();
             playerBase.AttackAction?.Invoke();
         }

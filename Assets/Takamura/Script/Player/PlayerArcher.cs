@@ -89,14 +89,16 @@ public class PlayerArcher : PlayerBase
                     if(hit.transform.gameObject.name == "Jaw3")
                     {
                         _bowDamageBuff = 100;
-                        damage.HitDamage(_attackPower + _bowDamageBuff );
+                        if (damage.CurrentHealth > 0)
+                            damage.HitDamage(_attackPower + _bowDamageBuff );
                         Debug.Log("Headshot");
                     }
                     else
                     {
                         Debug.Log("HitBow");
                         _bowDamageBuff = 1;
-                        damage.HitDamage(_attackPower + _bowDamageBuff);
+                        if (damage.CurrentHealth > 0)
+                            damage.HitDamage(_attackPower + _bowDamageBuff);
                     }
 
                     AttackAction?.Invoke();

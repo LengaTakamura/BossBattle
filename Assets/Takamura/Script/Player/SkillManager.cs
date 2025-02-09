@@ -43,7 +43,8 @@ public class SkillManager : MonoBehaviour
     {
         if ( other.transform.parent != null && other.transform.parent.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Enemy")
         {
-            damage.HitDamage(_damage);
+            if (damage.CurrentHealth > 0)
+                damage.HitDamage(_damage);
              
         }
     }

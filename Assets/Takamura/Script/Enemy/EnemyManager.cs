@@ -61,9 +61,13 @@ public class EnemyManager : MonoBehaviour,IDamageable
         _currentHealth -= damage;
         Debug.Log($"hit{damage}");
         _enemyHealthBarManager.FillUpdate(_currentHealth / _health);
-        if(_currentHealth / _health < 0.2)
+        if(_currentHealth / _health < 0.5)
         {
             _animator.SetTrigger("Ult");
+        }
+        if(_currentHealth <= 0)
+        {
+            _animator.SetTrigger("Death");
         }
     }
 
