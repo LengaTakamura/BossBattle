@@ -47,7 +47,7 @@ public class Skill : StateMachineBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         var effect = Instantiate(_skillPrefab, anim.transform.position + anim.transform.forward, anim.transform.rotation);
         var skillManager = effect.GetComponentInChildren<SkillManager>();
-        var player = anim.transform.root.GetComponent<PlayerBase>();
+        var player = anim.transform.parent.GetComponent<PlayerBase>();
         skillManager.HitAction += player.AddEnergy;
     }
 

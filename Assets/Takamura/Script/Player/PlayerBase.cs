@@ -95,19 +95,19 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public float UltEnergy = 10f;
 
-    private float currentEnergy = 0f;
+    private float _currentEnergy = 0f;
 
     public float CurrentEnergy
     {
         get
         {
-            Debug.Log("get" + currentEnergy + this.gameObject.name);
+            Debug.Log("get" + _currentEnergy + this.gameObject.name);
 
 
-            return currentEnergy;
+            return _currentEnergy;
             
         }
-        set { currentEnergy = value; Debug.Log("set"+currentEnergy + this.gameObject.name); }
+        set { _currentEnergy = value; Debug.Log("set"+_currentEnergy + this.gameObject.name); }
     }
 
     public Action<PlayerBase> OnEnergyChanged;

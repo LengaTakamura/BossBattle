@@ -16,9 +16,12 @@ public class BatManager : MonoBehaviour
 
     public Action<Vector3> GetTargetPos;
     PlayerBase _archer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
+
+      
         var players = Resources.FindObjectsOfTypeAll<PlayerBase>();
         foreach (var player in players)
         {
@@ -28,6 +31,8 @@ public class BatManager : MonoBehaviour
                 _archer = player;
             }
         }
+        var effectManager = _attackEffect.GetComponent<BatEffectManager>();
+        effectManager.HitAction += _archer.AddEnergy;
         _target = FindAnyObjectByType<EnemyManager>().transform.Find("EnemyCol").gameObject;
         _cts = new CancellationTokenSource();
         await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime));
@@ -55,10 +60,10 @@ public class BatManager : MonoBehaviour
     public void AttackWith()
     {
         Quaternion lookTarget = Quaternion.LookRotation(_target.transform.position);
-        var effect = Instantiate(_attackEffect,transform.position +transform.forward + new Vector3(0,1.6f,0),lookTarget * _attackEffect.transform.rotation);
+        var effect = Instantiate(_attackEffect,transform.position + transform.forward + new Vector3(0,1.6f,0),lookTarget * _attackEffect.transform.rotation);
         var effectManager = effect.GetComponent<BatEffectManager>();
         effectManager.Initialized(this);
-        effectManager.HitAction += _archer.AddEnergy;
+
     }
 
 

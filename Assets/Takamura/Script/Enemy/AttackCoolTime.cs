@@ -17,7 +17,7 @@ public class AttackCoolTime : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var archer = animator.transform.root.GetComponent<PlayerArcher>();
+        var archer = animator.transform.parent.GetComponent<PlayerArcher>();
         archer.CanAttack = true;
     }
 
