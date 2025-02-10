@@ -1,5 +1,4 @@
 using R3;
-using System;
 using UnityEngine;
 public class PlayerArcher : PlayerBase
 {
@@ -42,7 +41,6 @@ public class PlayerArcher : PlayerBase
             MoveWithAim();
 
         }
-
     }
 
     private void Aiming()
@@ -102,7 +100,7 @@ public class PlayerArcher : PlayerBase
                             damage.HitDamage(_attackPower + _bowDamageBuff);
                     }
 
-                    AttackAction?.Invoke();
+                    AttackAction?.Invoke();                  
                 }
             }
             CanAttack = false;

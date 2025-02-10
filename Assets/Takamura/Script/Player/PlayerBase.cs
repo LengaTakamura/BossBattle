@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using R3;
 using System;
 using System.Threading;
-using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -95,8 +94,23 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public int CharaIndex = 0;
 
     public float UltEnergy = 10f;
-    [SerializeField]
+
     private float _currentEnergy = 0f;
+
+    public float CurrentEnergy
+    {
+        get
+        {
+            Debug.Log("get" + _currentEnergy + this.gameObject.name);
+
+
+            return _currentEnergy;
+            
+        }
+        set { _currentEnergy = value; Debug.Log("set"+_currentEnergy + this.gameObject.name); }
+    }
+
+    public Action<PlayerBase> OnEnergyChanged;
     private void Awake()
     {
         Cursor.visible = false;
@@ -106,11 +120,13 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _rb.useGravity = false;
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cts = new CancellationTokenSource();
+        CurrentEnergy = 0f;
+       
     }
 
     protected virtual void Start()
     {
-        _currentEnergy = 0f;
+       
         InitOnDamage();
         CoolDownTime = 0f;
         CurrentStamina = MaxStamina;
@@ -168,6 +184,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
             UseSkill(_cts.Token).Forget();
         }
+
     }
 
     protected virtual void FixedUpdate()
@@ -181,7 +198,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             SkatingMove();
 
         }
-
         AddGravity();
     }
 
@@ -255,7 +271,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         if (Input.GetKeyUp(KeyCode.Q) && CanUseUlt())
         {
             _anim.SetTrigger("Ult");
-            _currentEnergy = 0;
+            CurrentEnergy = 0;
         }
   
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
@@ -405,7 +421,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     bool CanUseUlt()
     {
-        if(_currentEnergy >= UltEnergy)
+        if(CurrentEnergy >= UltEnergy)
         {
             return true;
         }
@@ -416,9 +432,9 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
      public void AddEnergy(float energy)
-    {
-        Debug.Log(_currentEnergy);
-        _currentEnergy += energy;
+     {
+        CurrentEnergy += energy;
+        OnEnergyChanged?.Invoke(this);
     }
 
     public void RecoveryStamina()

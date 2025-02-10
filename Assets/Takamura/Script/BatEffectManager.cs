@@ -21,6 +21,13 @@ public class BatEffectManager : MonoBehaviour
         bat.GetTargetPos += UpdateTartgetPos;
     }
 
+    private void Start()
+    {
+        var archer =GameObject.Find("PlayerManager").transform;
+        var archerManager = archer.Find("Archer").GetComponent<PlayerArcher>();
+        HitAction += archerManager.AddEnergy;
+    }
+
     private void Update()
     {
         MoveToTarget();

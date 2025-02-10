@@ -14552,6 +14552,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _damage: 5
+  _energy: 14
 --- !u!1 &1946108650276192
 GameObject:
   m_ObjectHideFlags: 0

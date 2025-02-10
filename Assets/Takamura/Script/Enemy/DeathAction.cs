@@ -17,7 +17,7 @@ public class DeathAction : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var player = animator.transform.root.GetComponent<PlayerBase>();
+        var player = animator.transform.parent.GetComponent<PlayerBase>();
         if (player != null)
         {
             Debug.Log("action");
