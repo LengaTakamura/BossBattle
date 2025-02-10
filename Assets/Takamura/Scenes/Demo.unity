@@ -1756,6 +1756,7 @@ MonoBehaviour:
   _players:
   - {fileID: 477152838}
   - {fileID: 8298239935448707469}
+  - {fileID: 874406374}
   _camera: {fileID: 1933551199}
   _enemyManager: {fileID: 2000576097}
   _playerheealthBarManager: {fileID: 114586933}

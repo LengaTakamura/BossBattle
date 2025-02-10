@@ -93,6 +93,9 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public Action<int> DeathAction;
 
     public int CharaIndex = 0;
+
+    public float UltEnergy = 10f;
+    public float CurrentEnergy = 0f;
     private void Awake()
     {
         Cursor.visible = false;
@@ -247,7 +250,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             return;
         }
 
-        if (Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.Q) && CanUseUlt())
         {
             _anim.SetTrigger("Ult");
         }
@@ -397,6 +400,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     
     }
 
+    bool CanUseUlt()
+    {
+        if(CurrentEnergy >= UltEnergy)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void RecoveryStamina()
     {
