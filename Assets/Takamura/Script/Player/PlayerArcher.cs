@@ -42,7 +42,6 @@ public class PlayerArcher : PlayerBase
             MoveWithAim();
 
         }
-
     }
 
     private void Aiming()

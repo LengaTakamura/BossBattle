@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Playermanager : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class Playermanager : MonoBehaviour
     GameObject _target;
     [SerializeField]
     TextMeshProUGUI _tmp;
-
+    [SerializeField]
+    Slider _ultSlider;
     public List<GameObject> DeadPlayers = new();
     private void Start()
     {
@@ -42,8 +44,10 @@ public class Playermanager : MonoBehaviour
         PlayerHPBarUpdate(damage);
         var playerBase = _players[0].GetComponent<PlayerBase>();
         UpdateSkillText(playerBase);
+        UpdateUltText(playerBase);
         playerBase.DeathAction += ChangeNextChara;
         playerBase.OnCoolDownChanged += UpdateSkillText;
+        playerBase.OnEnergyChanged += UpdateUltText;
         PlayerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
         foreach (var player in _players)
         {
@@ -64,6 +68,11 @@ public class Playermanager : MonoBehaviour
     void UpdateSkillText(PlayerBase player)
     {
         _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime.ToString("0.0")}" : "E";
+    }
+
+    void UpdateUltText(PlayerBase player)
+    {
+        _ultSlider.value = player.CurrentEnergy / player.UltEnergy;
     }
 
 
@@ -126,6 +135,7 @@ public class Playermanager : MonoBehaviour
                 player.SetActive(false);
                 pl.OnCoolDownChanged -= UpdateSkillText;
                 pl.DeathAction -= ChangeNextChara;
+                pl.OnEnergyChanged -= UpdateUltText;
             }
 
         }
@@ -136,8 +146,10 @@ public class Playermanager : MonoBehaviour
         var playerBase = _players[i].GetComponent<PlayerBase>();
         playerBase.StateChange((PlayerBase.MotionIndex)a);
         UpdateSkillText(playerBase);
+        UpdateUltText(playerBase);
         playerBase.OnCoolDownChanged += UpdateSkillText;
         playerBase.DeathAction += ChangeNextChara;
+        playerBase.OnEnergyChanged += UpdateUltText;
         _camera.Target.TrackingTarget = _players[i].transform.GetChild(1);
         var damage = _players[i].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
