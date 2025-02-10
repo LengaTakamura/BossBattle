@@ -69,6 +69,6 @@ public class FrameAttack : StateMachineBehaviour
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         var frame = Instantiate(_frame, _jaw3.position, _jaw3.transform.rotation,_jaw3);
-        
+        frame.transform.SetParent(_jaw3);
     }
 }

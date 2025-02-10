@@ -147,6 +147,11 @@ public class Playermanager : MonoBehaviour
     {
 
         DeadPlayers.Add(_players[index]);
+
+        if(DeadPlayers.Count == _players.Length)
+        {
+            Debug.Log("GameOver");
+        }
         if(index != 2)
         {
             ChangeChara(index + 1);
