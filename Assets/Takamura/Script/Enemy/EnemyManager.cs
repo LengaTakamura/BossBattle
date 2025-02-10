@@ -1,8 +1,5 @@
-
-using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour,IDamageable
@@ -42,6 +39,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     [SerializeField]
     float _timer;
+
+    public bool IsAttackEnd = false;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -88,7 +87,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 None();
                 break;
             case EnemyState.Move:
-                //Move();
+                Move();
                 break;
 
         }
@@ -118,7 +117,13 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 break;
             case EnemyState.Attack:
                 {
-                   
+                    if (IsAttackEnd)
+                    {
+                        _animator.SetBool("Attack", false);
+                        state = EnemyState.None;
+                        _timer = Time.time;
+                        IsAttackEnd = false;
+                    }
                 }
                 break;
             case EnemyState.None:
@@ -141,6 +146,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 {
                     if (GetDistance(_target.transform.position) < _minDistance)
                     {
+                        _animator.SetBool("Move", false);
                         state = EnemyState.None;
                         _timer = Time.time;
                     }
@@ -169,9 +175,14 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     }
 
+    void Move()
+    {
+        _animator.SetBool("Move", true);
+    }
+
     void Attack()
     {
-
+        _animator.SetBool("Attack", true);
     }
 
     void MoveUpdate(Vector3 target)
@@ -223,6 +234,19 @@ public enum EnemyState
     Attack,
     Sleep,
     Move
+}
+
+
+/// <summary>
+/// ìGÇÃçUåÇÇÃéÌóﬁ
+/// </summary>
+public enum EnemyAttack
+{
+    Normal = 0,
+    Claw = 1,
+    Jump = 2,
+    Flame = 3,
+
 }
 
 

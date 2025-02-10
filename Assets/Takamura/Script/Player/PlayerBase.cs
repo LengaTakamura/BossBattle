@@ -247,24 +247,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             return;
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-          
-
-        }
-
         if (Input.GetKeyUp(KeyCode.Q))
         {
             _anim.SetTrigger("Ult");
         }
-     
-
-     
+  
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
-
-      
-     
-        
     }
 
     public void StateChange(MotionIndex motion)
