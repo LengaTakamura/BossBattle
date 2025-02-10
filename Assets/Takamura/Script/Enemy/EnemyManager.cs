@@ -50,6 +50,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
     void Start()
     {
         _currentHealth = _health;
+        _enemyState = EnemyState.Sleep;
     }
 
     private void Update()
@@ -98,18 +99,20 @@ public class EnemyManager : MonoBehaviour,IDamageable
     public  EnemyState ChangeState(EnemyState state)
     {
          
-        switch (_enemyState) 
+        switch (state) 
         {
             case EnemyState.Sleep:
                 {
                     if(GetDistance(_target.transform.position) < _distance)
                     {
                         state = EnemyState.None;
+                        _timer = Time.time;
                     }
 
                     if (_onDamaged)
                     {
                         state = EnemyState.None;
+                        _timer = Time.time;
                     }
                 }
                 break;
@@ -120,16 +123,16 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 break;
             case EnemyState.None:
                 {
-                    _timer = Time.time;
-                     Debug.Log(_timer);
 
                     if (_timer + 3f < Time.time)
                     {
                         state = EnemyState.Attack;
+                        _timer = 0;
                     }
                     if (GetDistance(_target.transform.position) > _distance)
                     {
                         state = EnemyState.Move;
+                        _timer = 0;
                     }
                 }
                
@@ -138,7 +141,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 {
                     if (GetDistance(_target.transform.position) < _minDistance)
                     {
-                        state = EnemyState.None;                    
+                        state = EnemyState.None;
+                        _timer = Time.time;
                     }
                 }
                 break;
