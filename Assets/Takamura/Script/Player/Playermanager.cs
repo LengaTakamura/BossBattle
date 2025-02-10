@@ -63,7 +63,7 @@ public class Playermanager : MonoBehaviour
 
     void UpdateSkillText(PlayerBase player)
     {
-        _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime}" : "E";
+        _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime.ToString("0.0")}" : "E";
     }
 
 
