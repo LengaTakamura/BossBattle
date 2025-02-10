@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -6,6 +7,11 @@ public class SkillManager : MonoBehaviour
     private float _damage = 100f;
 
     CapsuleCollider _collider;
+
+    public Action<float> HitAction;
+
+    [SerializeField]
+    private float _energy = 1.5f;
     private void Start()
     {
         _collider = GetComponent<CapsuleCollider>();
@@ -46,7 +52,7 @@ public class SkillManager : MonoBehaviour
             if (damage.CurrentHealth > 0)
             {
                 damage.HitDamage(_damage);
-               
+                HitAction?.Invoke(_energy);
             }
                
               

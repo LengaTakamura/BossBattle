@@ -412,6 +412,11 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         }
     }
 
+     public void AddEnergy(float energy)
+    {
+        CurrentEnergy += energy;
+    }
+
     public void RecoveryStamina()
     {
         if (CurrentStamina < MaxStamina && State != MotionIndex.Avoid)

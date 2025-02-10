@@ -15,7 +15,7 @@ public class Skill : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         cts = new CancellationTokenSource();
-        UltTiming(cts.Token, animator);
+        SkillTiming(cts.Token, animator);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -42,10 +42,14 @@ public class Skill : StateMachineBehaviour
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
 
-    async void UltTiming(CancellationToken ct, Animator anim)
+    async void SkillTiming(CancellationToken ct, Animator anim)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: ct);
         var effect = Instantiate(_skillPrefab, anim.transform.position + anim.transform.forward, anim.transform.rotation);
-
+        var skillManager = effect.GetComponentInChildren<SkillManager>();
+        var player = anim.transform.root.GetComponent<PlayerBase>();
+        skillManager.HitAction += player.AddEnergy;
     }
+
+    
 }
