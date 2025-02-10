@@ -2753,6 +2753,8 @@ MonoBehaviour:
   _coolTime: 15
   CoolDownTime: 0
   CharaIndex: 2
+  UltEnergy: 10
+  CurrentEnergy: 0
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3256,6 +3258,10 @@ PrefabInstance:
     - target: {fileID: 3522915584368543216, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
       propertyPath: CharaIndex
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3522915584368543216, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
+      propertyPath: CurrentEnergy
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3695515900976040872, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
       propertyPath: m_Name

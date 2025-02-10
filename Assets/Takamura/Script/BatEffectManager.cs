@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BatEffectManager : MonoBehaviour
@@ -11,6 +12,10 @@ public class BatEffectManager : MonoBehaviour
     float _damage = 5f;
 
     private Vector3 _currentTargetPosition;
+
+    public Action<float> HitAction;
+    [SerializeField]
+    private float _energy = 0.5f; 
     public void Initialized(BatManager bat)
     {
         bat.GetTargetPos += UpdateTartgetPos;
@@ -36,6 +41,7 @@ public class BatEffectManager : MonoBehaviour
         {
             if(damage.CurrentHealth > 0)
             damage.HitDamage(_damage);
+            HitAction?.Invoke(_energy);
             Destroy(gameObject);
         }
     }

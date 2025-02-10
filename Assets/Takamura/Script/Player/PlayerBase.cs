@@ -95,7 +95,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     public int CharaIndex = 0;
 
     public float UltEnergy = 10f;
-    public float CurrentEnergy = 0f;
+    [SerializeField]
+    private float _currentEnergy = 0f;
     private void Awake()
     {
         Cursor.visible = false;
@@ -109,6 +110,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
+        _currentEnergy = 0f;
         InitOnDamage();
         CoolDownTime = 0f;
         CurrentStamina = MaxStamina;
@@ -253,6 +255,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         if (Input.GetKeyUp(KeyCode.Q) && CanUseUlt())
         {
             _anim.SetTrigger("Ult");
+            _currentEnergy = 0;
         }
   
         _anim.SetFloat("Blend", _rb.linearVelocity.magnitude);
@@ -402,7 +405,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     bool CanUseUlt()
     {
-        if(CurrentEnergy >= UltEnergy)
+        if(_currentEnergy >= UltEnergy)
         {
             return true;
         }
@@ -414,7 +417,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
      public void AddEnergy(float energy)
     {
-        CurrentEnergy += energy;
+        Debug.Log(_currentEnergy);
+        _currentEnergy += energy;
     }
 
     public void RecoveryStamina()
