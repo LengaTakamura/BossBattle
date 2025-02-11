@@ -3946,10 +3946,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioClip:
-  - {fileID: 8300000, guid: 4e0e4ca33e54baa439bc3155cb86da00, type: 3}
-  - {fileID: 8300000, guid: efc83bdd8cd239f458a48cf3ad539df4, type: 3}
+  - {fileID: 8300000, guid: 6cab4b5284ac2d74b9aed92bc42153c9, type: 3}
+  - {fileID: 8300000, guid: 75a02b637033c754f89907d8535ef2b8, type: 3}
   - {fileID: 8300000, guid: abd20c2f9809daf4d9053e1e45e2c92f, type: 3}
   - {fileID: 8300000, guid: a0cb1e2696fdd00469e863fe6ce66176, type: 3}
+  - {fileID: 8300000, guid: 4b406ec398563e641bc1748f4039faee, type: 3}
 --- !u!82 &2000576102
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3972,7 +3973,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 2.02
   MinDistance: 1
-  MaxDistance: 22.66
+  MaxDistance: 40
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0

@@ -117,14 +117,12 @@ public class EnemyManager : MonoBehaviour,IDamageable
                     {
                         state = EnemyState.None;
                         _timer = Time.time;
-                        _audio.AudioPlayNone();
                     }
 
                     if (_onDamaged)
                     {
                         state = EnemyState.None;
                         _timer = Time.time;
-                        _audio.AudioPlayNone();
                     }
                 }
                 break;
@@ -136,7 +134,6 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         state = EnemyState.None;
                         _timer = Time.time;
                         IsAttackEnd = false;
-                        _audio.AudioPlayNone();
                     }
                 }
                 break;
@@ -169,7 +166,6 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         state = EnemyState.None;
                         _timer = Time.time;
                         _audio.AudioPause();
-                        _audio.AudioPlayNone();
                     }
                 }
                 break;
