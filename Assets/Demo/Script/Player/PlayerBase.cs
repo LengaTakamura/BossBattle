@@ -99,6 +99,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public static bool OnPause = false;
 
+    private float _defense = 10;
+
+    public float Defense { get { return _defense; } set => _defense = value; }
+
     public float CurrentEnergy
     {
         get
@@ -296,7 +300,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     {
         if(State != MotionIndex.Avoid)
         {
-            _currentHealth -= damage;
+            damage = damage - Defense;
+            if(damage < 0)
+            {
+                return ;
+            }
+            _currentHealth -= (damage);
             _onDamage.OnNext(damage);
 
         }

@@ -1,9 +1,28 @@
 using UnityEngine;
 
-public class FlameParticleManager : MonoBehaviour
+public class FlameParticleManager : MonoBehaviour,IPause
 {
     [SerializeField]
     private float _damageBuff = 10f;
+
+    ParticleSystem _particleSystem;
+
+
+    private void Start()
+    {
+        _particleSystem = GetComponent<ParticleSystem>();
+    }
+
+
+    void IPause.Pause()
+    {
+        _particleSystem.Pause();
+    }
+
+    void IPause.Resume()
+    {
+        _particleSystem.Play();
+    }
 
     private void OnParticleCollision(GameObject other)
     {

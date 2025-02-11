@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5033058341872291339}
   m_Layer: 0
   m_Name: FlameThrower
-  m_TagString: Untagged
+  m_TagString: Pause
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4869,7 +4869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2787625138b0044eadad315f0d1c02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 100
+  _damageBuff: 10
 --- !u!1 &1685911702664702
 GameObject:
   m_ObjectHideFlags: 0
@@ -9644,7 +9644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2787625138b0044eadad315f0d1c02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
+  _damageBuff: 10
 --- !u!1 &1819868529388052
 GameObject:
   m_ObjectHideFlags: 0

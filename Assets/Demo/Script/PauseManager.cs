@@ -3,7 +3,7 @@ using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
     /// <summary>true ‚ÌŽž‚ÍˆêŽž’âŽ~‚Æ‚·‚é</summary>
-    bool _pauseFlg = false;
+    public static bool PauseFlg = false;
 
     void Update()
     {
@@ -19,7 +19,7 @@ public class PauseManager : MonoBehaviour
     /// </summary>
     void PauseResume()
     {
-        _pauseFlg = !_pauseFlg;
+        PauseFlg = !PauseFlg;
 
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Pause");
 
@@ -27,7 +27,7 @@ public class PauseManager : MonoBehaviour
         {
             IPause i = o.GetComponent<IPause>();
 
-            if (_pauseFlg)
+            if (PauseFlg)
             {
                 i?.Pause();     
             }
