@@ -6,24 +6,30 @@ using UnityEngine;
 
 public class HealSkill : StateMachineBehaviour
 {
-    CancellationTokenSource _cts;
+    [SerializeField]
+    float _energy = 2f;
     List<IDamageable> _players = new();
     int _healCount = 5;
     [SerializeField]
     float _healValue = 100;
     [SerializeField]
     float _healDelay = 1f;
+
+    PlayerBase _kinoko;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public async void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _healCount = 5;
-        _cts = new CancellationTokenSource();
         var parent = animator.transform.root;
         foreach(Transform player in parent)
         {
             if (player.TryGetComponent(out IDamageable damage))
             {
                 _players.Add(damage);
+                if(player.gameObject.name == "Kinoko")
+                {
+                    _kinoko = player.GetComponent<PlayerBase>();
+                }
             }
             
         }
@@ -34,7 +40,7 @@ public class HealSkill : StateMachineBehaviour
                 foreach(IDamageable player in _players)
                 {
                     player.HitHeal(_healValue);
-                    Debug.Log(player.CurrentHealth);
+                    _kinoko.CurrentEnergy += _energy;
                 }
                 _healCount--;
                 await UniTask.Delay(TimeSpan.FromSeconds(_healDelay));

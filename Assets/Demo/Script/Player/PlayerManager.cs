@@ -88,18 +88,21 @@ public class Playermanager : MonoBehaviour
         {
             ChangeChara(1);
             _enemyManager.SetTarget(_players[1]);
+            SetKinokoUltTarget(_players[1]);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1) && !DeadPlayers.Contains(_players[0]))
         {
             ChangeChara(0);
             _enemyManager.SetTarget(_players[0]);
+            SetKinokoUltTarget(_players[0]);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3) && !DeadPlayers.Contains(_players[2]))
         {
             ChangeChara(2);
             _enemyManager.SetTarget(_players[2]);
+            SetKinokoUltTarget(_players[2]);
 
         }
 
@@ -116,7 +119,17 @@ public class Playermanager : MonoBehaviour
         }
     }
 
-
+    void SetKinokoUltTarget(GameObject player)
+    {
+        try
+        {
+            var kinokoUlt = transform.GetComponentInChildren<BuffShieldManager>();
+            kinokoUlt.SetTarget(player.GetComponent<PlayerBase>());
+        }
+        catch { }
+        
+       
+    }
 
 
     private void ChangeChara(int i)

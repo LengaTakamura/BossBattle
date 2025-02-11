@@ -2889,6 +2889,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1641219021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1641219022}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1641219022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641219021}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 54.025585, y: 4.79, z: 112.623375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1652894315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3735,7 +3766,7 @@ MonoBehaviour:
   _coolTime: 15
   CoolDownTime: 0
   CharaIndex: 2
-  UltEnergy: 5
+  UltEnergy: 2
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4657,6 +4688,7 @@ SceneRoots:
   - {fileID: 18389131}
   - {fileID: 1703341513}
   - {fileID: 5310502832994651223}
+  - {fileID: 1641219022}
   - {fileID: 906244617}
   - {fileID: 1933551200}
   - {fileID: 633836363}

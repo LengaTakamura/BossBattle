@@ -7,7 +7,8 @@ public class KinokoUlt : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var effect = Instantiate(_buffEffect, animator.transform.position + new Vector3(0, 0.75f, 0), Quaternion.identity);
+        var effect = Instantiate(_buffEffect, animator.transform.position , Quaternion.identity);
+        effect.transform.SetParent(animator.transform.root);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
