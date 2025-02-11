@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyManager : MonoBehaviour,IDamageable
 {
@@ -41,6 +42,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
     float _timer;
 
     public bool IsAttackEnd = false;
+
+    private bool _onPause = false;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -53,9 +56,13 @@ public class EnemyManager : MonoBehaviour,IDamageable
     }
 
     private void Update()
-    {       
+    {   
+        if (_onPause)
+        {
+            return;
+        }
         LookTarget();
-       EnemyState state = ChangeState(_enemyState);
+        EnemyState state = ChangeState(_enemyState);
         if(state != _enemyState)
         {
             _enemyState = state;
@@ -219,6 +226,21 @@ public class EnemyManager : MonoBehaviour,IDamageable
     {
 
 
+    }
+
+    public float OnPause()
+    {
+        _onPause = true;
+        _enemyState = EnemyState.None;
+        float speed = _animator.speed;
+        _animator.speed = 0;
+        return speed;
+    }
+
+    public void OnResume(float speed)
+    {
+        _onPause = false;
+        _animator.speed = speed;
     }
 
 
