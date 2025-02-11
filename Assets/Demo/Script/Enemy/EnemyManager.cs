@@ -148,6 +148,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         state = EnemyState.Attack;
                         _timer = 0;
                         _animator.SetBool("Attack", true);
+                        _audio.AudioPause();
                         
                     }
                     if (GetDistance(_target.transform.position) > _distance)
@@ -155,7 +156,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         state = EnemyState.Move;
                         _timer = 0;
                         _animator.SetBool("Move", true);
-                        _audio.AudioPlayMove();
+                        _audio.AudioPause();
                     }
                 }
                

@@ -22,13 +22,21 @@ public class EnemyAudioManager : MonoBehaviour
         _audioSource.resource = SearchClip("Move");
         _audioSource.Play();
     }
-   
+    
+
+    public void PlaySe(string name)
+    {
+        _audioSource.PlayOneShot(SearchClip($"{name}"));
+    }
+
 
     public void AudioPlayNone()
     {
         _audioSource.resource = SearchClip("None");
         _audioSource.Play();
     }
+
+
 
     public void AudioPause()
     {
