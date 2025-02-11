@@ -99,6 +99,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public static bool OnPause = false;
 
+    [SerializeField]
     private float _defense = 10;
 
     public float Defense { get { return _defense; } set => _defense = value; }

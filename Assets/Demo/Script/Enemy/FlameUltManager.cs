@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class FlameUltManager : MonoBehaviour, IPause
 {
-    [SerializeField]
-    private float _damage = 10f;
-
+   
     ParticleSystem _particleSystem;
 
 
@@ -24,12 +22,6 @@ public class FlameUltManager : MonoBehaviour, IPause
         _particleSystem.Play();
     }
 
-    private void OnParticleCollision(GameObject other)
-    {
-        if (other.TryGetComponent(out IDamageable damage) && other.gameObject.tag == "Player")
-        {
-            if (damage.CurrentHealth > 0)
-                damage.HitDamage( _damage);
-        }
-    }
+   
+  
 }

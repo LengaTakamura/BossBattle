@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,6 @@ public class EnemyHealthBarManager : MonoBehaviour
         _slider = GetComponent<Slider>();
     }
 
-   public void FillUpdate(float value) => _slider.value = value;
+   public void FillUpdate(float value) => _slider.DOValue(value,0.1f);
   
 }

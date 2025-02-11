@@ -3498,6 +3498,7 @@ MonoBehaviour:
   CoolDownTime: 0
   CharaIndex: 2
   UltEnergy: 2
+  _defense: 10
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,6 +4442,10 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 1933551199}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: _defense
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: UltEnergy
       value: 10

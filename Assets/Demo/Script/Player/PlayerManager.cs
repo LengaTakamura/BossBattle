@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using R3;
 using System.Collections.Generic;
 using TMPro;
@@ -72,7 +73,7 @@ public class Playermanager : MonoBehaviour
 
     void UpdateUltText(PlayerBase player)
     {
-        _ultSlider.value = player.CurrentEnergy / player.UltEnergy;
+        _ultSlider.DOValue( player.CurrentEnergy / player.UltEnergy,0.1f);
     }
 
 
