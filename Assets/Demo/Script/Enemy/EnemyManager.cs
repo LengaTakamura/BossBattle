@@ -44,15 +44,19 @@ public class EnemyManager : MonoBehaviour,IDamageable
     public bool IsAttackEnd = false;
 
     private bool _onPause = false;
+
+    EnemyAudioManager _audio;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _cts = new CancellationTokenSource();
+        _audio = GetComponent<EnemyAudioManager>();
     }
     void Start()
     {
         _currentHealth = _health;
         _enemyState = EnemyState.Sleep;
+        _audio.AudioPlayNone();
     }
 
     private void Update()
@@ -113,12 +117,14 @@ public class EnemyManager : MonoBehaviour,IDamageable
                     {
                         state = EnemyState.None;
                         _timer = Time.time;
+                        _audio.AudioPlayNone();
                     }
 
                     if (_onDamaged)
                     {
                         state = EnemyState.None;
                         _timer = Time.time;
+                        _audio.AudioPlayNone();
                     }
                 }
                 break;
@@ -130,6 +136,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         state = EnemyState.None;
                         _timer = Time.time;
                         IsAttackEnd = false;
+                        _audio.AudioPlayNone();
                     }
                 }
                 break;
@@ -140,11 +147,15 @@ public class EnemyManager : MonoBehaviour,IDamageable
                     {
                         state = EnemyState.Attack;
                         _timer = 0;
+                        _animator.SetBool("Attack", true);
+                        
                     }
                     if (GetDistance(_target.transform.position) > _distance)
                     {
                         state = EnemyState.Move;
                         _timer = 0;
+                        _animator.SetBool("Move", true);
+                        _audio.AudioPlayMove();
                     }
                 }
                
@@ -156,6 +167,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         _animator.SetBool("Move", false);
                         state = EnemyState.None;
                         _timer = Time.time;
+                        _audio.AudioPause();
+                        _audio.AudioPlayNone();
                     }
                 }
                 break;
@@ -184,12 +197,12 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void Move()
     {
-        _animator.SetBool("Move", true);
+        
     }
 
     void Attack()
     {
-        _animator.SetBool("Attack", true);
+      
     }
 
     void MoveUpdate(Vector3 target)

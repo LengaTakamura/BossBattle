@@ -39,6 +39,7 @@ public class EnemyAudioManager : MonoBehaviour
     public void AudioPlayFlame()
     {
         _audioSource.PlayOneShot(SearchClip("Flame"));
+   
     }
 
     AudioClip SearchClip(string clipName)
