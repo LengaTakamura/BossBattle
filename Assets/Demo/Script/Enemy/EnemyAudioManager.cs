@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class EnemyAudioManager : MonoBehaviour
@@ -22,11 +22,7 @@ public class EnemyAudioManager : MonoBehaviour
         _audioSource.resource = SearchClip("Move");
         _audioSource.Play();
     }
-    public void AudioPauseMove()
-    {
-        _audioSource.Stop();
-        _audioSource.resource=null;
-    }
+   
 
     public void AudioPlayNone()
     {
@@ -34,7 +30,7 @@ public class EnemyAudioManager : MonoBehaviour
         _audioSource.Play();
     }
 
-    public void AudioPauseNone()
+    public void AudioPause()
     {
         _audioSource.Stop();
         _audioSource.resource = null;
