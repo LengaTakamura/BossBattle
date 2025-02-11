@@ -3138,7 +3138,7 @@ MonoBehaviour:
   _coolTime: 15
   CoolDownTime: 0
   CharaIndex: 2
-  UltEnergy: 10
+  UltEnergy: 5
 --- !u!1 &1933551194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4019,7 +4019,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: c84fbe2079f1253469d3c5ad4bbf3399, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3a9633676d9a6ac43b4a6e82a5c88692, type: 2}
+      objectReference: {fileID: 9100000, guid: 822410b63e88582419e6baeb1964d3bf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
