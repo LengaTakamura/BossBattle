@@ -97,6 +97,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     private float _currentEnergy = 0f;
 
+    public static bool OnPause = false;
+
     public float CurrentEnergy
     {
         get
@@ -120,8 +122,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
     protected virtual void Start()
-    {
-       
+    {       
         InitOnDamage();
         CoolDownTime = 0f;
         CurrentStamina = MaxStamina;
@@ -167,32 +168,44 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        AnimationManagement();
+
+       
         GroundCheck();
-        if (State == MotionIndex.Skating)
-        {
 
-            WallRun(WallCheck());
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown && gameObject.activeSelf)
+        if (!OnPause)
         {
-            UseSkill(_cts.Token).Forget();
+            AnimationManagement();
+            if (State == MotionIndex.Skating)
+            {
+
+                WallRun(WallCheck());
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown && gameObject.activeSelf)
+            {
+                UseSkill(_cts.Token).Forget();
+            }
         }
+        
 
     }
 
     protected virtual void FixedUpdate()
     {
-        if (State != MotionIndex.Skating)
+        if (!OnPause)
         {
-            Moving();
-        }
-        else
-        {
-            SkatingMove();
+            if (State != MotionIndex.Skating)
+            {
+                Moving();
+            }
+            else
+            {
+                SkatingMove();
 
+            }
         }
+
+       
         AddGravity();
     }
 

@@ -27,7 +27,7 @@ public class Playermanager : MonoBehaviour
     public List<GameObject> DeadPlayers = new();
     private void Start()
     {
-       Initialized();
+        Initialized();
     }
 
     private void Initialized()
@@ -76,8 +76,13 @@ public class Playermanager : MonoBehaviour
     }
 
 
-    
+
     private void Update()
+    {
+        InputManagement();
+    }
+
+    void InputManagement()
     {
         if (Input.GetKeyDown(KeyCode.Alpha2) && !DeadPlayers.Contains(_players[1]))
         {
@@ -85,7 +90,7 @@ public class Playermanager : MonoBehaviour
             _enemyManager.SetTarget(_players[1]);
 
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1)&& !DeadPlayers.Contains(_players[0]))
+        else if (Input.GetKeyDown(KeyCode.Alpha1) && !DeadPlayers.Contains(_players[0]))
         {
             ChangeChara(0);
             _enemyManager.SetTarget(_players[0]);
@@ -101,7 +106,7 @@ public class Playermanager : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             var player = _target.GetComponent<PlayerBase>();
-            if( PlayerBase.CurrentStamina != 0)
+            if (PlayerBase.CurrentStamina != 0)
             {
                 var anim = _target.GetComponentInChildren<Animator>();
                 anim.SetTrigger("Avoid");
@@ -112,12 +117,10 @@ public class Playermanager : MonoBehaviour
     }
 
 
-  
-    
+
+
     private void ChangeChara(int i)
     {
-
-
         Vector3 pos = Vector3.zero;
         Vector3 forward = Vector3.zero;
         int a = 0;
@@ -126,7 +129,7 @@ public class Playermanager : MonoBehaviour
             if (player.activeSelf)
             {
                 var pl = player.GetComponent<PlayerBase>();
-                if(pl.CharaIndex == i)
+                if (pl.CharaIndex == i)
                 {
                     return;
                 }
@@ -160,11 +163,11 @@ public class Playermanager : MonoBehaviour
 
         DeadPlayers.Add(_players[index]);
 
-        if(DeadPlayers.Count == _players.Length)
+        if (DeadPlayers.Count == _players.Length)
         {
             Debug.Log("GameOver");
         }
-        if(index != 2)
+        if (index != 2)
         {
             ChangeChara(index + 1);
 
@@ -175,13 +178,45 @@ public class Playermanager : MonoBehaviour
         }
 
     }
-    
+
     public void PlayerHPBarUpdate(IDamageable damage)
     {
         _playerheealthBarManager?.FillUpdate(damage.CurrentHealth / damage.MaxHealth);
     }
 
- 
+    public void OnPause()
+    {
+
+        PlayerBase.OnPause = true;
+        foreach (var player in _players)
+        {
+
+            if (player.activeSelf)
+            {
+                var anim = player.GetComponentInChildren<Animator>();
+                anim.SetBool("OnPause", true);
+
+            }
+
+        }
+    }
+
+    public void OnResume()
+    {
+
+        PlayerBase.OnPause = false;
+        foreach (var player in _players)
+        {
+
+            if (player.activeSelf)
+            {
+                var anim = player.GetComponentInChildren<Animator>();
+                anim.SetBool("OnPause", false);
+
+            }
+
+        }
+    }
 
 }
-    
+

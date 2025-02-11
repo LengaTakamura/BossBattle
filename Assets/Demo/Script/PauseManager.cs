@@ -8,7 +8,7 @@ public class PauseManager : MonoBehaviour
     void Update()
     {
         // ESC キーが押されたら一時停止・再開を切り替える
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             PauseResume();
         }

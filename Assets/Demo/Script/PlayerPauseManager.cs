@@ -1,16 +1,21 @@
 using UnityEngine;
 
-public class PlayerPauseManager : MonoBehaviour
+public class PlayerPauseManager : MonoBehaviour,IPause
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    Playermanager _playerManager;
+
+    private void Start()
     {
-        
+        _playerManager = GetComponent<Playermanager>();
+    }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void IPause.Pause()
+    {
+        _playerManager.OnPause();
     }
 
-    // Update is called once per frame
-    void Update()
+    void IPause.Resume()
     {
-        
+        _playerManager.OnResume();
     }
 }

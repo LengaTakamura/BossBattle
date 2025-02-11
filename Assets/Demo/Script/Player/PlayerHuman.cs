@@ -12,7 +12,7 @@ public class PlayerHuman : PlayerBase
     protected override void Update()
     {
         base.Update();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !OnPause)
         {
             AttackAnim();
         }

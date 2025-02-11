@@ -35,7 +35,7 @@ public class PlayerArcher : PlayerBase
     {
 
         base.FixedUpdate();
-        if (_isAiming && !_animatorState.IsName("AimStart"))
+        if (_isAiming && !_animatorState.IsName("AimStart") &&!OnPause)
         {
             MoveParam();
             MoveWithAim();
