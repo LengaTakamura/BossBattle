@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 public class PauseManager : MonoBehaviour
@@ -5,9 +7,14 @@ public class PauseManager : MonoBehaviour
     /// <summary>true の時は一時停止とする</summary>
     public static bool PauseFlg = false;
 
+    private async void Start()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
+        PauseResume();
+    }
     void Update()
     {
-        // ESC キーが押されたら一時停止・再開を切り替える
+        // Tab キーが押されたら一時停止・再開を切り替える
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             PauseResume();

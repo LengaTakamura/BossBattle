@@ -16,9 +16,10 @@ public class InputSystem : MonoBehaviour
     }
     public void GameStart()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        _startUI.DOFade(0, 1.0f);
+        if(Input.GetKeyDown(KeyCode.Tab))
+        _startUI.DOFade(0, 2.0f);
         
     }
+
     
 }
