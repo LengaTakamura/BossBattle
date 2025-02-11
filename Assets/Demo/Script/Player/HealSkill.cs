@@ -23,8 +23,9 @@ public class HealSkill : StateMachineBehaviour
         var parent = animator.transform.root;
         foreach(Transform player in parent)
         {
-            if (player.TryGetComponent(out IDamageable damage))
+            if (player.TryGetComponent(out IDamageable damage) && player.gameObject.tag =="Player")
             {
+                Debug.Log(player.gameObject.name);
                 _players.Add(damage);
                 if(player.gameObject.name == "Kinoko")
                 {

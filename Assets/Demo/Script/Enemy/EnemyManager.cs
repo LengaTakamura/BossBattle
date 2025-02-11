@@ -209,7 +209,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
         Debug.Log($"hit{damage}");
         _enemyHealthBarManager.FillUpdate(_currentHealth / _health);
         _onDamaged = true;
-        if(_currentHealth / _health < 0.5)
+        if(_currentHealth / _health < 0.3)
         {
             _animator.SetTrigger("Ult");
             _cts.Cancel();

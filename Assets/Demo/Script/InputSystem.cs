@@ -4,11 +4,21 @@ public class InputSystem : MonoBehaviour
 {
     [SerializeField]
     CanvasGroup _startUI;
-    public void OnClicked()
+
+    private void Awake()
     {
-        _startUI.DOFade(0, 1.0f);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+    private void Update()
+    {
+        GameStart();
+    }
+    public void GameStart()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        _startUI.DOFade(0, 1.0f);
+        
     }
     
 }
