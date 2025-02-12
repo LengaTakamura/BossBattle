@@ -14,7 +14,7 @@ public class PlayerAudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 敵の攻撃の種類
+    /// AnimationEventで呼び出すメソッド
     /// </summary>
     public void PlaySE(string name)
     {
