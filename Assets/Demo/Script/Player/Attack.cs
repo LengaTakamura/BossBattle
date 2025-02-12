@@ -25,7 +25,7 @@ public class Attack : StateMachineBehaviour
             _sword = obj.GetComponent<Collider>();
         }
         cts = new CancellationTokenSource();
-        AttackTiming(cts.Token,stateInfo);
+        AttackTiming(cts.Token,stateInfo,animator);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -71,7 +71,7 @@ public class Attack : StateMachineBehaviour
         return null;
     }
 
-    async void AttackTiming(CancellationToken ct,AnimatorStateInfo info)
+    async void AttackTiming(CancellationToken ct,AnimatorStateInfo info,Animator animator)
     {
         var sword = _sword.GetComponent<SwordManager>();
         sword.DamageBuff = _damageBuff;
@@ -79,7 +79,7 @@ public class Attack : StateMachineBehaviour
         _sword.enabled = true;
         if(!info.IsName("Attack"))
         {
-            var inst = Instantiate(_slashObj, _sword.transform.position, Quaternion.identity);
+            var inst = Instantiate(_slashObj, _sword.transform.position,animator.transform.rotation);
         }
         await UniTask.Delay(TimeSpan.FromSeconds(_delayTime), cancellationToken: ct);
         _sword.enabled = false;
