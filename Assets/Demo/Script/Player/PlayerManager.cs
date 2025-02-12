@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
@@ -26,6 +27,9 @@ public class Playermanager : MonoBehaviour
     [SerializeField]
     Slider _ultSlider;
     public List<GameObject> DeadPlayers = new();
+    bool _canAvoid = true;
+    float _timer;
+    public float AvoidTime = 0.75f;
     private void Start()
     {
         Initialized();
@@ -73,10 +77,10 @@ public class Playermanager : MonoBehaviour
 
     void UpdateUltText(PlayerBase player)
     {
-        _ultSlider.DOValue( player.CurrentEnergy / player.UltEnergy,0.1f);
+        _ultSlider.DOValue(player.CurrentEnergy / player.UltEnergy, 0.1f);
     }
 
-
+   
 
     private void Update()
     {
@@ -109,15 +113,36 @@ public class Playermanager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            if(!_canAvoid)
+                return;
             var player = _target.GetComponent<PlayerBase>();
-            if (PlayerBase.CurrentStamina != 0)
+            if (PlayerBase.CurrentStamina != 0 )
             {
+                _canAvoid = false;
                 var anim = _target.GetComponentInChildren<Animator>();
                 anim.SetTrigger("Avoid");
-
+               
             }
 
         }
+    }
+
+    private void FixedUpdate()
+    {
+        Timer();
+    }
+
+    private void Timer()
+    {
+        if (!_canAvoid)
+        {
+            _timer += Time.deltaTime;
+            if (_timer > AvoidTime)
+            {
+                _timer = 0;
+                _canAvoid = true;
+            }
+        }   
     }
 
     void SetKinokoUltTarget(GameObject player)

@@ -34,8 +34,7 @@ public class Avoid : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override async public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _cts2?.Cancel();
-        _cts2?.Dispose();
+
         _player.ReduceStamina();
         PlayerBase.OnStaminaChanged?.Invoke(PlayerBase.CurrentStamina / _player.MaxStamina);
         _cts?.Cancel();
