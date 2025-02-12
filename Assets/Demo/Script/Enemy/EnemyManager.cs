@@ -75,8 +75,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
             _enemyState = state;
             SwitchState(state);
         }
-        if(_enemyState == EnemyState.Move)
-        MoveUpdate(_target.transform.position);
+
+      
     }
 
     private void LookTarget()
@@ -213,6 +213,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void Move()
     {
+        MoveUpdate(_target.transform.position);
     }
 
     void Attack()
