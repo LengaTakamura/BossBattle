@@ -2454,6 +2454,7 @@ GameObject:
   - component: {fileID: 906244616}
   - component: {fileID: 906244618}
   - component: {fileID: 906244619}
+  - component: {fileID: 906244620}
   m_Layer: 0
   m_Name: MainSystem
   m_TagString: Pause
@@ -2516,6 +2517,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06dd3f260980d134a8ae8aeae832399c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &906244620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906244615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee8fc2d8b8139d4eaf2f22a3ef4456a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 1933551194}
 --- !u!1 &916621902
 GameObject:
   m_ObjectHideFlags: 0
@@ -4610,7 +4624,7 @@ GameObject:
   - component: {fileID: 1933551201}
   m_Layer: 0
   m_Name: FreeLook Camera
-  m_TagString: Untagged
+  m_TagString: Pause
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
