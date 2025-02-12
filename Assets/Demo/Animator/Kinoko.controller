@@ -915,7 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _energy: 1
-  _healValue: 100
+  _healValue: 50
   _healDelay: 1.5
 --- !u!1101 &6929939741924916766
 AnimatorStateTransition:

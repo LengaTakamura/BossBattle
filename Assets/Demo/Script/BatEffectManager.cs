@@ -15,7 +15,7 @@ public class BatEffectManager : MonoBehaviour
 
     public Action<float> HitAction;
     [SerializeField]
-    private float _energy = 0.5f; 
+    private float _energy ; 
     public void Initialized(BatManager bat)
     {
         bat.GetTargetPos += UpdateTartgetPos;

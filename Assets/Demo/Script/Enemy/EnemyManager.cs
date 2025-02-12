@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class EnemyManager : MonoBehaviour,IDamageable
 {
-    GameObject _target;
+   public GameObject Target;
 
     [SerializeField]
     float _distance;
@@ -49,6 +49,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     public bool IsSkating;
 
+    [SerializeField]
+    float _longRangeValue;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -77,14 +79,21 @@ public class EnemyManager : MonoBehaviour,IDamageable
         }
         if(_enemyState == EnemyState.Move)
         {
-            MoveUpdate(_target.transform.position);
+            MoveUpdate(Target.transform.position);
+        }
+        else if(_enemyState == EnemyState.Attack)
+        {
+            if (GetDistance(Target.transform.position) > _longRangeValue)
+            {
+                _animator.SetTrigger("LongAttack");
+            }
         }
        
     }
 
     private void LookTarget()
     {
-        var rot = _target.transform.position;
+        var rot = Target.transform.position;
         rot.y = transform.position.y;
         transform.LookAt(rot);
     }
@@ -119,7 +128,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
         {
             case EnemyState.Sleep:
                 {
-                    if(GetDistance(_target.transform.position) < _distance)
+                    if(GetDistance(Target.transform.position) < _distance)
                     {
                         state = EnemyState.None;
                         _timer = Time.time;
@@ -162,7 +171,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         _audio.AudioPause();
                         
                     }
-                    if (GetDistance(_target.transform.position) > _distance && !IsSkating)
+                    if (GetDistance(Target.transform.position) > _distance && !IsSkating)
                     {
                         state = EnemyState.Move;
                         _timer = 0;
@@ -182,7 +191,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         _timer = Time.time;
                         _audio.AudioPause();
                     }
-                    if (GetDistance(_target.transform.position) < _minDistance )
+                    if (GetDistance(Target.transform.position) < _minDistance )
                     {
                         _animator.SetBool("Move", false);
                         state = EnemyState.None;
@@ -221,7 +230,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void Attack()
     {
-      
+        
     }
 
     void MoveUpdate(Vector3 target)
@@ -233,7 +242,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     public void SetTarget(GameObject target)
     {
-        _target = target;
+        Target = target;
     }
 
     void IDamageable.HitDamage(float damage)

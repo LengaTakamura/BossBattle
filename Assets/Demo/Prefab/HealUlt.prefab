@@ -24666,4 +24666,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _delayTime: 1.5
-  _healValue: 100
+  _healValue: 500
