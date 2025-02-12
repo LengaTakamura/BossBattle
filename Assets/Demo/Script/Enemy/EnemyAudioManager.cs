@@ -12,24 +12,13 @@ public class EnemyAudioManager : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void AudioPlayAttack()
-    {
-        _audioSource.PlayOneShot(SearchClip("Attack"));
-    }
-
-    public void AudioPlayMove()
-    {
-        _audioSource.resource = SearchClip("Move");
-        _audioSource.Play();
-    }
-    
-
+    /// <summary>
+    /// AnimationEvent用のメソッド
+    /// </summary>
     public void PlaySe(string name)
     {
         _audioSource.PlayOneShot(SearchClip($"{name}"));
     }
-
-   
 
     public void AudioPlayNone()
     {
@@ -38,19 +27,16 @@ public class EnemyAudioManager : MonoBehaviour
     }
 
 
-
     public void AudioPause()
     {
         _audioSource.Stop();
         _audioSource.resource = null;
     }
 
-    public void AudioPlayFlame()
-    {
-        _audioSource.PlayOneShot(SearchClip("Flame"));
-   
-    }
 
+    /// <summary>
+    /// アサインされているクリップの中から指定されたクリップを返す
+    /// </summary>
     AudioClip SearchClip(string clipName)
     {
          foreach (var clip in _audioClip)
