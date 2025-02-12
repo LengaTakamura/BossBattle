@@ -7,7 +7,7 @@ public class EnemyAudioManager : MonoBehaviour
     [SerializeField]
     AudioClip[]  _audioClip;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
     }
