@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -12,9 +13,11 @@ public class SkillManager : MonoBehaviour
 
     [SerializeField]
     private float _energy = 1.5f;
-    private void Start()
+    private async void Start()
     {
         _collider = GetComponent<CapsuleCollider>();
+        await UniTask.Delay(TimeSpan.FromSeconds(2));
+        Destroy(transform.root.gameObject);
     }
 
     private void Update()
