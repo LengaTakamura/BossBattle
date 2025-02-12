@@ -16,7 +16,7 @@ public class PlayerAudioManager : MonoBehaviour
     /// <summary>
     /// “G‚ÌUŒ‚‚Ìí—Ş
     /// </summary>
-    public void PlaySe(string name)
+    public void PlaySE(string name)
     {
         _audioSource.PlayOneShot(SearchClip($"{name}"));
     }

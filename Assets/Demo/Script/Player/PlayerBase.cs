@@ -475,6 +475,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         return CurrentStamina / MaxStamina;
     }
 
+   
+
 
     private void OnDestroy()
     {
