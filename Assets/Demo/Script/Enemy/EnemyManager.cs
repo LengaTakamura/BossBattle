@@ -46,6 +46,9 @@ public class EnemyManager : MonoBehaviour,IDamageable
     private bool _onPause = false;
 
     EnemyAudioManager _audio;
+
+    public bool IsSkating;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -128,6 +131,14 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 break;
             case EnemyState.Attack:
                 {
+                    if (IsSkating)
+                    {
+                        _animator.SetBool("Attack", false);
+                        state = EnemyState.None;
+                        _timer = Time.time;
+                        IsAttackEnd = false;
+                    } 
+     
                     if (IsAttackEnd)
                     {
                         _animator.SetBool("Attack", false);
@@ -148,7 +159,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
                         _audio.AudioPause();
                         
                     }
-                    if (GetDistance(_target.transform.position) > _distance)
+                    if (GetDistance(_target.transform.position) > _distance && !IsSkating)
                     {
                         state = EnemyState.Move;
                         _timer = 0;
@@ -160,7 +171,15 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 break;
             case EnemyState.Move:
                 {
-                    if (GetDistance(_target.transform.position) < _minDistance)
+
+                    if (IsSkating)
+                    {
+                        _animator.SetBool("Move", false);
+                        state = EnemyState.None;
+                        _timer = Time.time;
+                        _audio.AudioPause();
+                    }
+                    if (GetDistance(_target.transform.position) < _minDistance )
                     {
                         _animator.SetBool("Move", false);
                         state = EnemyState.None;
@@ -194,7 +213,6 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void Move()
     {
-        
     }
 
     void Attack()
@@ -204,6 +222,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void MoveUpdate(Vector3 target)
     {
+        
         transform.position = Vector3.MoveTowards(transform.position, target + new Vector3(0, -1, 0), Time.deltaTime * _speed);
     }
  

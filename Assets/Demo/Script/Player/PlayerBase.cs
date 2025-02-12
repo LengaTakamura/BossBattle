@@ -115,6 +115,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
     public Action<PlayerBase> OnEnergyChanged;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -173,18 +174,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-
-       
         GroundCheck();
 
         if (!OnPause)
         {
             AnimationManagement();
-            if (State == MotionIndex.Skating)
-            {
-
-                WallRun(WallCheck());
-            }
+            
 
             if (Input.GetKeyDown(KeyCode.E) && !_isCoolDown && gameObject.activeSelf)
             {
@@ -206,7 +201,9 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             else
             {
                 SkatingMove();
-
+                
+                WallRun(WallCheck());
+                
             }
         }
 
@@ -278,7 +275,14 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
         if (State == MotionIndex.Skating)
         {
-            return;
+            if(Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            {
+                _anim.SetBool("Skate", true);
+            }
+            else
+            {
+                _anim.SetBool("Skate", false);
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.Q) && CanUseUlt())
@@ -323,10 +327,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         _onDamage.OnNext(value);
     }
 
-
-    public void SkateIn()
-    {
-    }
 
     public Collider[] WallCheck()
     {
