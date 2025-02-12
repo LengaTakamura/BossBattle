@@ -1999,6 +1999,7 @@ MonoBehaviour:
   _startUI: {fileID: 631004363}
   _player: {fileID: 1716853616345391241}
   _enemyManager: {fileID: 2000576097}
+  _canvas: {fileID: 1239041969}
 --- !u!4 &906244617
 Transform:
   m_ObjectHideFlags: 0

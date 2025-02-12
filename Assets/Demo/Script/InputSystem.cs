@@ -14,6 +14,8 @@ public class InputSystem : MonoBehaviour
     private PlayerBase _player;
     [SerializeField]
     EnemyManager _enemyManager;
+    [SerializeField]
+    Canvas _canvas;
     private void Awake()
     {
         Cursor.visible = false;
@@ -24,6 +26,7 @@ public class InputSystem : MonoBehaviour
     {
         var clickF = Observable.EveryUpdate()
             .Where(_ => Input.GetKeyDown(KeyCode.F))
+            .Where(_ => _player.gameObject.activeSelf)
             .Scan(0, (count, _) => count + 1)
             .Subscribe(count => {
 
@@ -31,13 +34,14 @@ public class InputSystem : MonoBehaviour
                 if (count % 2 != 0)
                 {
                     _player.StateChange(PlayerBase.MotionIndex.Skating);
-                    
+                    _canvas.gameObject.SetActive(false);
                    _enemyManager.IsSkating = true;
                 }
                 else
                 {
           
                     _player.StateChange(PlayerBase.MotionIndex.NonAvoid);
+                    _canvas.gameObject.SetActive(true);
                     _enemyManager.IsSkating = false;
                 }
                
