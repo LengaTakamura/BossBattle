@@ -116,6 +116,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public Action<PlayerBase> OnEnergyChanged;
 
+    private bool _isWallRun;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -199,11 +201,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                 Moving();
             }
             else
-            {
+            {  
                 SkatingMove();
-                
                 WallRun(WallCheck());
-                
+                InOutWallRun();
             }
         }
 
@@ -235,7 +236,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     void Moving()
     {
-        if (IsGround && _canMove)
+        if (IsGround && _canMove )
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             Vector3 cameraForward = Camera.main.transform.forward;
@@ -348,7 +349,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     void SkatingMove()
     {
-        if (IsGround && _canMove && !WallFlg)
+        if (IsGround && _canMove && !_isWallRun)
         {
             var velo = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             Vector3 cameraForward = Camera.main.transform.forward;
@@ -369,10 +370,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     }
 
+
+    //void CanWallRun()
+    //{
+    //   _isWallRun =  Physics.Raycast(transform.position, transform.forward * _capsuleCollider.radius, out RaycastHit hit, 1f);
+      
+    //}
+
     public void WallRun(Collider[] hits)
     {
 
-        if (WallFlg)
+        if (WallFlg && _isWallRun)
         {
             float gap = 0;
             _normal = Vector3.zero;
@@ -425,16 +433,29 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                 }
                 m.Normalize();
                 transform.position += (gap * _normal.normalized + m) * _wallRunSpeed * Time.deltaTime;
-                var foot = transform.GetChild(0);
-                var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(m), 10f);
-                rot.x = 0;
-                rot.z = 0;
-                foot.transform.rotation = rot;
+                //var foot = transform.GetChild(0);
+                //var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(m), 10f);
+                //rot.x = 0;
+                //rot.z = 0;
+                //foot.transform.rotation = rot;
 
             }
 
         }
     
+    }
+
+    void InOutWallRun()
+    {
+        if(IsGround && WallFlg && Input.GetKey(KeyCode.S))
+        {
+            _rb.isKinematic = false;
+            _isWallRun = false;
+        }
+        else if(IsGround && WallFlg && Input.GetKey(KeyCode.W))
+        {
+            _isWallRun = true;
+        }
     }
 
     bool CanUseUlt()
