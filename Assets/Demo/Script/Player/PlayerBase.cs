@@ -1,6 +1,9 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening.Core;
+using NUnit.Framework;
 using R3;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -118,6 +121,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     private bool _isWallRun;
 
+    Vector3 _wallMoveDirection;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -371,17 +375,44 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     }
 
 
-    //void CanWallRun()
-    //{
-    //   _isWallRun =  Physics.Raycast(transform.position, transform.forward * _capsuleCollider.radius, out RaycastHit hit, 1f);
-      
-    //}
+    void TestRun(Collider[] hits)
+    {
+        _normal = Vector3.zero;
+        var input = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0).normalized;
+
+        if (input == Vector3.zero)
+        {
+            return;
+        }
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
+        {
+            _cameraF = _camera.transform.forward;
+            _cameraF.y = 0;
+            _cameraF.Normalize();
+            _cameraR = _camera.transform.right;
+            _cameraR.y = 0;
+            _cameraR.Normalize();
+
+        }
+
+        Vector3 moveDirectionX = Vector3.zero;
+        Vector3 moveDirectionY = Vector3.zero;
+        moveDirectionY = new Vector3(0, input.y, 0);
+        foreach (var hit in hits)
+        {
+            var point = transform.position - hit.ClosestPoint(transform.position);
+            _normal += point;
+
+        }
+
+    }
 
     public void WallRun(Collider[] hits)
     {
 
         if (WallFlg && _isWallRun)
         {
+
             float gap = 0;
             _normal = Vector3.zero;
             _rb.isKinematic = true;
@@ -405,21 +436,23 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             Vector3 moveDirectionX = Vector3.zero;
             Vector3 moveDirectionY = Vector3.zero;
             moveDirectionY = new Vector3(0,input.y,0);
+           
             foreach (var hit in hits)
             {
                 var point = transform.position - hit.ClosestPoint(transform.position);
-                _normal += point;
-
+                _normal = point;
+                Debug.DrawLine(hit.ClosestPoint(transform.position), transform.position);
             }
+
+           
+
             if (hits.Length > 0)
             {
-                _normal /= hits.Length;
                 if (_normal.magnitude > 0.8f)
                 {
-                     gap = _normal.magnitude - (_capsuleCollider.radius + _radiusOffset);
+                    gap = _normal.magnitude - (_capsuleCollider.radius + _radiusOffset);
                 }
-                _normal.Normalize();
-               
+                CheckWallForward();
                 var onplaneX = Vector3.Cross(_normal, Vector3.up);
                 var onplaneY = Vector3.Cross(onplaneX,_normal );
                 Vector3 m = Vector3.zero;
@@ -438,11 +471,25 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                 //rot.x = 0;
                 //rot.z = 0;
                 //foot.transform.rotation = rot;
+                _wallMoveDirection = m;
 
+                
             }
 
         }
     
+    }
+
+    void CheckWallForward()
+    {
+        bool wallForward = Physics.Raycast(transform.position,_wallMoveDirection * _capsuleCollider.radius, out RaycastHit hit, 1.3f);
+        Debug.DrawRay(transform.position, _wallMoveDirection * _capsuleCollider.radius, color: Color.cyan);
+        if (wallForward)
+        {
+            _normal = hit.normal;
+            Debug.Log("MaeKabe");
+           
+        }
     }
 
     void InOutWallRun()
