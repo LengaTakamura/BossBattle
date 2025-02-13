@@ -81,7 +81,7 @@ public class PlayerArcher : PlayerBase
             Debug.DrawRay(transform.position,dir,Color.red);
             if(Physics.Raycast(ray,out RaycastHit hit))
             {
-               
+                Debug.Log("HIt");
                 if (hit.transform.root != null && hit.transform.root.TryGetComponent(out IDamageable damage) && hit.transform.gameObject.tag == "Enemy")
                 {
                     if (hit.transform.gameObject.name == "Jaw3")

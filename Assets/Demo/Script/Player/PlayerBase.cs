@@ -67,7 +67,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     Vector3 _cameraF = Vector3.zero;
     Vector3 _cameraR = Vector3.zero;
-    float _gapSum = 0;
     Vector3 _normal = Vector3.zero;
 
     private Subject<float> _onDamage = new Subject<float>();

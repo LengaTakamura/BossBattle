@@ -12,7 +12,7 @@ public class BaseAttack : StateMachineBehaviour
             Transform obj = FindChildRecursive(animator.transform, "Jaw3");
             _head = obj.GetComponent<Collider>();
         }
-        _head.enabled = true;
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -24,7 +24,7 @@ public class BaseAttack : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _head.enabled = false;
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

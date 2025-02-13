@@ -5603,7 +5603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _health
-      value: 1000
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _distance
@@ -5619,7 +5619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _currentHealth
-      value: 1000
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _longRangeValue
