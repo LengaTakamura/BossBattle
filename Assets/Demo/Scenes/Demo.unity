@@ -4828,7 +4828,7 @@ MonoBehaviour:
   _radiusOffset: 0.2
   _maxHealth: 800
   _currentHealth: 800
-  _attackPower: 1
+  _attackPower: 3
   MaxStamina: 3
   _coolTime: 15
   CoolDownTime: 0
@@ -5746,7 +5746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3522915584368543216, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
       propertyPath: _attackPower
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3522915584368543216, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
       propertyPath: CurrentEnergy
@@ -5848,6 +5848,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 3033408560307764487, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: _damageMag
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3881770200931461137, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -5863,6 +5867,10 @@ PrefabInstance:
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _distance
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: _attackPower
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _minDistance
@@ -5903,6 +5911,14 @@ PrefabInstance:
     - target: {fileID: 5290062389284949747, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047551599990515119, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047551599990515119, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6734568131417260735, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: m_Center.x
@@ -6014,6 +6030,10 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 1933551199}
+    - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
+      propertyPath: _attackPower
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8298239935863708481, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_Name
       value: Player
