@@ -154,9 +154,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         ).AddTo(this);
     }
 
-   
-       
-
     private async UniTask UseSkill(CancellationToken token)
     {
         try
@@ -166,6 +163,12 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
             _anim.SetTrigger("Skil");
             while(CoolDownTime > 0)
             {
+                while(PauseManager.PauseFlg)
+                {
+                   
+                    await UniTask.Yield(token);
+                    
+                }
                 await UniTask.Delay(100, cancellationToken: token);
                 CoolDownTime -= 0.1f;
                 OnCoolDownChanged?.Invoke(this);
@@ -429,11 +432,6 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
                 var nextPos = transform.position + nextDir;
                 nextPos = CheckWall(nextPos);
                 transform.position = nextPos;
-                //var foot = transform.GetChild(0);
-                //var rot = Quaternion.RotateTowards(foot.transform.rotation, Quaternion.LookRotation(m), 10f);
-                //rot.x = 0;
-                //rot.z = 0;
-                //foot.transform.rotation = rot;
                 _wallMoveDirection = m;
 
                 
@@ -518,6 +516,10 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public void RecoveryStamina()
     {
+        if (PauseManager.PauseFlg)
+        {
+            return;
+        }
         if (CurrentStamina < MaxStamina && State != MotionIndex.Avoid)
             CurrentStamina += 1;
         OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
@@ -525,6 +527,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
 
     public float ReduceStamina()
     {
+       
         CurrentStamina -= 1;
         OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
         if (CurrentStamina < 0)
