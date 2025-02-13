@@ -122,6 +122,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     private bool _isWallRun;
 
     Vector3 _wallMoveDirection;
+
+    public Vector3 CamaraOffset;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
