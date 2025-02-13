@@ -19,22 +19,11 @@ public class CinemachineUserInputZoom : CinemachineExtension
     // 変化の最大速度
     [SerializeField] private float _maxSpeed = Mathf.Infinity;
 
-    // ユーザー入力を必要とする
-
     private float _scrollDelta;
-
-    // 滑らかに変化するFOVの計算用変数
     private float _targetAdjustFOV;
     private float _currentAdjustFOV;
     private float _currentAdjustFOVVelocity;
 
-    private void Update()
-    {
-        // スクロール量を加算
-        _scrollDelta += Input.GetAxis(_inputName);
-    }
-
-    // 各ステージ毎に実行されるコールバック
     protected override void PostPipelineStageCallback(
         CinemachineVirtualCameraBase vcam,
         CinemachineCore.Stage stage,
@@ -42,6 +31,7 @@ public class CinemachineUserInputZoom : CinemachineExtension
         float deltaTime
     )
     {
+        _scrollDelta += Input.GetAxis(_inputName);
         // Aimの直後だけ処理を実施
         if (stage != CinemachineCore.Stage.Aim)
             return;
@@ -60,7 +50,7 @@ public class CinemachineUserInputZoom : CinemachineExtension
             _scrollDelta = 0;
         }
 
-        // 滑らかに変化するFOV値を計算
+        // FOV値を計算
         _currentAdjustFOV = Mathf.SmoothDamp(
             _currentAdjustFOV,
             _targetAdjustFOV,
