@@ -6,7 +6,7 @@ public class BatEffectManager : MonoBehaviour
     [SerializeField]
     float _speed = 3f;
 
-    GameObject _bat;
+    AudioSource _source;
 
     [SerializeField]
     float _damage = 5f;
@@ -23,6 +23,9 @@ public class BatEffectManager : MonoBehaviour
 
     private void Start()
     {
+        _source = GetComponent<AudioSource>();
+        _source.loop = false;
+        _source.Play();
         var archer =GameObject.Find("PlayerManager").transform;
         var archerManager = archer.Find("Archer").GetComponent<PlayerArcher>();
         HitAction += archerManager.AddEnergy;

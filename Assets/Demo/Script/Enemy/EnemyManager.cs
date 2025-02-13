@@ -1,7 +1,6 @@
-using System;
+
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class EnemyManager : MonoBehaviour,IDamageable
 {
@@ -51,8 +50,9 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     [SerializeField]
     float _longRangeValue;
+
     private void Awake()
-    {
+    { 
         _animator = GetComponent<Animator>();
         _cts = new CancellationTokenSource();
         _audio = GetComponent<EnemyAudioManager>();
@@ -220,7 +220,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     void None()
     {
-
+       
     }
 
     void Move()

@@ -78,14 +78,13 @@ public class PlayerArcher : PlayerBase
             Ray screeenRay = Camera.main.ScreenPointToRay(screenPoint);
             var dir = screeenRay.direction.normalized;
             Ray ray = new Ray(transform.position, dir);
+            Debug.DrawRay(transform.position,dir,Color.red);
             if(Physics.Raycast(ray,out RaycastHit hit))
             {
-
+               
                 if (hit.transform.root != null && hit.transform.root.TryGetComponent(out IDamageable damage) && hit.transform.gameObject.tag == "Enemy")
                 {
-                  
-                    
-                    if(hit.transform.gameObject.name == "Jaw3")
+                    if (hit.transform.gameObject.name == "Jaw3")
                     {
                         _bowDamageBuff = 10;
                         if (damage.CurrentHealth > 0)
@@ -94,7 +93,7 @@ public class PlayerArcher : PlayerBase
                     }
                     else
                     {
-                        Debug.Log("HitBow");
+                        Debug.Log("HitBownormal");
                         _bowDamageBuff = 1;
                         if (damage.CurrentHealth > 0)
                             damage.HitDamage(_attackPower + _bowDamageBuff);
