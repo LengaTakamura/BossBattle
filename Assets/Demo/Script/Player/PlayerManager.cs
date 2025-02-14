@@ -208,11 +208,29 @@ public class Playermanager : MonoBehaviour
         }
         if (index != 2)
         {
-            ChangeChara(index + 1);
+            if (DeadPlayers.Contains(_players[index + 1]))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!DeadPlayers.Contains(_players[i]))
+                    {
+                        ChangeChara(i);
+                    }
+                }
+            }
+            else
+            {
+                ChangeChara(index + 1);
+            }
+
 
         }
         else
         {
+            if (DeadPlayers.Contains(_players[0]))
+            {
+                ChangeChara(1);
+            }
             ChangeChara(0);
         }
 
