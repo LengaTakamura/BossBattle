@@ -178,6 +178,7 @@ public class Playermanager : MonoBehaviour
                 pl.OnCoolDownChanged -= UpdateSkillText;
                 pl.DeathAction -= ChangeNextChara;
                 pl.OnEnergyChanged -= UpdateUltText;
+                
             }
 
         }
