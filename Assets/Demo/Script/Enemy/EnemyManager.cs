@@ -62,7 +62,6 @@ public class EnemyManager : MonoBehaviour,IDamageable
     void Start()
     {
         _currentHealth = _health;
-        _enemyState = EnemyState.Sleep;
         _audio.AudioPlayNone();
     }
 
@@ -277,7 +276,6 @@ public class EnemyManager : MonoBehaviour,IDamageable
                 _cts.Cancel();
                 _cts.Dispose();
                 _isDead = true;
-
             }
           
         }
