@@ -5821,6 +5821,10 @@ PrefabInstance:
       propertyPath: _cursor
       value: 
       objectReference: {fileID: 2029497110}
+    - target: {fileID: 3522915584368543216, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
+      propertyPath: _awaitTime
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3695515900976040872, guid: a21d6d17c2b1ae84eb9746505ce83b2a, type: 3}
       propertyPath: m_Name
       value: Archer

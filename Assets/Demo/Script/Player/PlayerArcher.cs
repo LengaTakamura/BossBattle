@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 public class PlayerArcher : PlayerBase
@@ -13,22 +16,23 @@ public class PlayerArcher : PlayerBase
     [SerializeField]
     float _bowDamageBuff = 1f;
 
-    public bool CanAttack = true;
+    public bool CanAttack = false;
     
     AnimatorStateInfo _animatorState;
+    
+    CancellationTokenSource _cts;
+    [SerializeField] private float _awaitTime = 1;
     protected override void Start()
     {
         base.Start();
         Aiming();
+        _cts = new CancellationTokenSource();
     }
 
     protected override void Update()
     {
         base.Update();
-
         Attack();
-
-
     }
 
     protected override void FixedUpdate()
@@ -43,7 +47,7 @@ public class PlayerArcher : PlayerBase
         }
     }
 
-    private void Aiming()
+    private  void Aiming()
     {
         _animatorState = _anim.GetCurrentAnimatorStateInfo(0);
         var attack = Observable.EveryUpdate()
@@ -51,7 +55,7 @@ public class PlayerArcher : PlayerBase
            .Where(_ => gameObject.activeSelf)
            .Where(_ => !_animatorState.IsName("AimStart"))
            .Scan(0, (count, _) => count + 1)
-           .Subscribe(count =>
+           .Subscribe( count =>
            {
                if (count % 2 != 0)
                {
@@ -89,11 +93,9 @@ public class PlayerArcher : PlayerBase
                         _bowDamageBuff = 10;
                         if (damage.CurrentHealth > 0)
                             damage.HitDamage(_attackPower + _bowDamageBuff );
-                        Debug.Log("Headshot");
                     }
                     else
                     {
-                        Debug.Log("HitBownormal");
                         _bowDamageBuff = 1;
                         if (damage.CurrentHealth > 0)
                             damage.HitDamage(_attackPower + _bowDamageBuff);
