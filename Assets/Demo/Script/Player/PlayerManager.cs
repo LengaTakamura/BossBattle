@@ -3,6 +3,7 @@ using DG.Tweening;
 using R3;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 
 public class Playermanager : MonoBehaviour
 {
-    [SerializeField] GameObject[] _players;
+    [SerializeField] private PlayerBase[] _players;
 
     [SerializeField] CinemachineCamera _camera;
 
@@ -26,33 +27,35 @@ public class Playermanager : MonoBehaviour
     TextMeshProUGUI _tmp;
     [SerializeField]
     Slider _ultSlider;
-    public List<GameObject> DeadPlayers = new();
+    public List<PlayerBase> DeadPlayers = new();
     bool _canAvoid = true;
     float _timer;
     public float AvoidTime = 0.75f;
+    private CancellationTokenSource _cts;
+    private bool _isRecovering;
     private void Start()
     {
         Initialized();
+        _cts = new CancellationTokenSource();
     }
 
     private void Initialized()
     {
-        _players[0].SetActive(true);
-        _target = _players[0];
+        _players[0].gameObject.SetActive(true);
+        _target = _players[0].gameObject;
         for (int i = 1; i < _players.Length; i++)
         {
-            _players[i].SetActive(false);
+            _players[i].gameObject.SetActive(false);
         }
         InitCamera();
-        _enemyManager.SetTarget(_players[0]);
+        _enemyManager.SetTarget(_players[0].gameObject);
         var damage = _players[0].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
-        var playerBase = _players[0].GetComponent<PlayerBase>();
-        UpdateSkillText(playerBase);
-        UpdateUltText(playerBase);
-        playerBase.DeathAction += ChangeNextChara;
-        playerBase.OnCoolDownChanged += UpdateSkillText;
-        playerBase.OnEnergyChanged += UpdateUltText;
+        UpdateSkillText(_players[0]);
+        UpdateUltText(_players[0]);
+        _players[0].DeathAction += ChangeNextChara;
+        _players[0].OnCoolDownChanged += UpdateSkillText;
+        _players[0].OnEnergyChanged += UpdateUltText;
         PlayerBase.OnStaminaChanged += _staminaBarM.SliderUpdate;
         foreach (var player in _players)
         {
@@ -72,7 +75,7 @@ public class Playermanager : MonoBehaviour
 
     void UpdateSkillText(PlayerBase player)
     {
-        _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime.ToString("0.0")}" : "ÉXÉLÉãî≠ìÆâ¬î\";
+        _tmp.text = player.CoolDownTime > 0 ? $"{player.CoolDownTime.ToString("0.0")}" : "„Çπ„Ç≠„É´Áô∫ÂãïÂèØËÉΩ";
     }
 
     void UpdateUltText(PlayerBase player)
@@ -85,6 +88,15 @@ public class Playermanager : MonoBehaviour
     private void Update()
     {
         InputManagement();
+        
+        if (PlayerBase.CurrentStamina < 3 && !_isRecovering)
+        {
+            Debug.Log($"[DEBUG] Stamina: {PlayerBase.CurrentStamina}");
+            _isRecovering = true;
+            RecoveryDelay(_cts.Token);
+        }
+        
+       
     }
 
     void InputManagement()
@@ -92,22 +104,22 @@ public class Playermanager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && !DeadPlayers.Contains(_players[1]))
         {
             ChangeChara(1);
-            _enemyManager.SetTarget(_players[1]);
-            SetKinokoUltTarget(_players[1]);
+            _enemyManager.SetTarget(_players[1].gameObject);
+            SetKinokoUltTarget(_players[1].gameObject);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1) && !DeadPlayers.Contains(_players[0]))
         {
             ChangeChara(0);
-            _enemyManager.SetTarget(_players[0]);
-            SetKinokoUltTarget(_players[0]);
+            _enemyManager.SetTarget(_players[0].gameObject);
+            SetKinokoUltTarget(_players[0].gameObject);
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3) && !DeadPlayers.Contains(_players[2]))
         {
             ChangeChara(2);
-            _enemyManager.SetTarget(_players[2]);
-            SetKinokoUltTarget(_players[2]);
+            _enemyManager.SetTarget(_players[2].gameObject);
+            SetKinokoUltTarget(_players[2].gameObject);
 
         }
 
@@ -115,7 +127,6 @@ public class Playermanager : MonoBehaviour
         {
             if(!_canAvoid)
                 return;
-            var player = _target.GetComponent<PlayerBase>();
             if (PlayerBase.CurrentStamina != 0 )
             {
                 _canAvoid = false;
@@ -165,7 +176,7 @@ public class Playermanager : MonoBehaviour
         int a = 0;
         foreach (var player in _players)
         {
-            if (player.activeSelf)
+            if (player.gameObject.activeSelf)
             {
                 var pl = player.GetComponent<PlayerBase>();
                 if (pl.CharaIndex == i)
@@ -174,7 +185,7 @@ public class Playermanager : MonoBehaviour
                 }
                 pos = player.transform.position;
                 forward = player.transform.forward;
-                player.SetActive(false);
+                player.gameObject.SetActive(false);
                 pl.OnCoolDownChanged -= UpdateSkillText;
                 pl.DeathAction -= ChangeNextChara;
                 pl.OnEnergyChanged -= UpdateUltText;
@@ -182,17 +193,16 @@ public class Playermanager : MonoBehaviour
             }
 
         }
-        _players[i].SetActive(true);
-        _target = _players[i];
+        _players[i].gameObject.SetActive(true);
+        _target = _players[i].gameObject;
         _players[i].transform.position = pos;
         _players[i].transform.forward = forward;
-        var playerBase = _players[i].GetComponent<PlayerBase>();
-        playerBase.StateChange((PlayerBase.MotionIndex)a);
-        UpdateSkillText(playerBase);
-        UpdateUltText(playerBase);
-        playerBase.OnCoolDownChanged += UpdateSkillText;
-        playerBase.DeathAction += ChangeNextChara;
-        playerBase.OnEnergyChanged += UpdateUltText;
+        _players[i].StateChange((PlayerBase.MotionIndex)a);
+        UpdateSkillText(_players[i]);
+        UpdateUltText(_players[i]);
+        _players[i].OnCoolDownChanged += UpdateSkillText;
+        _players[i].DeathAction += ChangeNextChara;
+        _players[i].OnEnergyChanged += UpdateUltText;
         _camera.Target.TrackingTarget = _players[i].transform.GetChild(1);
         var damage = _players[i].GetComponent<IDamageable>();
         PlayerHPBarUpdate(damage);
@@ -249,7 +259,7 @@ public class Playermanager : MonoBehaviour
         foreach (var player in _players)
         {
 
-            if (player.activeSelf)
+            if (player.gameObject.activeSelf)
             {
                 var anim = player.GetComponentInChildren<Animator>();
                 anim.SetBool("OnPause", true);
@@ -257,6 +267,28 @@ public class Playermanager : MonoBehaviour
             }
 
         }
+    }
+    
+    private async void RecoveryDelay(CancellationToken token)
+    {
+        while (PlayerBase.CurrentStamina <3)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(2f));
+            RecoveryStamina();
+            Debug.Log(PlayerBase.CurrentStamina);
+        }
+        _isRecovering = false;
+    }
+    
+    public void RecoveryStamina()
+    {
+        if (PauseManager.PauseFlg)
+        {
+            return;
+        }
+        PlayerBase.CurrentStamina += 1; 
+        _staminaBarM.SliderUpdate(PlayerBase.CurrentStamina / 3);
+        
     }
 
     public void OnResume()
@@ -266,7 +298,7 @@ public class Playermanager : MonoBehaviour
         foreach (var player in _players)
         {
 
-            if (player.activeSelf)
+            if (player.gameObject.activeSelf)
             {
                 var anim = player.GetComponentInChildren<Animator>();
                 anim.SetBool("OnPause", false);

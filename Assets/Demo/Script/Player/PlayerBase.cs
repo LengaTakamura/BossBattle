@@ -106,7 +106,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     private float _defense = 10;
 
     public float Defense { get { return _defense; } set => _defense = value; }
-
+    
     public float CurrentEnergy
     {
         get
@@ -140,6 +140,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         InitOnDamage();
         CoolDownTime = 0f;
         CurrentStamina = MaxStamina;
+        State = MotionIndex.NonAvoid;
     }
 
     private void InitOnDamage()
@@ -148,7 +149,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
             if (_currentHealth <= 0)
             {
-                Debug.Log($"Ž€–S{gameObject}");
+                Debug.Log($"ï¿½ï¿½ï¿½S{gameObject}");
                 _anim.SetTrigger("Death");
             }
         }
@@ -514,25 +515,7 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         CurrentEnergy += energy;
         OnEnergyChanged?.Invoke(this);
     }
-
-    public void RecoveryStamina()
-    {
-        if (PauseManager.PauseFlg)
-        {
-            return;
-        }
-        if (!gameObject.activeSelf)
-        {
-            return;
-        }
-        if (CurrentStamina < MaxStamina && State != MotionIndex.Avoid)
-        {
-            CurrentStamina += 1;
-            OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
-        }
-    }
-       
-
+    
     public float ReduceStamina()
     {
        
