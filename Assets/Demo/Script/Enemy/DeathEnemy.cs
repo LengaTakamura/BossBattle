@@ -1,12 +1,19 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class DeathEnemy : StateMachineBehaviour
 {
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    CancellationTokenSource _cts;
+    [SerializeField]
+    private float _awaitTime = 3.3f;    
+    
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        _cts = new CancellationTokenSource();
+        DeathCallback(_cts.Token,animator);
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -15,10 +22,10 @@ public class DeathEnemy : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        animator.transform.gameObject.SetActive(false);
-    }
+    // override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // {
+    //
+    // }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -31,4 +38,23 @@ public class DeathEnemy : StateMachineBehaviour
     //{
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
+
+    private async void DeathCallback(CancellationToken token,Animator animator)
+    {
+        try
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: token);
+            animator.speed = 0;
+            GameManager.Instance.GameEnded();
+        }
+        catch 
+        {
+           
+        }
+        finally
+        {
+            _cts?.Dispose();
+            _cts = null;
+        }
+    }
 }

@@ -521,10 +521,17 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         {
             return;
         }
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
         if (CurrentStamina < MaxStamina && State != MotionIndex.Avoid)
+        {
             CurrentStamina += 1;
-        OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+            OnStaminaChanged?.Invoke(CurrentStamina / MaxStamina);
+        }
     }
+       
 
     public float ReduceStamina()
     {

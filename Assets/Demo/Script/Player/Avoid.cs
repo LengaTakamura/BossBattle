@@ -58,10 +58,11 @@ public class Avoid : StateMachineBehaviour
     {
         try
         {
-            while (true)
+            while (player.gameObject.activeSelf && PlayerBase.CurrentStamina < player.MaxStamina)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(2f), cancellationToken: token);
                 player.RecoveryStamina();
+                Debug.Log(PlayerBase.CurrentStamina);
             }
         }
         catch { }
