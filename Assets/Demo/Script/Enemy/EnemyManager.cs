@@ -50,6 +50,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     [SerializeField]
     float _longRangeValue;
+    
+    private bool _isDead = false;
 
     private void Awake()
     { 
@@ -66,7 +68,7 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     private void Update()
     {   
-        if (_onPause)
+        if (_onPause || _enemyState == EnemyState.Dead)
         {
             return;
         }
@@ -115,7 +117,8 @@ public class EnemyManager : MonoBehaviour,IDamageable
             case EnemyState.Move:
                 Move();
                 break;
-
+            case EnemyState.Dead:
+                break;
         }
 
     }
@@ -123,6 +126,11 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
     public  EnemyState ChangeState(EnemyState state)
     {
+
+        if (_enemyState == EnemyState.Dead)
+        {
+            return EnemyState.Dead;
+        }
          
         switch (state) 
         {
@@ -200,6 +208,10 @@ public class EnemyManager : MonoBehaviour,IDamageable
                     }
                 }
                 break;
+            case EnemyState.Dead:
+                {
+                }
+                break;
 
         }
         return state;
@@ -251,16 +263,23 @@ public class EnemyManager : MonoBehaviour,IDamageable
         Debug.Log($"hit{damage}");
         _enemyHealthBarManager.FillUpdate(_currentHealth / _health);
         _onDamaged = true;
-        if(_currentHealth / _health < 0.3)
+        if(_currentHealth / _health < 0.3 && _currentHealth > 0)
         {
             _animator.SetTrigger("Ult");
             _cts.Cancel();
         }
         if (_currentHealth <= 0)
         {
-            _animator.SetTrigger("Death");
-            _cts.Cancel();
-            _cts.Dispose();
+            if (!_isDead)
+            {
+                _enemyState = EnemyState.Dead;
+                _animator.SetTrigger("Death");
+                _cts.Cancel();
+                _cts.Dispose();
+                _isDead = true;
+
+            }
+          
         }
     }
 
@@ -290,19 +309,20 @@ public class EnemyManager : MonoBehaviour,IDamageable
 
 
 /// <summary>
-/// “G‚Ìs“®‚Ìí—Ş
+/// ï¿½Gï¿½Ìsï¿½ï¿½ï¿½Ìï¿½ï¿½
 /// </summary>
 public enum EnemyState
 {
     None,
     Attack,
     Sleep,
-    Move
+    Move,
+    Dead
 }
 
 
 /// <summary>
-/// “G‚ÌUŒ‚‚Ìí—Ş
+/// ï¿½Gï¿½ÌUï¿½ï¿½ï¿½Ìï¿½ï¿½
 /// </summary>
 public enum EnemyAttack
 {
@@ -316,7 +336,7 @@ public enum EnemyAttack
 
 
 /// <summary>
-/// HP‘Œ¸ˆ—‚ğŠÇ—‚·‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+/// HPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½^ï¿½[ï¿½tï¿½Fï¿½[ï¿½X
 /// </summary>
 public interface IDamageable
 {
