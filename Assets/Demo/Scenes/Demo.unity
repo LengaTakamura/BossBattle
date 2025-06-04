@@ -1440,7 +1440,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -4632,8 +4632,8 @@ GameObject:
   - component: {fileID: 1933551203}
   - component: {fileID: 1933551196}
   - component: {fileID: 1933551195}
-  - component: {fileID: 1933551201}
   - component: {fileID: 1933551204}
+  - component: {fileID: 1933551205}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Pause
@@ -4794,7 +4794,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -4828,24 +4828,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1933551201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1933551194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 864e40a8347c8c043817d90bea294d84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputName: Mouse ScrollWheel
-  _inputScale: 100
-  _minFOV: 10
-  _maxFOV: 90
-  _smoothTime: 0.1
-  _maxSpeed: Infinity
 --- !u!114 &1933551203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4871,6 +4853,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e830e90325535b64aadb42e736698a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1933551205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933551194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775051ae98f08e94a89a43ee7a0088c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scrollSpeed: 30
+  _minFOV: 30
+  _maxFOV: 70
 --- !u!1 &1983799103
 GameObject:
   m_ObjectHideFlags: 0
@@ -5608,7 +5605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _health
-      value: 300
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _distance
@@ -5624,7 +5621,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _currentHealth
-      value: 300
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 4800183979664712933, guid: 3d682b5a6a719f241a9208e2de3d3651, type: 3}
       propertyPath: _longRangeValue
@@ -5786,7 +5783,7 @@ PrefabInstance:
       objectReference: {fileID: 1933551199}
     - target: {fileID: 8121760998612357148, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: _attackPower
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8298239935863708481, guid: b28bb169b95403c41acff8cea82d5bc8, type: 3}
       propertyPath: m_Name
