@@ -12,6 +12,8 @@ public class Avoid : StateMachineBehaviour
     float _avoidDelay = 0.3f;
     [SerializeField]
     float _avoidTime = 0.1f;
+
+    public Action OnExit;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override async public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -32,40 +34,11 @@ public class Avoid : StateMachineBehaviour
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override async public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    override  public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
         _player.ReduceStamina();
         PlayerBase.OnStaminaChanged?.Invoke(PlayerBase.CurrentStamina / _player.MaxStamina);
-        _cts = new CancellationTokenSource();
-        await RecoveryDelay(_player,_cts.Token);
-
-
-        // OnStateMove is called right after Animator.OnAnimatorMove()
-        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that processes and affects root motion
-        //}
-
-        // OnStateIK is called right after Animator.OnAnimatorIK()
-        //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that sets up animation IK (inverse kinematics)
-        //}
     }
 
-    private async UniTask RecoveryDelay(PlayerBase player,CancellationToken token)
-    {
-        try
-        {
-            while (player.gameObject.activeSelf && PlayerBase.CurrentStamina < player.MaxStamina)
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(2f), cancellationToken: token);
-                player.RecoveryStamina();
-                Debug.Log(PlayerBase.CurrentStamina);
-            }
-        }
-        catch { }
-
-    }
+   
 }

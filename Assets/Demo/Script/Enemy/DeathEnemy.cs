@@ -45,7 +45,7 @@ public class DeathEnemy : StateMachineBehaviour
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_awaitTime), cancellationToken: token);
             animator.speed = 0;
-            GameManager.Instance.GameEnded();
+            GameManager.Instance.GameOvered();
         }
         catch 
         {
