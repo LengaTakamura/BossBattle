@@ -90,8 +90,7 @@ public class Playermanager : MonoBehaviour
         InputManagement();
         
         if (PlayerBase.CurrentStamina < 3 && !_isRecovering)
-        {
-            Debug.Log($"[DEBUG] Stamina: {PlayerBase.CurrentStamina}");
+        { 
             _isRecovering = true;
             RecoveryDelay(_cts.Token);
         }
@@ -215,7 +214,7 @@ public class Playermanager : MonoBehaviour
 
         if (DeadPlayers.Count == _players.Length)
         {
-            Debug.Log("GameOver");
+           GameManager.Instance.GameOvered();
         }
         if (index != 2)
         {

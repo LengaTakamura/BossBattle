@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PauseManager : MonoBehaviour
 {
-    /// <summary>true ‚Ì‚Íˆê’â~‚Æ‚·‚é</summary>
     public static bool PauseFlg = false;
 
     private async void Start()
@@ -14,7 +13,7 @@ public class PauseManager : MonoBehaviour
     }
     void Update()
     {
-        // Tab ƒL[‚ª‰Ÿ‚³‚ê‚½‚çˆê’â~EÄŠJ‚ğØ‚è‘Ö‚¦‚é
+        // Tab ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½êï¿½ï¿½~ï¿½Eï¿½ÄŠJï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             PauseResume();
@@ -22,7 +21,7 @@ public class PauseManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆê’â~EÄŠJ‚ğØ‚è‘Ö‚¦‚é
+    /// ï¿½êï¿½ï¿½~ï¿½Eï¿½ÄŠJï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
     /// </summary>
     void PauseResume()
     {
@@ -47,14 +46,14 @@ public class PauseManager : MonoBehaviour
 }
 
 /// <summary>
-/// ƒ|[ƒYˆ—‚ğŠÇ—‚·‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+/// ï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½^ï¿½[ï¿½tï¿½Fï¿½[ï¿½X
 /// </summary>
 public interface IPause
 {
-    /// <summary>ˆê’â~‚Ì‚½‚ß‚Ìˆ—‚ğÀ‘•‚·‚é</summary>
+    /// <summary>ï¿½êï¿½ï¿½~ï¿½Ì‚ï¿½ï¿½ß‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     void Pause();
 
-    /// <summary>ÄŠJ‚Ì‚½‚ß‚Ìˆ—‚ğÀ‘•‚·‚é</summary>
+    /// <summary>ï¿½ÄŠJï¿½Ì‚ï¿½ï¿½ß‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     void Resume();
 }
 

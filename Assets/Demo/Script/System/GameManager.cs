@@ -44,4 +44,22 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    private void Update()
+    {
+        AppQuit();
+    }
+
+    void AppQuit()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+             Application.Quit();//ゲームプレイ終了
+#endif
+        }
+    }
 }

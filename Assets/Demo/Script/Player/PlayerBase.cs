@@ -9,7 +9,7 @@ using Unity.Burst.CompilerServices;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public abstract class PlayerBase : MonoBehaviour, IDamageable
+public abstract class PlayerBase : MonoBehaviour, IDamageable,IPause
 {
 
     protected Rigidbody _rb;
@@ -124,6 +124,8 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
     Vector3 _wallMoveDirection;
 
     public Vector3 CamaraOffset;
+
+    private float _animSpeed = 0;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -528,6 +530,18 @@ public abstract class PlayerBase : MonoBehaviour, IDamageable
         }
         
         return CurrentStamina / MaxStamina;
+    }
+
+    void IPause.Pause()
+    {
+        _animSpeed = _anim.speed;
+        _anim.speed = 0;
+    }
+
+
+    void IPause.Resume()
+    {
+        _anim.speed = _animSpeed;
     }
 
    
